@@ -8,8 +8,8 @@ r5 <- r1 |> step_umap(disp, outcome = vars(mpg))
 
 test_that("required packages", {
   expect_equal(required_pkgs(r1), "recipes")
-  expect_equal(required_pkgs(r2), c("recipes", "rstanarm", "embed"))
-  expect_equal(required_pkgs(r3), c("recipes", "rpart", "embed"))
-  expect_equal(required_pkgs(r4), c("recipes", "xgboost", "embed"))
-  expect_equal(required_pkgs(r5), c("recipes", "uwot", "embed"))
+  expect_equal(required_pkgs(r2), c("recipes", "rstanarm", "embedmit"))
+  expect_equal(required_pkgs(r3), c("recipes", "rpart", "embedmit"))
+  expect_equal(required_pkgs(r4), c("recipes", "xgboost", "embedmit"))
+  expect_equal(required_pkgs(r5), c("recipes", "uwotlite", "embedmit"))
 })

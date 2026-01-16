@@ -13,13 +13,13 @@
 #'   construct the target simplicial set. If `neighbors` is greater than the
 #'   number of data points, the smaller value is used.
 #' @param metric Character, type of distance metric to use to find nearest
-#'   neighbors. See [uwot::umap()] for more details. Default to `"euclidean"`.
+#'   neighbors. See [uwotlite::umap()] for more details. Default to `"euclidean"`.
 #' @param epochs Number of iterations for the neighbor optimization. See
-#'   [uwot::umap()] for more details.
+#'   [uwotlite::umap()] for more details.
 #' @param initial Character, Type of initialization for the coordinates. Can be
 #'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`,
 #'   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of initial
-#'   coordinates. See [uwot::umap()] for more details. Default to `"spectral"`.
+#'   coordinates. See [uwotlite::umap()] for more details. Default to `"spectral"`.
 #' @param target_weight Weighting factor between data topology and target
 #'   topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
 #'   entirely on target. The default of 0.5 balances the weighting equally
@@ -28,7 +28,7 @@
 #'   process.
 #' @param outcome A call to `vars` to specify which variable is used as the
 #'   outcome in the encoding process (if any).
-#' @param options A list of options to pass to [uwot::umap()]. The arguments
+#' @param options A list of options to pass to [uwotlite::umap()]. The arguments
 #'   `X`, `n_neighbors`, `n_components`, `min_dist`, `n_epochs`, `ret_model`,
 #'   and `learning_rate` should not be passed here. By default, `verbose` and
 #'   `n_threads` are set.
@@ -227,7 +227,7 @@ step_umap_new <-
 umap_fit_call <- function(obj, y = NULL) {
   cl <- rlang::call2(
     "umap",
-    .ns = "uwot",
+    .ns = "uwotlite",
     X = rlang::expr(training[, col_names])
   )
   if (!is.null(y)) {
@@ -322,7 +322,7 @@ bake.step_umap <- function(object, new_data, ...) {
   withr::with_seed(
     object$seed[2],
     res <-
-      uwot::umap_transform(
+      uwotlite::umap_transform(
         model = object$object,
         X = new_data[, col_names]
       )
@@ -372,7 +372,7 @@ tidy.step_umap <- function(x, ...) {
 #' @rdname required_pkgs.embedmit
 #' @export
 required_pkgs.step_umap <- function(x, ...) {
-  c("uwot", "embedmit")
+  c("uwotlite", "embedmit")
 }
 
 #' @export

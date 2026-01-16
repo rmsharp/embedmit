@@ -20,22 +20,24 @@ which in turn depends on `dqrng` (AGPL-3 licensed). This creates
 licensing complications for projects that need to maintain MIT or other
 permissive licensing throughout their dependency tree.
 
-`embedmit` modifies the default options in `step_umap()` to use
-`rng_type = "tausworthe"` instead of the default PCG random number
-generator. The tausworthe RNG is built into uwot and doesn’t require the
-AGPL-licensed dqrng package.
+`embedmit` solves this by: 1. Depending on
+[uwotlite](https://github.com/rmsharp/uwotlite) instead of `uwot` - an
+MIT-licensed fork that replaces `dqrng` with `sitmo` 2. Using
+`rng_type = "tausworthe"` as the default for additional safety
 
 ### Key Differences from embed
 
-| Feature              | embed                   | embedmit                       |
-|----------------------|-------------------------|--------------------------------|
-| License              | MIT                     | MIT                            |
-| Default RNG for UMAP | PCG (via dqrng, AGPL-3) | Tausworthe (built-in, no AGPL) |
-| Functionality        | Full                    | Full                           |
+| Feature              | embed                         | embedmit                 |
+|----------------------|-------------------------------|--------------------------|
+| License              | MIT                           | MIT                      |
+| UMAP dependency      | uwot (requires dqrng, AGPL-3) | uwotlite (MIT-only deps) |
+| Default RNG for UMAP | PCG (via dqrng)               | Tausworthe (built-in)    |
+| Functionality        | Full                          | Full                     |
 
-### Technical Change
+### Technical Changes
 
-The only code change is in `R/umap.R`:
+1.  **Dependency change**: `uwot` → `uwotlite` in DESCRIPTION
+2.  **Default RNG** in `R/umap.R`:
 
 ``` r
 # embed (original)
@@ -45,9 +47,8 @@ options = list(verbose = FALSE, n_threads = 1)
 options = list(verbose = FALSE, n_threads = 1, rng_type = "tausworthe")
 ```
 
-This ensures that when `step_umap()` calls uwot, it uses the tausworthe
-random number generator instead of PCG, avoiding the dqrng dependency at
-runtime.
+This ensures a fully MIT-compatible dependency chain with no
+AGPL-licensed packages.
 
 ## Installation
 
@@ -104,8 +105,9 @@ dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm),
 
 - `step_umap()` uses a nonlinear transformation similar to t-SNE but can
   be used to project the transformation on new data. Both supervised and
-  unsupervised methods can be used. **Note:** In embedmit, this defaults
-  to using the tausworthe RNG to avoid AGPL dependencies.
+  unsupervised methods can be used. **Note:** In embedmit, this uses
+  [uwotlite](https://github.com/rmsharp/uwotlite) and defaults to the
+  tausworthe RNG for a fully MIT-compatible dependency chain.
 
 - `step_discretize_xgb()` and `step_discretize_cart()` can make binned
   versions of numeric predictors using supervised tree-based models.
