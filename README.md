@@ -1,32 +1,43 @@
+
 # embedmit
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/rmsharp/embedmit/workflows/R-CMD-check/badge.svg)](https://github.com/rmsharp/embedmit/actions)
+
+[![R-CMD-check](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## MIT-Compatible Fork of embed
 
-`embedmit` is an MIT-licensed fork of the [embed](https://github.com/tidymodels/embed) package from tidymodels. It provides the same recipe steps for encoding predictors but avoids AGPL-licensed dependencies at runtime.
+`embedmit` is an MIT-licensed fork of the
+[embed](https://github.com/tidymodels/embed) package from tidymodels. It
+provides the same recipe steps for encoding predictors but avoids
+AGPL-licensed dependencies at runtime.
 
 ### Why embedmit?
 
-The original `embed` package depends on `uwot` for UMAP functionality, which in turn depends on `dqrng` (AGPL-3 licensed). This creates licensing complications for projects that need to maintain MIT or other permissive licensing throughout their dependency tree.
+The original `embed` package depends on `uwot` for UMAP functionality,
+which in turn depends on `dqrng` (AGPL-3 licensed). This creates
+licensing complications for projects that need to maintain MIT or other
+permissive licensing throughout their dependency tree.
 
-`embedmit` modifies the default options in `step_umap()` to use `rng_type = "tausworthe"` instead of the default PCG random number generator. The tausworthe RNG is built into uwot and doesn't require the AGPL-licensed dqrng package.
+`embedmit` modifies the default options in `step_umap()` to use
+`rng_type = "tausworthe"` instead of the default PCG random number
+generator. The tausworthe RNG is built into uwot and doesn’t require the
+AGPL-licensed dqrng package.
 
 ### Key Differences from embed
 
-| Feature | embed | embedmit |
-|---------|-------|----------|
-| License | MIT | MIT |
+| Feature              | embed                   | embedmit                       |
+|----------------------|-------------------------|--------------------------------|
+| License              | MIT                     | MIT                            |
 | Default RNG for UMAP | PCG (via dqrng, AGPL-3) | Tausworthe (built-in, no AGPL) |
-| Functionality | Full | Full |
+| Functionality        | Full                    | Full                           |
 
 ### Technical Change
 
 The only code change is in `R/umap.R`:
 
-```r
+``` r
 # embed (original)
 options = list(verbose = FALSE, n_threads = 1)
 
@@ -34,47 +45,84 @@ options = list(verbose = FALSE, n_threads = 1)
 options = list(verbose = FALSE, n_threads = 1, rng_type = "tausworthe")
 ```
 
-This ensures that when `step_umap()` calls uwot, it uses the tausworthe random number generator instead of PCG, avoiding the dqrng dependency at runtime.
+This ensures that when `step_umap()` calls uwot, it uses the tausworthe
+random number generator instead of PCG, avoiding the dqrng dependency at
+runtime.
 
-## Installing
+## Installation
 
 ### From GitHub
 
-```R
+``` r
 # install.packages("devtools")
 devtools::install_github("rmsharp/embedmit")
 ```
 
+Note that to use some steps, you will also have to install other
+packages such as `rstanarm` and `lme4`. For all of the steps to work,
+you may want to use:
+
+``` r
+install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))
+```
+
 ## Introduction
 
-`embedmit` has extra steps for the [`recipes`](https://recipes.tidymodels.org/) package for embedding predictors into one or more numeric columns. Almost all of the preprocessing methods are *supervised*.
+`embedmit` has extra steps for the
+[`recipes`](https://recipes.tidymodels.org/) package for embedding
+predictors into one or more numeric columns. Almost all of the
+preprocessing methods are *supervised*.
 
-These steps are available here in a separate package because the step dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm), [`lme4`](https://CRAN.r-project.org/package=lme4), and [`keras3`](https://CRAN.r-project.org/package=keras3), are fairly heavy.
+These steps are available here in a separate package because the step
+dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm),
+[`lme4`](https://CRAN.r-project.org/package=lme4), and
+[`keras3`](https://CRAN.r-project.org/package=keras3), are fairly heavy.
 
 ### Available Steps
 
 **For categorical predictors:**
 
-- `step_lencode_glm()`, `step_lencode_bayes()`, and `step_lencode_mixed()` - effect encoding using generalized linear models
-- `step_embed()` - neural network embeddings using keras3
-- `step_woe()` - weight of evidence encodings
+- `step_lencode_glm()`, `step_lencode_bayes()`, and
+  `step_lencode_mixed()` estimate the effect of each of the factor
+  levels on the outcome and these estimates are used as the new
+  encoding. The estimates are estimated by a generalized linear model.
+  This step can be executed without pooling (via `glm`) or with partial
+  pooling (`stan_glm` or `lmer`). Currently implemented for numeric and
+  two-class outcomes.
+
+- `step_embed()` uses `keras3::layer_embedding` to translate the
+  original *C* factor levels into a set of *D* new variables (\< *C*).
+  The model fitting routine optimizes which factor levels are mapped to
+  each of the new variables as well as the corresponding regression
+  coefficients (i.e., neural network weights) that will be used as the
+  new encodings.
+
+- `step_woe()` creates new variables based on weight of evidence
+  encodings.
 
 **For numeric predictors:**
 
-- `step_umap()` - UMAP dimensionality reduction (using tausworthe RNG by default)
-- `step_discretize_xgb()` and `step_discretize_cart()` - supervised binning
-- `step_pca_sparse()` and `step_pca_sparse_bayes()` - sparse PCA
+- `step_umap()` uses a nonlinear transformation similar to t-SNE but can
+  be used to project the transformation on new data. Both supervised and
+  unsupervised methods can be used. **Note:** In embedmit, this defaults
+  to using the tausworthe RNG to avoid AGPL dependencies.
+
+- `step_discretize_xgb()` and `step_discretize_cart()` can make binned
+  versions of numeric predictors using supervised tree-based models.
+
+- `step_pca_sparse()` and `step_pca_sparse_bayes()` conduct feature
+  extraction with sparsity of the component loadings.
 
 ## Example
 
-```R
+``` r
 library(embedmit)
 library(recipes)
 
 # Create a recipe with UMAP embedding
 rec <- recipe(Species ~ ., data = iris) |>
-  step_normalize(all_numeric_predictors()) |>
-  step_umap(all_numeric_predictors(), num_comp = 2)
+ step_normalize(all_numeric_predictors()) |>
+ step_umap(all_numeric_predictors(), num_comp = 2)
 
 # Prepare and bake
 prepped <- prep(rec)
@@ -83,7 +131,26 @@ baked <- bake(prepped, new_data = NULL)
 
 ## Documentation
 
-For detailed documentation on the embedding steps, please refer to the original embed documentation at <https://embed.tidymodels.org/>.
+For detailed documentation on the embedding steps, please refer to the
+original embed documentation at <https://embed.tidymodels.org/>.
+
+Some references for these methods are:
+
+- Francois C and Allaire JJ (2018) [*Deep Learning with
+  R*](https://www.manning.com/books/deep-learning-with-r), Manning
+- Guo, C and Berkhahn F (2016) “[Entity Embeddings of Categorical
+  Variables](https://arxiv.org/abs/1604.06737)”
+- Micci-Barreca D (2001) “[A preprocessing scheme for high-cardinality
+  categorical attributes in classification and prediction
+  problems](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&btnG=),”
+  ACM SIGKDD Explorations Newsletter, 3(1), 27-32.
+- Zumel N and Mount J (2017) “[`vtreat`: a `data.frame` Processor for
+  Predictive Modeling](https://arxiv.org/abs/1611.09477)”
+- McInnes L and Healy J (2018) [UMAP: Uniform Manifold Approximation and
+  Projection for Dimension Reduction](https://arxiv.org/abs/1802.03426)
+- Good, I. J. (1985), “[Weight of evidence: A brief
+  survey](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Weight+of+evidence%3A+A+brief+survey&btnG=)”,
+  Bayesian Statistics, 2, pp.249-270.
 
 ## License
 
@@ -91,10 +158,13 @@ For detailed documentation on the embedding steps, please refer to the original 
 
 ## Acknowledgments
 
-This package is a fork of [embed](https://github.com/tidymodels/embed) by Emil Hvitfeldt and Max Kuhn (Posit). All credit for the core functionality goes to the original authors and contributors.
+This package is a fork of [embed](https://github.com/tidymodels/embed)
+by Emil Hvitfeldt and Max Kuhn (Posit). All credit for the core
+functionality goes to the original authors and contributors.
 
 ## See Also
 
-* The original [embed package](https://github.com/tidymodels/embed)
-* [uwotlite](https://github.com/rmsharp/uwotlite) - MIT-compatible fork of uwot with sitmo instead of dqrng
-* The [tidymodels](https://www.tidymodels.org/) framework
+- The original [embed package](https://github.com/tidymodels/embed)
+- [uwotlite](https://github.com/rmsharp/uwotlite) - MIT-compatible fork
+  of uwot with sitmo instead of dqrng
+- The [tidymodels](https://www.tidymodels.org/) framework
