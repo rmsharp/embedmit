@@ -14,7 +14,7 @@ output:
 #| include: false
 library(tidymodels)
 library(keras3)
-library(embed)
+library(embedmit)
 library(ggplot2)
 library(ggiraph)
 embedmit:::is_tf_2()
@@ -70,7 +70,7 @@ We'll fit a model with 10 hidden units and 3 encoding columns:
 ```{r}
 #| label: ames-linear
 #| fig-alt: "Line chart with 2 lines. epochs along the x-axis, loss along the y-axis. The two lines are colored according to the type of loss, red for normal loss and blue for validation loss. The lines have high values for small epochs and lower values for higher epochs, with the validation loss being lower at all times."
-library(embed)
+library(embedmit)
 tf_embed <-
   recipe(Sale_Price ~ ., data = ames) |>
   step_log(Sale_Price, base = 10) |>

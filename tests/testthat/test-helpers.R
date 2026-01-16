@@ -1,4 +1,4 @@
-library(embed)
+library(embedmit)
 library(dplyr)
 library(testthat)
 

@@ -13,7 +13,7 @@ output:
 #| include: false
 library(tidymodels)
 library(ggiraph)
-library(embed)
+library(embedmit)
 library(modeldata)
 
 data(grants)
@@ -28,7 +28,7 @@ We first calculate the raw log-odds for the data (independent of any model):
 ```{r}
 #| label: raw-data
 library(tidymodels)
-library(embed)
+library(embedmit)
 
 tidymodels_prefer()
 theme_set(theme_bw() + theme(legend.position = "top"))
