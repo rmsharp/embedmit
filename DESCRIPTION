@@ -1,0 +1,66 @@
+Package: embedmit
+Title: Extra Recipes for Encoding Predictors (MIT-Compatible Fork)
+Version: 1.2.1.9000
+Authors@R: c(
+    person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0679-1945")),
+    person("Max", "Kuhn", , "max@posit.co", role = "aut",
+           comment = c(ORCID = "0000-0003-2402-136X")),
+    person("Posit Software, PBC", role = c("cph", "fnd"),
+           comment = c(ROR = "03wc8by49"))
+  )
+Description: MIT-compatible fork of the 'embed' package. Predictors can be
+    converted to one or more numeric representations using a variety of
+    methods. Effect encodings using simple generalized linear models
+    <doi:10.48550/arXiv.1611.09477> or nonlinear models
+    <doi:10.48550/arXiv.1604.06737> can be used. There are also functions
+    for dimension reduction and other approaches. This fork defaults to
+    'tausworthe' RNG in UMAP to avoid AGPL-licensed dependencies.
+License: MIT + file LICENSE
+URL: https://github.com/rmsharp/embedmit
+BugReports: https://github.com/rmsharp/embedmit/issues
+Depends: 
+    R (>= 4.1),
+    recipes (>= 1.1.0)
+Imports:
+    cli,
+    dplyr (>= 1.1.0),
+    generics (>= 0.1.0),
+    glue,
+    lifecycle,
+    purrr,
+    rlang (>= 1.1.0),
+    rsample,
+    stats,
+    tibble,
+    tidyr,
+    utils,
+    uwot,
+    vctrs,
+    withr
+Suggests: 
+    covr,
+    dials (>= 1.2.0),
+    ggplot2,
+    hardhat,
+    irlba,
+    keras3,
+    knitr,
+    lme4,
+    modeldata,
+    rmarkdown,
+    rpart,
+    rstanarm,
+    stringdist,
+    tensorflow,
+    testthat (>= 3.0.0),
+    VBsparsePCA,
+    xgboost
+ByteCompile: true
+Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate,
+    reticulate
+Config/testthat/edition: 3
+Config/usethis/last-upkeep: 2025-04-24
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3

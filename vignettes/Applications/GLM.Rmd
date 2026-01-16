@@ -1,0 +1,241 @@
+---
+title: "Using Generalized Linear Models"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Using Generalized Linear Models}
+output:
+  knitr:::html_vignette:
+    toc: yes
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidymodels)
+library(ggiraph)
+library(embed)
+library(modeldata)
+
+data(grants)
+```
+
+This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. This is sometimes referred to as _likelihood encodings_. `embed` has two estimation methods for accomplishing this: with and without pooling. 
+
+The example used here is the Grant data from Kuhn and Johnson (2013), these data are used to predict whether a grant application was accepted. One predictor, the sponsor, is represented by the factor variable `sponsor_code`. The frequencies of sponsors in the data set used here vary between `r min(table(grants_other$sponsor_code))` person and `r max(table(grants_other$sponsor_code))` per code. There are `r length(table(grants_other$sponsor_code))` sponsor codes in the data. Rather than producing `r length(table(grants_other$sponsor_code)) - 1` indicator variables for a model, a single numeric variable can be used to represent the _effect_ or _impact_ of the factor level on the outcome. In this case, where a factor outcome is being predicted (accepted or not), the effects are quantified by the log-odds of the sponsor code for being accepted.  
+
+We first calculate the raw log-odds for the data (independent of any model):
+
+```{r}
+#| label: raw-data
+library(tidymodels)
+library(embed)
+
+tidymodels_prefer()
+theme_set(theme_bw() + theme(legend.position = "top"))
+
+data(grants)
+
+props <-
+  grants_other |>
+  group_by(sponsor_code) |>
+  summarise(
+    prop = mean(class == "successful"),
+    log_odds = log(prop / (1 - prop)),
+    n = length(class)
+  ) |>
+  mutate(label = paste0(gsub("_", " ", sponsor_code), " (n=", n, ")"))
+
+props |>
+  select(-label)
+
+# later, for plotting
+rng <- extendrange(props$log_odds[is.finite(props$log_odds)], f = 0.1)
+```
+
+In subsequent sections, a logistic regression model is used. When the outcome variable is numeric, the steps automatically use linear regression models to estimate effects. 
+
+## No Pooling
+
+In this case, the effect of each sponsor code can be estimated separately for each factor level. One method for conducting this estimation step is to fit a logistic regression with the acceptance classification as the outcome and the sponsor code as the predictor. From this, the log-odds are naturally estimated by logistic regression. 
+
+For these data, a recipe is created and `step_lencode_glm` is used:
+
+```{r}
+#| label: simple-glm
+grants_glm <-
+  recipe(class ~ ., data = grants_other) |>
+  # specify the variable being encoded and the outcome
+  step_lencode_glm(sponsor_code, outcome = vars(class)) |>
+  # estimate the effects
+  prep(training = grants_other)
+```
+
+The `tidy` method can be used to extract the encodings and are merged with the raw estimates:
+
+```{r}
+#| label: simple-glm-extract
+glm_estimates <-
+  tidy(grants_glm, number = 1) |>
+  dplyr::select(-terms, -id)
+glm_estimates
+
+glm_estimates <-
+  glm_estimates |>
+  set_names(c("sponsor_code", "glm")) |>
+  inner_join(props, by = "sponsor_code")
+```
+
+For the sponsor codes with `n > 1`, the estimates are effectively the same:
+
+```{r}
+#| label: simple-glm-check
+glm_estimates |>
+  dplyr::filter(is.finite(log_odds)) |>
+  mutate(difference = log_odds - glm) |>
+  dplyr::select(difference) |>
+  summary()
+```
+
+Note that there is also a effect that is used for a novel sponsor code for future data sets that is the average effect:
+
+```{r}
+#| label: simple-glm-new
+tidy(grants_glm, number = 1) |>
+  dplyr::filter(level == "..new") |>
+  select(-id)
+```
+
+## Partial Pooling
+
+This method estimates the effects by using all of the sponsor codes at once using a hierarchical Bayesian generalized linear model. The sponsor codes are treated as a random set that contributes a random intercept to the previously used logistic regression. 
+
+Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For sponsor codes with small sample sizes, the final estimate is _shrunken_ towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these sponsor codes. For sponsor codes with many data points, the estimates reply more on the empirical estimates. [This page](https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html) has a good discussion of pooling using Bayesian models. 
+ 
+```{r}
+# due to Matrix problems
+knitr::knit_exit()
+```
+
+### Bayesian Methods
+
+One appraoch to partial pooling is the function `step_lencode_bayes` uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
+
+```{r}
+#| label: stan-options
+opts <-
+  list(
+    ## the number of chains
+    chains = 4,
+    ## how many cores to use
+    cores = 4,
+    ## the total number of iterations per chain (low here for time)
+    iter = 1000,
+    ## set the random number seed
+    seed = 8779
+  )
+```
+
+Using the default priors, the model is estimated via:
+
+```{r}
+#| label: stan-fit-defaults
+grants_glmer <-
+  recipe(class ~ ., data = grants_other) |>
+  step_lencode_bayes(
+    sponsor_code,
+    outcome = vars(class),
+    options = opts
+  ) |>
+  prep(training = grants_other)
+```
+
+This took more time than the simple non-pooled model. The embeddings are extracted in the same way:
+
+```{r}
+#| label: stan-extract
+all_estimates <-
+  tidy(grants_glmer, number = 1) |>
+  dplyr::select(-terms, -id) |>
+  set_names(c("sponsor_code", "glmer")) |>
+  inner_join(glm_estimates, by = "sponsor_code")
+
+all_estimates |> dplyr::select(sponsor_code, log_odds, glm, glmer)
+```
+
+Note that the `n = 1` sponsor codes have estimates that are less extreme that the naive estimates. Also, 
+
+Let's see the effect of the shrinkage induced by partial pooling by plotting the naive results versus the new results (finite data only):
+
+```{r}
+#| label: stan-compare
+#| fig-alt: "Scatter chart. log odds along the x-axis, glmer along the y-axis. a red line appears at x=y. Points appear near the line. with smaller values of log_odds appear over the line, and larger values appear over the line."
+pooled_plot <-
+  all_estimates |>
+  dplyr::filter(is.finite(log_odds)) |>
+  ggplot(aes(x = log_odds, y = glmer)) +
+  geom_abline(col = "red", alpha = .5) +
+  geom_point_interactive(
+    aes(size = sqrt(n), tooltip = label),
+    alpha = .5
+  ) +
+  xlim(rng) +
+  ylim(rng)
+
+# Convert the plot to a format that the html file can handle
+girafe(ggobj = pooled_plot)
+```
+
+New levels are encoded as:
+
+```{r}
+#| label: glmer-new
+tidy(grants_glmer, number = 1) |>
+  dplyr::filter(level == "..new") |>
+  dplyr::select(-terms, -id)
+```
+
+### Empirical Bayesian Methods/Mixed Models
+
+The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
+
+```{r}
+#| label: mixed-rec
+grants_mixed <-
+  recipe(class ~ ., data = grants_other) |>
+  step_lencode_mixed(
+    sponsor_code,
+    outcome = vars(class),
+  ) |>
+  prep(training = grants_other)
+
+all_estimates <-
+  tidy(grants_mixed, number = 1) |>
+  dplyr::select(-terms, -id) |>
+  set_names(c("sponsor_code", "mixed")) |>
+  inner_join(all_estimates, by = "sponsor_code")
+
+all_estimates |>
+  dplyr::select(sponsor_code, log_odds, glm, glmer, mixed)
+```
+
+Comparing the raw and mixed model estimates:
+
+```{r}
+#| label: mixed-compare
+#| fig-alt: "Scatter chart. log odds along the x-axis, glmer along the y-axis. a red line appears at x=y. Points appear near the line. with smaller values of log_odds appear over the line, and larger values appear over the line."
+mixed_plot <-
+  all_estimates |>
+  dplyr::filter(is.finite(log_odds)) |>
+  ggplot(aes(x = log_odds, y = mixed)) +
+  geom_abline(col = "red", alpha = .5) +
+  geom_point_interactive(
+    aes(size = sqrt(n), tooltip = label),
+    alpha = .5
+  ) +
+  xlim(rng) +
+  ylim(rng)
+
+girafe(ggobj = mixed_plot)
+```
+
+These values are very similar to the Bayesian estimates. 
