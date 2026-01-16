@@ -17,7 +17,7 @@ best_split <- unname(mod$splits[, "index"])
 test_that("low-level binning for classification", {
   expect_no_error(
     splits <-
-      embed:::cart_binning(
+      embedmit:::cart_binning(
         sim_tr_cls$x,
         "x",
         sim_tr_cls$class,
@@ -31,7 +31,7 @@ test_that("low-level binning for classification", {
   set.seed(283834)
   expect_snapshot({
     splits <-
-      embed:::cart_binning(
+      embedmit:::cart_binning(
         sample(sim_tr_cls$x),
         "x",
         sim_tr_cls$class,
@@ -46,7 +46,7 @@ test_that("low-level binning for classification", {
 test_that("low-level binning for regression", {
   expect_no_error(
     splits <-
-      embed:::cart_binning(
+      embedmit:::cart_binning(
         sim_tr_reg$x,
         "x",
         sim_tr_reg$y,
@@ -60,7 +60,7 @@ test_that("low-level binning for regression", {
   set.seed(283834)
   expect_snapshot({
     splits <-
-      embed:::cart_binning(
+      embedmit:::cart_binning(
         sample(sim_tr_reg$x),
         "potato",
         sim_tr_reg$y,

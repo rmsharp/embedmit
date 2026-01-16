@@ -1,33 +1,33 @@
 # woe_table do not accept different length inputs
 
     Code
-      embed:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5))
+      embedmit:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5))
     Condition
-      Error in `embed:::woe_table()`:
+      Error in `embedmit:::woe_table()`:
       ! `outcome` must have exactly 2 categories (has 4).
 
 # woe_table accepts only outcome with 2 distinct categories
 
     Code
-      embed:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10))
+      embedmit:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10))
     Condition
-      Error in `embed:::woe_table()`:
+      Error in `embedmit:::woe_table()`:
       ! `outcome` must have exactly 2 categories (has 3).
 
 ---
 
     Code
-      embed:::woe_table(rep(letters[1:3], 10), rep(c(0), 30))
+      embedmit:::woe_table(rep(letters[1:3], 10), rep(c(0), 30))
     Condition
-      Error in `embed:::woe_table()`:
+      Error in `embedmit:::woe_table()`:
       ! `outcome` must have exactly 2 categories (has 1).
 
 ---
 
     Code
-      embed:::woe_table(df$x2, df$x1)
+      embedmit:::woe_table(df$x2, df$x1)
     Condition
-      Error in `embed:::woe_table()`:
+      Error in `embedmit:::woe_table()`:
       ! `outcome` must have exactly 2 categories (has 3).
 
 # add_woe accepts only outcome with 2 distinct categories

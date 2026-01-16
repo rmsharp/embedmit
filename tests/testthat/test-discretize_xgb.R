@@ -111,7 +111,7 @@ sim_te_reg <- sim_data_reg(100)
 test_that("run_xgboost for classification", {
   skip_on_cran() # because data.table uses all cores by default
 
-  xgboost <- embed:::run_xgboost(
+  xgboost <- embedmit:::run_xgboost(
     xgb_credit_train,
     xgb_credit_test,
     .learn_rate = 0.3,
@@ -142,7 +142,7 @@ test_that("run_xgboost for classification", {
 test_that("run_xgboost for multi-classification", {
   skip_on_cran() # because data.table uses all cores by default
 
-  xgboost <- embed:::run_xgboost(
+  xgboost <- embedmit:::run_xgboost(
     xgb_attrition_train,
     xgb_attrition_test,
     .learn_rate = 0.3,
@@ -174,7 +174,7 @@ test_that("run_xgboost for multi-classification", {
 test_that("run_xgboost for regression", {
   skip_on_cran() # because data.table uses all cores by default
 
-  xgboost <- embed:::run_xgboost(
+  xgboost <- embedmit:::run_xgboost(
     xgb_ames_train,
     xgb_ames_test,
     .learn_rate = 0.3,
@@ -208,7 +208,7 @@ test_that("xgb_binning for classification", {
 
   # Usual case
   set.seed(8497)
-  xgb_binning <- embed:::xgb_binning(
+  xgb_binning <- embedmit:::xgb_binning(
     credit_data_train,
     "Status",
     "Seniority",
@@ -229,7 +229,7 @@ test_that("xgb_binning for classification", {
   skip_if(packageVersion("xgboost") > "1.5.2.1")
   # Algorithm runs on a too small training set/ insufficient variation in data
   expect_snapshot(
-    embed:::xgb_binning(
+    embedmit:::xgb_binning(
       credit_data_small,
       "Status",
       "Seniority",
@@ -247,7 +247,7 @@ test_that("xgb_binning for multi-classification", {
 
   # Usual case
   set.seed(8497)
-  xgb_binning <- embed:::xgb_binning(
+  xgb_binning <- embedmit:::xgb_binning(
     attrition_data_train,
     "EducationField",
     "Age",
@@ -267,7 +267,7 @@ test_that("xgb_binning for multi-classification", {
 
   # Algorithm runs on a too small training set/ insufficient variation in data
   expect_snapshot(
-    embed:::xgb_binning(
+    embedmit:::xgb_binning(
       attrition_data_small,
       "EducationField",
       "Age",
@@ -285,7 +285,7 @@ test_that("xgb_binning for regression", {
 
   set.seed(4235)
   # Usual case
-  xgb_binning <- embed:::xgb_binning(
+  xgb_binning <- embedmit:::xgb_binning(
     ames_data_train,
     "Sale_Price",
     "Latitude",
@@ -306,7 +306,7 @@ test_that("xgb_binning for regression", {
   # Algorithm runs on a too small training set/ insufficient variation in data
 
   expect_snapshot(
-    embed:::xgb_binning(
+    embedmit:::xgb_binning(
       ames_data_small,
       "Sale_Price",
       "Latitude",
@@ -541,7 +541,7 @@ test_that("xgb_binning() errors if only one class in outcome", {
   )
   expect_snapshot(
     error = TRUE,
-    embed:::xgb_binning(
+    embedmit:::xgb_binning(
       const_outcome,
       "outcome",
       "predictor",

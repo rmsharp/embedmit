@@ -1,7 +1,7 @@
 # low-level binning for classification
 
     Code
-      splits <- embed:::cart_binning(sample(sim_tr_cls$x), "x", sim_tr_cls$class,
+      splits <- embedmit:::cart_binning(sample(sim_tr_cls$x), "x", sim_tr_cls$class,
       cost_complexity = 0.01, tree_depth = 5, min_n = 10)
     Condition
       Warning:
@@ -10,7 +10,7 @@
 # low-level binning for regression
 
     Code
-      splits <- embed:::cart_binning(sample(sim_tr_reg$x), "potato", sim_tr_reg$y,
+      splits <- embedmit:::cart_binning(sample(sim_tr_reg$x), "potato", sim_tr_reg$y,
       cost_complexity = 0.01, tree_depth = 5, min_n = 10)
     Condition
       Warning:

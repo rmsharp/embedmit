@@ -177,7 +177,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (!embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (!embedmit:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))) withAutoprint(\{ # examplesIf}
 data(grants, package = "modeldata")
 
 set.seed(1)

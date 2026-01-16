@@ -18,29 +18,29 @@ df <- data.frame(
 test_that("woe_table do not accept different length inputs", {
   expect_snapshot(
     error = TRUE,
-    embed:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5))
+    embedmit:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5))
   )
 })
 
 test_that("woe_table accepts only outcome with 2 distinct categories", {
   expect_snapshot(
     error = TRUE,
-    embed:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10))
+    embedmit:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10))
   )
   expect_snapshot(
     error = TRUE,
-    embed:::woe_table(rep(letters[1:3], 10), rep(c(0), 30))
+    embedmit:::woe_table(rep(letters[1:3], 10), rep(c(0), 30))
   )
   expect_snapshot(
     error = TRUE,
-    embed:::woe_table(df$x2, df$x1)
+    embedmit:::woe_table(df$x2, df$x1)
   )
 })
 
 test_that("woe_table returns a proper tibble", {
-  expect_equal(dim(embed:::woe_table(df$x1, df$y)), c(3, 7))
+  expect_equal(dim(embedmit:::woe_table(df$x1, df$y)), c(3, 7))
   expect_identical(
-    names(embed:::woe_table(df$x1, df$y)),
+    names(embedmit:::woe_table(df$x1, df$y)),
     c("predictor", "n_tot", "n_A", "n_B", "p_A", "p_B", "woe")
   )
 })
@@ -48,7 +48,7 @@ test_that("woe_table returns a proper tibble", {
 test_that("logical outcome variables are treated properly", {
   expect_equal(
     dim(
-      embed:::woe_table(c("A", "A", "A", "B"), c(TRUE, FALSE, TRUE, FALSE))
+      embedmit:::woe_table(c("A", "A", "A", "B"), c(TRUE, FALSE, TRUE, FALSE))
     ),
     c(2, 7)
   )
@@ -57,7 +57,7 @@ test_that("logical outcome variables are treated properly", {
 test_that("logical predictor variable are treated properly", {
   expect_equal(
     class(
-      embed:::woe_table(
+      embedmit:::woe_table(
         c(TRUE, FALSE, TRUE, FALSE),
         c("A", "A", "A", "B")
       )$predictor
@@ -67,27 +67,27 @@ test_that("logical predictor variable are treated properly", {
 })
 
 test_that("woe_table ruturns no messages nor warnings", {
-  expect_silent(embed:::woe_table(
+  expect_silent(embedmit:::woe_table(
     c(TRUE, FALSE, TRUE, FALSE),
     c("A", "A", "A", "B")
   ))
-  expect_silent(embed:::woe_table(
+  expect_silent(embedmit:::woe_table(
     c(TRUE, FALSE, TRUE, FALSE, NA),
     c("A", "A", "A", "B", "B")
   ))
-  expect_silent(embed:::woe_table(
+  expect_silent(embedmit:::woe_table(
     as.factor(c(TRUE, FALSE, TRUE, FALSE, NA)),
     c("A", "A", "A", "B", "B")
   ))
-  expect_silent(embed:::woe_table(df$x1, df$y))
+  expect_silent(embedmit:::woe_table(df$x1, df$y))
 })
 
 test_that("Laplace works", {
   expect_true(all(is.finite(
-    embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 1e-6)$woe
+    embedmit:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 1e-6)$woe
   )))
   expect_false(all(is.finite(
-    embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe
+    embedmit:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe
   )))
 })
 

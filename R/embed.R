@@ -126,7 +126,7 @@
 #' "Concatenate Embeddings for Categorical Variables with keras3"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
-#' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))
+#' @examplesIf !embedmit:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))
 #' data(grants, package = "modeldata")
 #'
 #' set.seed(1)

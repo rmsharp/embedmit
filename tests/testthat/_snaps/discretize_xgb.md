@@ -1,7 +1,7 @@
 # xgb_binning for multi-classification
 
     Code
-      embed:::xgb_binning(attrition_data_small, "EducationField", "Age", sample_val = 0.3,
+      embedmit:::xgb_binning(attrition_data_small, "EducationField", "Age", sample_val = 0.3,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
     Output
       numeric(0)
@@ -9,7 +9,7 @@
 # xgb_binning for regression
 
     Code
-      embed:::xgb_binning(ames_data_small, "Sale_Price", "Latitude", sample_val = 0.3,
+      embedmit:::xgb_binning(ames_data_small, "Sale_Price", "Latitude", sample_val = 0.3,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
     Output
       numeric(0)
@@ -28,7 +28,7 @@
 # xgb_binning() errors if only one class in outcome
 
     Code
-      embed:::xgb_binning(const_outcome, "outcome", "predictor", sample_val = 0.2,
+      embedmit:::xgb_binning(const_outcome, "outcome", "predictor", sample_val = 0.2,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
     Condition
       Error:

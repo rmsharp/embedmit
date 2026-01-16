@@ -17,7 +17,7 @@ library(keras3)
 library(embed)
 library(ggplot2)
 library(ggiraph)
-embed:::is_tf_2()
+embedmit:::is_tf_2()
 options(digits = 2)
 set.seed(24566)
 ```
