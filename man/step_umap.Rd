@@ -20,7 +20,7 @@ step_umap(
   epochs = NULL,
   initial = "spectral",
   target_weight = 0.5,
-  options = list(verbose = FALSE, n_threads = 1),
+  options = list(verbose = FALSE, n_threads = 1, rng_type = "tausworthe"),
   seed = sample(10^5, 2),
   prefix = "UMAP",
   keep_original_cols = FALSE,
@@ -58,28 +58,28 @@ is used.}
 \item{min_dist}{The effective minimum distance between embedded points.}
 
 \item{metric}{Character, type of distance metric to use to find nearest
-neighbors. See \code{\link[uwot:umap]{uwot::umap()}} for more details. Default to \code{"euclidean"}.}
+neighbors. See \code{\link[uwotlite:umap]{uwotlite::umap()}} for more details. Default to \code{"euclidean"}.}
 
 \item{learn_rate}{Positive number of the learning rate for the optimization
 process.}
 
 \item{epochs}{Number of iterations for the neighbor optimization. See
-\code{\link[uwot:umap]{uwot::umap()}} for more details.}
+\code{\link[uwotlite:umap]{uwotlite::umap()}} for more details.}
 
 \item{initial}{Character, Type of initialization for the coordinates. Can be
 one of \code{"spectral"}, \code{"normlaplacian"}, \code{"random"}, \code{"lvrandom"},
 \code{"laplacian"}, \code{"pca"}, \code{"spca"}, \code{"agspectral"}, or a matrix of initial
-coordinates. See \code{\link[uwot:umap]{uwot::umap()}} for more details. Default to \code{"spectral"}.}
+coordinates. See \code{\link[uwotlite:umap]{uwotlite::umap()}} for more details. Default to \code{"spectral"}.}
 
 \item{target_weight}{Weighting factor between data topology and target
 topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
 entirely on target. The default of 0.5 balances the weighting equally
 between data and target.}
 
-\item{options}{A list of options to pass to \code{\link[uwot:umap]{uwot::umap()}}. The arguments
+\item{options}{A list of options to pass to \code{\link[uwotlite:umap]{uwotlite::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model},
-and \code{learning_rate} should not be passed here. By default, \code{verbose} and
-\code{n_threads} are set.}
+and \code{learning_rate} should not be passed here. By default, \code{verbose},
+\code{n_threads}, and \code{rng_type} are set.}
 
 \item{seed}{Two integers to control the random numbers used by the numerical
 methods. The default pulls from the main session's stream of numbers and

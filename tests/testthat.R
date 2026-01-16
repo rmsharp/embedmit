@@ -1,4 +1,4 @@
 library(testthat)
-library(embed)
+library(embedmit)
 
-test_check("embed")
+test_check("embedmit")
