@@ -24,8 +24,6 @@ outcome.
 
 ## Setup
 
-Code
-
 ``` r
 library(embedmit)
 library(recipes)
@@ -76,8 +74,6 @@ relationship between that level and the outcome. This approach:
 The Ames data has 28 different neighborhoods. Let’s visualize how sale
 price varies across them:
 
-Code
-
 ``` r
 ames_train %>%
   group_by(Neighborhood) %>%
@@ -93,7 +89,9 @@ ames_train %>%
   theme_minimal()
 ```
 
-![](categorical-encoding_files/figure-html/neighborhood-viz-1.png)
+![Mean sale price by neighborhood with 90% confidence intervals.
+Neighborhoods are ordered by their mean sale
+price.](categorical-encoding-01_files/figure-html/neighborhood-viz-1.png)
 
 Mean sale price by neighborhood with 90% confidence intervals.
 Neighborhoods are ordered by their mean sale price.
@@ -108,8 +106,6 @@ The
 [`step_lencode_glm()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_glm.md)
 function uses a generalized linear model to estimate the effect of each
 category level. The recipe below demonstrates the approach:
-
-Code
 
 ``` r
 ames_glm <-
@@ -126,8 +122,6 @@ ames_glm
 
 We can examine the learned encodings by preparing the recipe and using
 [`tidy()`](https://generics.r-lib.org/reference/tidy.html):
-
-Code
 
 ``` r
 glm_estimates <-
@@ -160,8 +154,6 @@ neighborhoods associated with higher prices.
 A key advantage of effect encoding is graceful handling of categories
 not seen during training. The encoding includes a special `..new` level:
 
-Code
-
 ``` r
 glm_estimates %>%
   filter(level == "..new")
@@ -185,8 +177,6 @@ function uses *hierarchical* or *mixed effects* models that apply
 **partial pooling**. This shrinks estimates toward the overall mean,
 with more shrinkage for categories with fewer observations:
 
-Code
-
 ``` r
 ames_mixed <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
@@ -199,8 +189,6 @@ ames_mixed <-
 
 ames_mixed
 ```
-
-Code
 
 ``` r
 mixed_estimates <-
@@ -224,8 +212,6 @@ mixed_estimates
 #> # ℹ 19 more rows
 ```
 
-Code
-
 ``` r
 mixed_estimates %>%
   filter(level == "..new")
@@ -238,8 +224,6 @@ mixed_estimates %>%
 ### Comparing Pooling Methods
 
 Let’s visualize how partial pooling affects the estimates:
-
-Code
 
 ``` r
 glm_estimates %>%
@@ -264,7 +248,10 @@ glm_estimates %>%
   theme_minimal()
 ```
 
-![](categorical-encoding_files/figure-html/compare-pooling-1.png)
+![Comparison of GLM (no pooling) versus mixed effects (partial pooling)
+encodings. Point size represents the number of observations in each
+neighborhood. Points below the diagonal indicate shrinkage toward the
+mean.](categorical-encoding-01_files/figure-html/compare-pooling-1.png)
 
 Comparison of GLM (no pooling) versus mixed effects (partial pooling)
 encodings. Point size represents the number of observations in each
@@ -282,8 +269,6 @@ For the most principled uncertainty quantification,
 [`step_lencode_bayes()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_bayes.md)
 uses a fully Bayesian approach (requires the `rstanarm` package):
 
-Code
-
 ``` r
 ames_bayes <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
@@ -300,8 +285,6 @@ ames_bayes <-
 An alternative approach for high-cardinality categoricals is *feature
 hashing* (the “hashing trick”). This uses a hash function to map
 categories to a fixed number of columns:
-
-Code
 
 ``` r
 library(rlang)
@@ -326,8 +309,6 @@ ames_hashed %>%
 
 We can reduce these to a smaller number of bins using the modulo
 operation:
-
-Code
 
 ``` r
 ames_hashed %>%
