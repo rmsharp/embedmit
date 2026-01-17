@@ -26,7 +26,9 @@ categorical variables into numeric representations suitable for machine learning
 
 ```{r libraries, message=FALSE, warning=FALSE}
 library(embedmit)
-library(tidymodels)
+library(recipes)
+library(dplyr)
+library(rsample)
 library(modeldata)
 
 # Load the Ames housing data
@@ -195,9 +197,14 @@ ames_train %>%
 
 ## Building a Complete Model
 
-Here's how to use effect encoding in a complete modeling workflow:
+Here's how to use effect encoding in a complete modeling workflow.
+This example requires the `parsnip`, `workflows`, and `yardstick` packages:
 
-```{r workflow, message=FALSE, warning=FALSE}
+```{r workflow, eval=FALSE}
+library(parsnip)
+library(workflows)
+library(yardstick)
+
 # Define the recipe with mixed effect encoding
 ames_rec <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +

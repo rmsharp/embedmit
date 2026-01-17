@@ -55,7 +55,6 @@ Suggests:
     stringdist,
     tensorflow,
     testthat (>= 3.0.0),
-    tidymodels,
     VBsparsePCA,
     xgboost
 VignetteBuilder: knitr
