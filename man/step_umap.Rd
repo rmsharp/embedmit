@@ -78,8 +78,8 @@ between data and target.}
 
 \item{options}{A list of options to pass to \code{\link[uwotlite:umap]{uwotlite::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model},
-and \code{learning_rate} should not be passed here. By default, \code{verbose},
-\code{n_threads}, and \code{rng_type} are set.}
+and \code{learning_rate} should not be passed here. By default, \code{verbose} and
+\code{n_threads} are set.}
 
 \item{seed}{Two integers to control the random numbers used by the numerical
 methods. The default pulls from the main session's stream of numbers and

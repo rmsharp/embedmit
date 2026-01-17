@@ -8,10 +8,10 @@
 \alias{tunable.step_embed}
 \alias{tunable.step_pca_sparse}
 \alias{tunable.step_pca_sparse_bayes}
-\alias{tunable_embed}
+\alias{tunable_embedmit}
 \alias{tunable.step_umap}
 \alias{tunable.step_woe}
-\title{tunable methods for embed}
+\title{tunable methods for embedmit}
 \usage{
 \method{tunable}{step_discretize_cart}(x, ...)
 

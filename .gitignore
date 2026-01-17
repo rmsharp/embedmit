@@ -6,4 +6,5 @@ man/.Rapp.history
 revdep/cloud.noindex/*
 revdep/checks.noindex
 revdep/library.noindex
-revdep/data.sqlite
+revdep/data.sqlite*.Rcheck/
+*.tar.gz

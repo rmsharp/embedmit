@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-MIT-compatible fork of the 'embed' package. Predictors can be converted to one or more numeric representations using a variety of methods. Effect encodings using simple generalized linear models \doi{10.48550/arXiv.1611.09477} or nonlinear models \doi{10.48550/arXiv.1604.06737} can be used. There are also functions for dimension reduction and other approaches. This fork uses 'uwotlite' and defaults to 'tausworthe' RNG in UMAP to avoid AGPL-licensed dependencies.
+MIT-compatible fork of the 'embed' package. Predictors can be converted to one or more numeric representations using a variety of methods. Effect encodings using simple generalized linear models \doi{10.48550/arXiv.1611.09477} or nonlinear models \doi{10.48550/arXiv.1604.06737} can be used. There are also functions for dimension reduction and other approaches. This fork defaults to 'tausworthe' RNG in UMAP to avoid AGPL-licensed dependencies.
 }
 \seealso{
 Useful links:
