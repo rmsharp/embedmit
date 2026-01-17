@@ -1,26 +1,24 @@
 # Encoding Categorical Data
 
 This vignette demonstrates categorical encoding techniques using
-`embedmit`, closely following the approach from [Chapter 17 of Tidy
-Modeling with R](https://www.tmwr.org/categorical) by Max Kuhn and Julia
-Silge.
+`embedmit`, closely following [Chapter 17 of Tidy Modeling with
+R](https://www.tmwr.org/categorical) by Max Kuhn and Julia Silge.
 
 ## Introduction
 
-For many models, the predictors must be encoded as numbers before
-modeling. The most common encoding for categorical variables is to
-create *dummy* or *indicator* variables. However, when a categorical
-variable has many levels (high cardinality), dummy encoding creates many
-columns and can lead to issues with:
+For statistical modeling in R, the preferred representation for
+categorical or nominal data is a *factor*, which is a variable that can
+take on a limited number of different values. Internally, factors are
+stored as a vector of integer values together with a set of text labels.
 
-- Computational efficiency
-- Overfitting on rare categories
-- Handling new/unseen categories at prediction time
+The most straightforward approach for transforming a categorical
+variable to a numeric representation is to create dummy or indicator
+variables from the levels. However, this approach does not work well
+when you have a variable with high cardinality (too many levels) or when
+you may encounter novel values at prediction time (new levels).
 
-This chapter explores *effect encodings* (also called likelihood
-encodings) as an alternative approach that replaces categorical
-variables with numeric values representing their relationship to the
-outcome.
+This vignette explores alternative encoding strategies that address
+these challenges.
 
 ## Setup
 
@@ -47,29 +45,32 @@ ames_test <- testing(ames_split)
 
 ## Is an Encoding Necessary?
 
-Before diving into encoding strategies, it’s worth noting that some
-models can handle categorical predictors natively:
+A minority of models, such as those based on trees or rules, can handle
+categorical data natively and do not require encoding or transformation
+of these kinds of features. For example:
 
 - **Tree-based models** (decision trees, random forests, boosted trees)
-  can use categorical variables directly by finding optimal splits
+  can find optimal splits on categorical variables directly
 - **Naive Bayes** models compute class probabilities without requiring
   numeric encoding
 
-For these models, converting categories to dummy variables typically
-doesn’t improve performance and may even hurt it. The `recipes` package
-provides
+For these models, research has shown that creating dummy variables
+typically does not improve performance and can increase computation
+time. The `recipes` package provides
 [`step_dummy()`](https://recipes.tidymodels.org/reference/step_dummy.html)
-for standard dummy encoding when needed.
+for standard dummy encoding when it is needed.
 
 ## Using the Outcome for Encoding Predictors
 
-Effect encodings (sometimes called likelihood or target encodings)
-replace categorical levels with a numeric value that represents the
-relationship between that level and the outcome. This approach:
+There are multiple options for encodings more complex than dummy or
+indicator variables. One method called *effect* or *likelihood
+encodings* replaces the original categorical variables with a single
+numeric column that measures the effect of those data.
 
-1.  Reduces a high-cardinality categorical to a single numeric column
-2.  Naturally handles novel categories at prediction time
-3.  Can incorporate regularization to prevent overfitting
+For example, for the Ames housing data, we can compute the mean or
+median sale price for each neighborhood and use this value to represent
+that categorical level. Effect encodings can also seamlessly handle
+situations where a novel factor level is encountered in the data.
 
 ### Visualizing Neighborhood Effects
 
@@ -98,16 +99,12 @@ ames_train %>%
 Mean sale price by neighborhood with 90% confidence intervals.
 Neighborhoods are ordered by their mean sale price.
 
-Some neighborhoods (like Northridge Heights, Stone Brook) command
-premium prices, while others (like Meadow Village, Iowa DOT and Rail
-Road) are associated with lower prices.
-
 ### GLM-Based Effect Encoding
 
 The
 [`step_lencode_glm()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_glm.md)
 function uses a generalized linear model to estimate the effect of each
-category level. The recipe below demonstrates the approach:
+category level:
 
 Code
 
@@ -152,13 +149,13 @@ glm_estimates
 ```
 
 Each neighborhood is replaced by a single numeric value representing its
-effect on sale price (on the log scale). Higher values indicate
-neighborhoods associated with higher prices.
+effect on sale price.
 
 ### Handling Novel Categories
 
-A key advantage of effect encoding is graceful handling of categories
-not seen during training. The encoding includes a special `..new` level:
+Effect encodings can seamlessly handle situations where a novel factor
+level is encountered in the data. The encoding includes a special
+`..new` level:
 
 Code
 
@@ -172,18 +169,22 @@ glm_estimates %>%
 ```
 
 When the model encounters an unseen neighborhood at prediction time, it
-uses this default encoding (typically close to the overall mean).
+uses this default encoding.
 
-### Effect Encodings with Partial Pooling
+## Effect Encodings with Partial Pooling
 
-The GLM approach estimates each neighborhood’s effect independently. For
-neighborhoods with few observations, these estimates can be unreliable.
+Creating an effect encoding with
+[`step_lencode_glm()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_glm.md)
+estimates the effect separately for each factor level (in this case,
+neighborhood). However, some of these neighborhoods have many houses in
+them, and some have only a few. There is much more uncertainty in our
+measurement of price for neighborhoods with few training set homes than
+for neighborhoods with many.
 
-The
+We can use *partial pooling* to adjust these estimates so that levels
+with small sample sizes are shrunk toward the overall mean. The
 [`step_lencode_mixed()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_mixed.md)
-function uses *hierarchical* or *mixed effects* models that apply
-**partial pooling**. This shrinks estimates toward the overall mean,
-with more shrinkage for categories with fewer observations:
+function uses hierarchical or mixed effects models to accomplish this:
 
 Code
 
@@ -268,19 +269,18 @@ glm_estimates %>%
 
 Comparison of GLM (no pooling) versus mixed effects (partial pooling)
 encodings. Point size represents the number of observations in each
-neighborhood. Points below the diagonal indicate shrinkage toward the
-mean.
+neighborhood.
 
-Neighborhoods with fewer observations (smaller points) show more
-shrinkage—their partial pooling estimates are pulled toward the diagonal
-(overall mean). Neighborhoods with many observations retain estimates
-close to the unpooled GLM values.
+When we use partial pooling, we shrink the effect estimates toward the
+mean because we don’t have as much evidence about the price in
+neighborhoods with few observations. Neighborhoods with many
+observations retain estimates close to the unpooled GLM values.
 
 ### Bayesian Effect Encoding
 
-For the most principled uncertainty quantification,
+For fully Bayesian uncertainty quantification,
 [`step_lencode_bayes()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_bayes.md)
-uses a fully Bayesian approach (requires the `rstanarm` package):
+provides an alternative approach (requires the `rstanarm` package):
 
 Code
 
@@ -297,9 +297,10 @@ ames_bayes <-
 
 ## Feature Hashing
 
-An alternative approach for high-cardinality categoricals is *feature
-hashing* (the “hashing trick”). This uses a hash function to map
-categories to a fixed number of columns:
+*Feature hashing* methods also create dummy variables, but only consider
+the value of the category to assign it to a predefined pool of dummy
+variables. A hashing function takes an input of variable size and maps
+it to an output of fixed size.
 
 Code
 
@@ -324,8 +325,9 @@ ames_hashed %>%
 #> 6 Northpark_Villa 6af95b5db968bf393e78188a81e0e1e4
 ```
 
-We can reduce these to a smaller number of bins using the modulo
-operation:
+In feature hashing, the number of possible hashes is a hyperparameter
+and is set by the model developer through computing the modulo of the
+integer hashes:
 
 Code
 
@@ -352,10 +354,9 @@ ames_hashed %>%
 #> 10 Sawyer              8
 ```
 
-The `textrecipes` package provides `step_dummy_hash()` for this
-approach. Note that `embedmit` previously provided
-[`step_feature_hash()`](https://rmsharp.github.io/embedmit/dev/reference/step_feature_hash.md)
-but this is now deprecated in favor of `textrecipes::step_dummy_hash()`.
+Feature hashing can handle new category levels at prediction time, since
+it does not rely on pre-determined dummy variables. The `textrecipes`
+package provides `step_dummy_hash()` for this approach.
 
 ## More Encoding Options
 
@@ -371,28 +372,28 @@ The `embedmit` package offers additional encoding methods:
 
 ## Chapter Summary
 
-Encoding categorical predictors is a fundamental preprocessing step for
-many models:
+The most straightforward option for transforming a categorical variable
+to a numeric representation is to create dummy variables from the
+levels, but this option does not work well when you have a variable with
+high cardinality (too many levels) or when you may see novel values at
+prediction time (new levels).
 
-- **Dummy variables** work well for low-cardinality categoricals but
-  create many columns for high-cardinality variables
+Effect encodings and feature hashing address these challenges:
+
 - **Effect encodings** replace categories with a single numeric value
-  representing the outcome relationship, handling high cardinality
-  elegantly
+  measuring the outcome relationship
 - **Partial pooling** (via
   [`step_lencode_mixed()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_mixed.md))
-  provides regularization for categories with few observations
-- **Feature hashing** offers a fast, memory-efficient alternative that
-  works well for very high cardinality
-- Tree-based models often work better with untransformed categorical
-  variables
+  adjusts estimates so that levels with small sample sizes are shrunk
+  toward the overall mean
+- **Feature hashing** maps categories to a predefined pool of dummy
+  variables and can handle novel categories
 
-The choice of encoding strategy depends on:
-
-1.  The model being used
-2.  The cardinality of categorical variables
-3.  Whether interpretability is important
-4.  How novel categories should be handled at prediction time
+Other options include entity embeddings (learned via a neural network
+with
+[`step_embed()`](https://rmsharp.github.io/embedmit/dev/reference/step_embed.md))
+and weight of evidence transformation (via
+[`step_woe()`](https://rmsharp.github.io/embedmit/dev/reference/step_woe.md)).
 
 ## References
 

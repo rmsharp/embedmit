@@ -73,25 +73,23 @@ Chapter 17 of Tidy Modeling with R</h4>
     
     
 <p>This vignette demonstrates categorical encoding techniques using
-<code>embedmit</code>, closely following the approach from <a href="https://www.tmwr.org/categorical" class="external-link">Chapter 17 of Tidy Modeling with
+<code>embedmit</code>, closely following <a href="https://www.tmwr.org/categorical" class="external-link">Chapter 17 of Tidy Modeling with
 R</a> by Max Kuhn and Julia Silge.</p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>For many models, the predictors must be encoded as numbers before
-modeling. The most common encoding for categorical variables is to
-create <em>dummy</em> or <em>indicator</em> variables. However, when a
-categorical variable has many levels (high cardinality), dummy encoding
-creates many columns and can lead to issues with:</p>
-<ul>
-<li>Computational efficiency</li>
-<li>Overfitting on rare categories</li>
-<li>Handling new/unseen categories at prediction time</li>
-</ul>
-<p>This chapter explores <em>effect encodings</em> (also called
-likelihood encodings) as an alternative approach that replaces
-categorical variables with numeric values representing their
-relationship to the outcome.</p>
+<p>For statistical modeling in R, the preferred representation for
+categorical or nominal data is a <em>factor</em>, which is a variable
+that can take on a limited number of different values. Internally,
+factors are stored as a vector of integer values together with a set of
+text labels.</p>
+<p>The most straightforward approach for transforming a categorical
+variable to a numeric representation is to create dummy or indicator
+variables from the levels. However, this approach does not work well
+when you have a variable with high cardinality (too many levels) or when
+you may encounter novel values at prediction time (new levels).</p>
+<p>This vignette explores alternative encoding strategies that address
+these challenges.</p>
 </div>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
@@ -117,34 +115,35 @@ relationship to the outcome.</p>
 <div class="section level2">
 <h2 id="is-an-encoding-necessary">Is an Encoding Necessary?<a class="anchor" aria-label="anchor" href="#is-an-encoding-necessary"></a>
 </h2>
-<p>Before diving into encoding strategies, it’s worth noting that some
-models can handle categorical predictors natively:</p>
+<p>A minority of models, such as those based on trees or rules, can
+handle categorical data natively and do not require encoding or
+transformation of these kinds of features. For example:</p>
 <ul>
 <li>
 <strong>Tree-based models</strong> (decision trees, random forests,
-boosted trees) can use categorical variables directly by finding optimal
-splits</li>
+boosted trees) can find optimal splits on categorical variables
+directly</li>
 <li>
 <strong>Naive Bayes</strong> models compute class probabilities
 without requiring numeric encoding</li>
 </ul>
-<p>For these models, converting categories to dummy variables typically
-doesn’t improve performance and may even hurt it. The
-<code>recipes</code> package provides <code><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy()</a></code> for
-standard dummy encoding when needed.</p>
+<p>For these models, research has shown that creating dummy variables
+typically does not improve performance and can increase computation
+time. The <code>recipes</code> package provides
+<code><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy()</a></code> for standard dummy encoding when it is
+needed.</p>
 </div>
 <div class="section level2">
 <h2 id="using-the-outcome-for-encoding-predictors">Using the Outcome for Encoding Predictors<a class="anchor" aria-label="anchor" href="#using-the-outcome-for-encoding-predictors"></a>
 </h2>
-<p>Effect encodings (sometimes called likelihood or target encodings)
-replace categorical levels with a numeric value that represents the
-relationship between that level and the outcome. This approach:</p>
-<ol style="list-style-type: decimal">
-<li>Reduces a high-cardinality categorical to a single numeric
-column</li>
-<li>Naturally handles novel categories at prediction time</li>
-<li>Can incorporate regularization to prevent overfitting</li>
-</ol>
+<p>There are multiple options for encodings more complex than dummy or
+indicator variables. One method called <em>effect</em> or <em>likelihood
+encodings</em> replaces the original categorical variables with a single
+numeric column that measures the effect of those data.</p>
+<p>For example, for the Ames housing data, we can compute the mean or
+median sale price for each neighborhood and use this value to represent
+that categorical level. Effect encodings can also seamlessly handle
+situations where a novel factor level is encountered in the data.</p>
 <div class="section level3">
 <h3 id="visualizing-neighborhood-effects">Visualizing Neighborhood Effects<a class="anchor" aria-label="anchor" href="#visualizing-neighborhood-effects"></a>
 </h3>
@@ -169,16 +168,12 @@ Mean sale price by neighborhood with 90% confidence intervals.
 Neighborhoods are ordered by their mean sale price.
 </p>
 </div>
-<p>Some neighborhoods (like Northridge Heights, Stone Brook) command
-premium prices, while others (like Meadow Village, Iowa DOT and Rail
-Road) are associated with lower prices.</p>
 </div>
 <div class="section level3">
 <h3 id="glm-based-effect-encoding">GLM-Based Effect Encoding<a class="anchor" aria-label="anchor" href="#glm-based-effect-encoding"></a>
 </h3>
 <p>The <code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code> function uses a generalized
-linear model to estimate the effect of each category level. The recipe
-below demonstrates the approach:</p>
+linear model to estimate the effect of each category level:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_glm</span> <span class="op">&lt;-</span></span>
 <span><span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
@@ -213,14 +208,13 @@ using <code><a href="https://generics.r-lib.org/reference/tidy.html" class="exte
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Sawyer_West        <span style="text-decoration: underline;">182</span>651. Neighborhood lencode_glm_yj20u</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 19 more rows</span></span></span></code></pre></div>
 <p>Each neighborhood is replaced by a single numeric value representing
-its effect on sale price (on the log scale). Higher values indicate
-neighborhoods associated with higher prices.</p>
+its effect on sale price.</p>
 </div>
 <div class="section level3">
 <h3 id="handling-novel-categories">Handling Novel Categories<a class="anchor" aria-label="anchor" href="#handling-novel-categories"></a>
 </h3>
-<p>A key advantage of effect encoding is graceful handling of categories
-not seen during training. The encoding includes a special
+<p>Effect encodings can seamlessly handle situations where a novel
+factor level is encountered in the data. The encoding includes a special
 <code>..new</code> level:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_estimates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -230,19 +224,22 @@ not seen during training. The encoding includes a special
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ..new <span style="text-decoration: underline;">183</span>150. Neighborhood lencode_glm_yj20u</span></span></code></pre></div>
 <p>When the model encounters an unseen neighborhood at prediction time,
-it uses this default encoding (typically close to the overall mean).</p>
+it uses this default encoding.</p>
 </div>
-<div class="section level3">
-<h3 id="effect-encodings-with-partial-pooling">Effect Encodings with Partial Pooling<a class="anchor" aria-label="anchor" href="#effect-encodings-with-partial-pooling"></a>
-</h3>
-<p>The GLM approach estimates each neighborhood’s effect independently.
-For neighborhoods with few observations, these estimates can be
-unreliable.</p>
-<p>The <code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> function uses
-<em>hierarchical</em> or <em>mixed effects</em> models that apply
-<strong>partial pooling</strong>. This shrinks estimates toward the
-overall mean, with more shrinkage for categories with fewer
-observations:</p>
+</div>
+<div class="section level2">
+<h2 id="effect-encodings-with-partial-pooling">Effect Encodings with Partial Pooling<a class="anchor" aria-label="anchor" href="#effect-encodings-with-partial-pooling"></a>
+</h2>
+<p>Creating an effect encoding with <code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code>
+estimates the effect separately for each factor level (in this case,
+neighborhood). However, some of these neighborhoods have many houses in
+them, and some have only a few. There is much more uncertainty in our
+measurement of price for neighborhoods with few training set homes than
+for neighborhoods with many.</p>
+<p>We can use <em>partial pooling</em> to adjust these estimates so that
+levels with small sample sizes are shrunk toward the overall mean. The
+<code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> function uses hierarchical or mixed
+effects models to accomplish this:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_mixed</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
@@ -281,7 +278,6 @@ observations:</p>
 <span><span class="co">#&gt;   level   value terms        id                 </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ..new <span style="text-decoration: underline;">183</span>225. Neighborhood lencode_mixed_AmBz1</span></span></code></pre></div>
-</div>
 <div class="section level3">
 <h3 id="comparing-pooling-methods">Comparing Pooling Methods<a class="anchor" aria-label="anchor" href="#comparing-pooling-methods"></a>
 </h3>
@@ -308,23 +304,22 @@ observations:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>size <span class="op">=</span> <span class="st">"sqrt(n)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="categorical-encoding-01_files/figure-html/compare-pooling-1.png" class="r-plt" alt="Comparison of GLM (no pooling) versus mixed effects (partial pooling) encodings. Point size represents the number of observations in each neighborhood. Points below the diagonal indicate shrinkage toward the mean." width="672"><p class="caption">
+<img src="categorical-encoding-01_files/figure-html/compare-pooling-1.png" class="r-plt" alt="Comparison of GLM (no pooling) versus mixed effects (partial pooling) encodings. Point size represents the number of observations in each neighborhood." width="672"><p class="caption">
 Comparison of GLM (no pooling) versus mixed effects (partial pooling)
 encodings. Point size represents the number of observations in each
-neighborhood. Points below the diagonal indicate shrinkage toward the
-mean.
+neighborhood.
 </p>
 </div>
-<p>Neighborhoods with fewer observations (smaller points) show more
-shrinkage—their partial pooling estimates are pulled toward the diagonal
-(overall mean). Neighborhoods with many observations retain estimates
-close to the unpooled GLM values.</p>
+<p>When we use partial pooling, we shrink the effect estimates toward
+the mean because we don’t have as much evidence about the price in
+neighborhoods with few observations. Neighborhoods with many
+observations retain estimates close to the unpooled GLM values.</p>
 </div>
 <div class="section level3">
 <h3 id="bayesian-effect-encoding">Bayesian Effect Encoding<a class="anchor" aria-label="anchor" href="#bayesian-effect-encoding"></a>
 </h3>
-<p>For the most principled uncertainty quantification,
-<code><a href="../reference/step_lencode_bayes.html">step_lencode_bayes()</a></code> uses a fully Bayesian approach
+<p>For fully Bayesian uncertainty quantification,
+<code><a href="../reference/step_lencode_bayes.html">step_lencode_bayes()</a></code> provides an alternative approach
 (requires the <code>rstanarm</code> package):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_bayes</span> <span class="op">&lt;-</span></span>
@@ -340,9 +335,10 @@ close to the unpooled GLM values.</p>
 <div class="section level2">
 <h2 id="feature-hashing">Feature Hashing<a class="anchor" aria-label="anchor" href="#feature-hashing"></a>
 </h2>
-<p>An alternative approach for high-cardinality categoricals is
-<em>feature hashing</em> (the “hashing trick”). This uses a hash
-function to map categories to a fixed number of columns:</p>
+<p><em>Feature hashing</em> methods also create dummy variables, but
+only consider the value of the category to assign it to a predefined
+pool of dummy variables. A hashing function takes an input of variable
+size and maps it to an output of fixed size.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rlang.r-lib.org" class="external-link">rlang</a></span><span class="op">)</span></span>
 <span></span>
@@ -362,8 +358,9 @@ function to map categories to a fixed number of columns:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Briardale       b598bec306983e3e68a3118952df8cf0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Northpark_Villa 6af95b5db968bf393e78188a81e0e1e4</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Northpark_Villa 6af95b5db968bf393e78188a81e0e1e4</span></span></code></pre></div>
-<p>We can reduce these to a smaller number of bins using the modulo
-operation:</p>
+<p>In feature hashing, the number of possible hashes is a hyperparameter
+and is set by the model developer through computing the modulo of the
+integer hashes:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_hashed</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -385,11 +382,10 @@ operation:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Sawyer_West         9</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Sawyer              8</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Sawyer              8</span></span></code></pre></div>
-<p>The <code>textrecipes</code> package provides
-<code>step_dummy_hash()</code> for this approach. Note that
-<code>embedmit</code> previously provided
-<code><a href="../reference/step_feature_hash.html">step_feature_hash()</a></code> but this is now deprecated in favor of
-<code>textrecipes::step_dummy_hash()</code>.</p>
+<p>Feature hashing can handle new category levels at prediction time,
+since it does not rely on pre-determined dummy variables. The
+<code>textrecipes</code> package provides <code>step_dummy_hash()</code>
+for this approach.</p>
 </div>
 <div class="section level2">
 <h2 id="more-encoding-options">More Encoding Options<a class="anchor" aria-label="anchor" href="#more-encoding-options"></a>
@@ -432,33 +428,27 @@ methods:</p>
 <div class="section level2">
 <h2 id="chapter-summary">Chapter Summary<a class="anchor" aria-label="anchor" href="#chapter-summary"></a>
 </h2>
-<p>Encoding categorical predictors is a fundamental preprocessing step
-for many models:</p>
+<p>The most straightforward option for transforming a categorical
+variable to a numeric representation is to create dummy variables from
+the levels, but this option does not work well when you have a variable
+with high cardinality (too many levels) or when you may see novel values
+at prediction time (new levels).</p>
+<p>Effect encodings and feature hashing address these challenges:</p>
 <ul>
 <li>
-<strong>Dummy variables</strong> work well for low-cardinality
-categoricals but create many columns for high-cardinality variables</li>
-<li>
 <strong>Effect encodings</strong> replace categories with a single
-numeric value representing the outcome relationship, handling high
-cardinality elegantly</li>
+numeric value measuring the outcome relationship</li>
 <li>
 <strong>Partial pooling</strong> (via
-<code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code>) provides regularization for
-categories with few observations</li>
+<code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code>) adjusts estimates so that levels with
+small sample sizes are shrunk toward the overall mean</li>
 <li>
-<strong>Feature hashing</strong> offers a fast, memory-efficient
-alternative that works well for very high cardinality</li>
-<li>Tree-based models often work better with untransformed categorical
-variables</li>
+<strong>Feature hashing</strong> maps categories to a predefined
+pool of dummy variables and can handle novel categories</li>
 </ul>
-<p>The choice of encoding strategy depends on:</p>
-<ol style="list-style-type: decimal">
-<li>The model being used</li>
-<li>The cardinality of categorical variables</li>
-<li>Whether interpretability is important</li>
-<li>How novel categories should be handled at prediction time</li>
-</ol>
+<p>Other options include entity embeddings (learned via a neural network
+with <code><a href="../reference/step_embed.html">step_embed()</a></code>) and weight of evidence transformation
+(via <code><a href="../reference/step_woe.html">step_woe()</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
