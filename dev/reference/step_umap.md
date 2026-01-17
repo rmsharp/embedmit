@@ -114,7 +114,7 @@ step_umap(
   [`uwotlite::umap()`](https://rdrr.io/pkg/uwotlite/man/umap.html). The
   arguments `X`, `n_neighbors`, `n_components`, `min_dist`, `n_epochs`,
   `ret_model`, and `learning_rate` should not be passed here. By
-  default, `verbose`, `n_threads`, and `rng_type` are set.
+  default, `verbose` and `n_threads` are set.
 
 - seed:
 

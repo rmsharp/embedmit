@@ -12,10 +12,10 @@
 <url><loc>https://rmsharp.github.io/embedmit/dev/news/index.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/add_woe.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/dictionary.html</loc></url>
-<url><loc>https://rmsharp.github.io/embedmit/dev/reference/embed-package.html</loc></url>
+<url><loc>https://rmsharp.github.io/embedmit/dev/reference/embedmit-package.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/index.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/reexports.html</loc></url>
-<url><loc>https://rmsharp.github.io/embedmit/dev/reference/required_pkgs.embed.html</loc></url>
+<url><loc>https://rmsharp.github.io/embedmit/dev/reference/required_pkgs.embedmit.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/solubility.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/step_collapse_cart.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/step_collapse_stringdist.html</loc></url>
@@ -32,7 +32,7 @@
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/step_pca_truncated.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/step_umap.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/step_woe.html</loc></url>
-<url><loc>https://rmsharp.github.io/embedmit/dev/reference/tunable_embed.html</loc></url>
+<url><loc>https://rmsharp.github.io/embedmit/dev/reference/tunable_embedmit.html</loc></url>
 <url><loc>https://rmsharp.github.io/embedmit/dev/reference/woe_table.html</loc></url>
 </urlset>
 
