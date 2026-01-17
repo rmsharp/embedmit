@@ -26,8 +26,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-# Check for required packages
-required_pkgs <- c("modeldata", "ggplot2", "lme4", "dplyr", "rsample", "purrr")
+# Check for required packages (including embedmit itself for vignette building)
+required_pkgs <- c("embedmit", "modeldata", "ggplot2", "lme4", "dplyr", "rsample", "purrr")
 have_pkgs <- vapply(required_pkgs, requireNamespace, logical(1), quietly = TRUE)
 if (!all(have_pkgs)) {
   knitr::opts_chunk$set(eval = FALSE)
