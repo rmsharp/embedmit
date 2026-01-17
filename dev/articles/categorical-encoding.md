@@ -12,7 +12,9 @@ suitable for machine learning models.
 
 ``` r
 library(embedmit)
-library(tidymodels)
+library(recipes)
+library(dplyr)
+library(rsample)
 library(modeldata)
 
 # Load the Ames housing data
@@ -275,9 +277,14 @@ Mean sale price by neighborhood with 90% confidence intervals
 
 ## Building a Complete Model
 
-Here’s how to use effect encoding in a complete modeling workflow:
+Here’s how to use effect encoding in a complete modeling workflow. This
+example requires the `parsnip`, `workflows`, and `yardstick` packages:
 
 ``` r
+library(parsnip)
+library(workflows)
+library(yardstick)
+
 # Define the recipe with mixed effect encoding
 ames_rec <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
@@ -305,12 +312,6 @@ ames_pred <- predict(ames_fit, ames_test) %>%
 
 ames_pred %>%
   metrics(truth = Sale_Price, estimate = .pred)
-#> # A tibble: 3 × 3
-#>   .metric .estimator .estimate
-#>   <chr>   <chr>          <dbl>
-#> 1 rmse    standard   38832.   
-#> 2 rsq     standard       0.779
-#> 3 mae     standard   25362.
 ```
 
 ## Additional Encoding Methods in embedmit
