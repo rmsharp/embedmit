@@ -55,6 +55,7 @@ library(recipes)
 library(dplyr)
 library(rsample)
 library(ggplot2)
+library(purrr)
 library(modeldata)
 
 # Load the Ames housing data
