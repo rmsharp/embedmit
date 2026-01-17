@@ -38,7 +38,7 @@ Imports:
     uwotlite,
     vctrs,
     withr
-Suggests: 
+Suggests:
     covr,
     dials (>= 1.2.0),
     ggplot2,
@@ -51,11 +51,14 @@ Suggests:
     rmarkdown,
     rpart,
     rstanarm,
+    scales,
     stringdist,
     tensorflow,
     testthat (>= 3.0.0),
+    tidymodels,
     VBsparsePCA,
     xgboost
+VignetteBuilder: knitr
 ByteCompile: true
 Remotes: rmsharp/uwotlite
 Config/Needs/website: tidymodels, ggiraph, reticulate
