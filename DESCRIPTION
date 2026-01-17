@@ -51,13 +51,14 @@ Suggests:
     rmarkdown,
     rpart,
     rstanarm,
+    quarto,
     scales,
     stringdist,
     tensorflow,
     testthat (>= 3.0.0),
     VBsparsePCA,
     xgboost
-VignetteBuilder: knitr
+VignetteBuilder: knitr, quarto
 ByteCompile: true
 Remotes: rmsharp/uwotlite
 Config/Needs/website: tidymodels, ggiraph, reticulate
