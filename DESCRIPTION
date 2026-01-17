@@ -19,8 +19,8 @@ Description: MIT-compatible fork of the 'embed' package. Predictors can be
 License: MIT + file LICENSE
 URL: https://github.com/rmsharp/embedmit
 BugReports: https://github.com/rmsharp/embedmit/issues
-Depends: 
-    R (>= 4.1),
+Depends:
+    R (>= 4.3),
     recipes (>= 1.1.0)
 Imports:
     cli,
