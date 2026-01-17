@@ -1,8 +1,8 @@
 # xgb_binning for multi-classification
 
     Code
-      embedmit:::xgb_binning(attrition_data_small, "EducationField", "Age", sample_val = 0.3,
-        learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
+      embedmit:::xgb_binning(attrition_data_small, "EducationField", "Age",
+        sample_val = 0.3, learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
     Output
       numeric(0)
 
