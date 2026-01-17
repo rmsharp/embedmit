@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "command": "bash -c 'if echo \"$TOOL_INPUT\" | grep -q \"git commit\"; then echo \"REMINDER: Ensure all tests pass before committing. Run devtools::test() first.\"; fi'"
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(devtools::test*)",
+      "Bash(devtools::check*)",
+      "Bash(testthat::test_file*)",
+      "Bash(R CMD check*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git push*)"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+#!/bin/bash
+# Git pre-commit hook for embedmit
+# Runs full test suite before allowing commit
+
+# Get the root directory of the git repository
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+
+echo "Running pre-commit tests for embedmit..."
+echo ""
+
+# Run the pre-commit test script
+if [ -x "$ROOT_DIR/scripts/precommit-tests.sh" ]; then
+    "$ROOT_DIR/scripts/precommit-tests.sh"
+    exit $?
+else
+    echo "Warning: precommit-tests.sh not found or not executable"
+    echo "Running basic test check..."
+
+    cd "$ROOT_DIR"
+    Rscript -e "
+      results <- devtools::test(reporter = 'summary')
+      df <- as.data.frame(results)
+      if (sum(df\$failed) > 0 || sum(df\$error) > 0) {
+        quit(status = 1)
+      }
+    "
+    exit $?
+fi
