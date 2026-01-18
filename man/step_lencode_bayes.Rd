@@ -134,10 +134,10 @@ Modeling," arXiv:1611.09477
 \url{https://CRAN.R-project.org/package=rstanarm/vignettes/pooling.html}
 
 "Prior Distributions for \code{rstanarm} Models"
-\url{http://mc-stan.org/rstanarm/reference/priors.html}
+\url{https://mc-stan.org/rstanarm/reference/priors.html}
 
 "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
-\code{rstanarm}" \url{http://mc-stan.org/rstanarm/articles/glmer.html}
+\code{rstanarm}" \url{https://mc-stan.org/rstanarm/articles/glmer.html}
 }
 \seealso{
 \code{\link[=step_lencode]{step_lencode()}}, \code{\link[=step_lencode_glm]{step_lencode_glm()}}, \code{\link[=step_lencode_mixed]{step_lencode_mixed()}}

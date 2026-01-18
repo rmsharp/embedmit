@@ -245,7 +245,7 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 
     # compute epochs actually trained for
     epochs <- min(res$history$params$epochs, length(res$history$metrics[[1]]))
-    .hist <- # TODO convert to pivot and get signature for below
+    .hist <-
       as_tibble(res$history$metrics) |>
       mutate(epochs = 1:epochs) |>
       tidyr::pivot_longer(c(-epochs), names_to = "type", values_to = "loss")

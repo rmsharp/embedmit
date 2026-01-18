@@ -86,10 +86,10 @@
 #' \url{https://CRAN.R-project.org/package=rstanarm/vignettes/pooling.html}
 #'
 #' "Prior Distributions for `rstanarm` Models"
-#' \url{http://mc-stan.org/rstanarm/reference/priors.html}
+#' \url{https://mc-stan.org/rstanarm/reference/priors.html}
 #'
 #' "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
-#' `rstanarm`" \url{http://mc-stan.org/rstanarm/articles/glmer.html}
+#' `rstanarm`" \url{https://mc-stan.org/rstanarm/articles/glmer.html}
 #'
 #' @examplesIf rlang::is_installed("modeldata")
 #' library(recipes)
