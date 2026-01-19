@@ -282,7 +282,7 @@ woe_table <- function(
       predictor = as.character(predictor)
     )
 
-  return(woe_tbl)
+  woe_tbl
 }
 
 #' Weight of evidence dictionary
@@ -382,15 +382,15 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
     dictionary <- dictionary(.data, outcome, ...)
   } else {
     if (is.null(dictionary$variable)) {
-      cli::cli_abort('Column {.field variable} is missing in dictionary.')
+      cli::cli_abort("Column {.field variable} is missing in dictionary.")
     }
     if (is.null(dictionary$predictor)) {
       cli::cli_abort(
-        'The column {.code predictor} is missing in the dictionary.'
+        "The column {.code predictor} is missing in the dictionary."
       )
     }
     if (is.null(dictionary$woe)) {
-      cli::cli_abort('Column {.field woe} is missing in dictionary.')
+      cli::cli_abort("Column {.field woe} is missing in dictionary.")
     }
   }
 
