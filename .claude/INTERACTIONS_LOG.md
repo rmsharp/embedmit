@@ -253,7 +253,7 @@ uwotlite::umap(
 
 ```
 embedmit/
-├── R/                              # 18 source files
+├── R/                              # 22 source files
 │   ├── umap.R                      # Modified: uwotlite + tausworthe default
 │   ├── lencode.R                   # Base likelihood encoding
 │   ├── lencode_glm.R               # GLM-based encoding
@@ -272,7 +272,7 @@ embedmit/
 │   ├── tunable.R                   # Tunable parameter definitions
 │   ├── reexports.R                 # Re-exported functions
 │   └── aaa.R                       # Package initialization
-├── tests/testthat/                 # 833 tests across 22 test files
+├── tests/testthat/                 # 833 tests across 24 test files
 │   ├── test-zzz_comparison_embed.R # Comparison tests vs embed (run last)
 │   ├── test-coverage_gaps.R        # 59 comprehensive coverage tests
 │   ├── test-fork_regressions.R     # Fork-specific regression tests
@@ -304,16 +304,19 @@ embedmit/
 
 ```
 uwotlite/
-├── R/                              # UMAP implementation
+├── R/                              # 13 source files
 │   ├── uwot.R                      # Main UMAP functions
 │   ├── umap2.R                     # Alternative UMAP interface
 │   ├── transform.R                 # Transform new data
+│   ├── neighbors.R                 # Nearest neighbor search
+│   ├── affinity.R                  # Affinity calculations
+│   ├── init.R                      # Initialization methods
 │   └── ...                         # Supporting functions
-├── src/                            # C++ code
+├── src/                            # 13 C++ files
 │   ├── rng.h                       # Modified: sitmo instead of dqrng
 │   ├── optimize.cpp                # SGD optimization
 │   └── ...                         # Other C++ sources
-├── tests/testthat/                 # 1140 tests
+├── tests/testthat/                 # 1140 tests across 26 test files
 │   ├── test_comparison_uwot.R      # Comparison tests vs uwot
 │   ├── test-coverage_gaps.R        # 94 coverage gap tests
 │   └── ...                         # Feature tests
