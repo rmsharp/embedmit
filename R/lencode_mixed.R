@@ -229,7 +229,7 @@ lme_coefs <- function(x, y, wts = NULL, ...) {
   mod <- rlang::eval_tidy(cl)
 
   coefs <- coef(mod)$value
-  ..levels <- rownames(coefs)
+  ..levels <- rownames(coefs) # nolint: object_name_linter
   coefs <- coefs[, 1]
   names(coefs) <- ..levels
   mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)

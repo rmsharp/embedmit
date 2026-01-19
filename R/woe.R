@@ -146,7 +146,7 @@ step_woe <- function(
   outcome,
   trained = FALSE,
   dictionary = NULL,
-  Laplace = 1e-6,
+  Laplace = 1e-6, # nolint: object_name_linter
   prefix = "woe",
   keep_original_cols = FALSE,
   skip = FALSE,
@@ -182,7 +182,7 @@ step_woe_new <- function(
   trained,
   outcome,
   dictionary,
-  Laplace,
+  Laplace, # nolint: object_name_linter
   prefix,
   keep_original_cols,
   skip,
@@ -234,7 +234,7 @@ step_woe_new <- function(
 woe_table <- function(
   predictor,
   outcome,
-  Laplace = 1e-6,
+  Laplace = 1e-6, # nolint: object_name_linter
   call = rlang::caller_env(0)
 ) {
   if (is.factor(outcome)) {
@@ -323,7 +323,7 @@ woe_table <- function(
 #' Statistics_, 2, pp.249-270.
 #'
 #' @export
-dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
+dictionary <- function(.data, outcome, ..., Laplace = 1e-6) { # nolint: object_name_linter
   outcome_vector <- .data |> dplyr::pull(!!outcome)
   res <- dplyr::select(.data, ..., -!!outcome)
   res <- lapply(
@@ -465,7 +465,7 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
       dplyr::summarize(low_n = sum(n_tot < 10))
 
     if (any(n_count$low_n > 0)) {
-      flagged <- n_count$variable[n_count$low_n > 0]
+      flagged <- n_count$variable[n_count$low_n > 0] # nolint: object_usage_linter
       cli::cli_warn(
         "Some columns used by {.fn step_woe} have categories with fewer than 10 
         values: {.val {unique(flagged)}}"

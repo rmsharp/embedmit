@@ -187,7 +187,7 @@ cart_binning <- function(
     )
 
   if (inherits(cart_mdl, "try-error")) {
-    err <- conditionMessage(attr(cart_mdl, "condition"))
+    err <- conditionMessage(attr(cart_mdl, "condition")) # nolint: object_usage_linter
     cli::cli_warn(
       "step_discretize_cart() failed to create a tree for predictor \\
       {.var {term}}, which will not be binned. The error: {err}"

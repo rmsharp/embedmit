@@ -489,7 +489,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     )
     too_few <- num_unique < 20
     if (any(too_few)) {
-      predictors <- paste0("'", col_names[too_few], "'", collapse = ", ")
+      predictors <- paste0("'", col_names[too_few], "'", collapse = ", ") # nolint: object_usage_linter
       cli::cli_warn(
         c(
           "More than 20 unique training set values are required.",

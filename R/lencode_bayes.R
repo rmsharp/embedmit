@@ -249,7 +249,7 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
   cl <- rlang::call2("stan_glmer", .ns = "rstanarm", !!!args)
 
   if (!verbose) {
-    junk <- capture.output(mod <- rlang::eval_tidy(cl))
+    junk <- capture.output(mod <- rlang::eval_tidy(cl)) # nolint: object_usage_linter
   } else {
     mod <- rlang::eval_tidy(cl)
   }

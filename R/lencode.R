@@ -227,7 +227,7 @@ lencode_calc <- function(x, y, wts = NULL, smooth = TRUE) {
 
   res <- dplyr::summarise(
     data,
-    ..value := {{ call }},
+    ..value := {{ call }}, # nolint: object_name_linter
     .by = ..level
   )
 
