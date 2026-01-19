@@ -6,7 +6,7 @@ articles:
   categorical-encoding: categorical-encoding.html
   Applications/GLM: Applications/GLM.html
   Applications/Tensorflow: Applications/Tensorflow.html
-last_built: 2026-01-19T05:12Z
+last_built: 2026-01-19T05:24Z
 urls:
   reference: https://rmsharp.github.io/embedmit/reference
   article: https://rmsharp.github.io/embedmit/articles
