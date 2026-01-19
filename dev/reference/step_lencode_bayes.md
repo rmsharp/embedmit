@@ -158,11 +158,10 @@ Predictive Modeling," arXiv:1611.09477
 <https://CRAN.R-project.org/package=rstanarm/vignettes/pooling.html>
 
 "Prior Distributions for `rstanarm` Models"
-[http://mc-stan.org/rstanarm/reference/priors.html](http://mc-stan.org/rstanarm/reference/priors.md)
+<https://mc-stan.org/rstanarm/reference/priors.html>
 
 "Estimating Generalized (Non-)Linear Models with Group-Specific Terms
-with `rstanarm`"
-[http://mc-stan.org/rstanarm/articles/glmer.html](http://mc-stan.org/rstanarm/articles/glmer.md)
+with `rstanarm`" <https://mc-stan.org/rstanarm/articles/glmer.html>
 
 ## See also
 
