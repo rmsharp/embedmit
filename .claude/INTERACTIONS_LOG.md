@@ -462,3 +462,74 @@ The duplicate file contained the same ~22 comparison tests as `test-zzz_comparis
 
 ### Lesson Learned
 When renaming test files, ensure the old file is completely removed from the installed package. Running `devtools::install(quick = FALSE)` with a full rebuild ensures the installed tests match the source repository.
+
+---
+
+## 2026-01-19: Lintr Compliance and Code Style
+
+### Summary
+Achieved full lintr compliance by fixing code style issues and adding appropriate nolint comments for intentional exceptions.
+
+### Work Completed
+
+#### 1. Fixed Line Length Issues (>80 characters)
+Wrapped roxygen documentation and long strings across multiple R files:
+- R/collapse_cart.R, R/collapse_stringdist.R
+- R/discretize_cart.R, R/discretize_xgb.R
+- R/embed.R, R/lencode_bayes.R, R/lencode_glm.R, R/lencode_mixed.R
+- R/pca_sparse.R, R/pca_sparse_bayes.R, R/pca_truncated.R
+- R/umap.R, R/woe.R
+
+Added `# nolint start: line_length_linter` / `# nolint end` for unavoidable long URLs.
+
+#### 2. Fixed Quote Style Issues
+Changed single quotes to double quotes in cli_abort() calls in R/woe.R:
+```r
+# Before
+cli::cli_abort('Column {.field variable} is missing in dictionary.')
+# After
+cli::cli_abort("Column {.field variable} is missing in dictionary.")
+```
+
+#### 3. Removed Explicit Returns
+Replaced `return(woe_tbl)` with implicit return `woe_tbl` in R/woe.R.
+
+#### 4. Added nolint Comments for Intentional Exceptions
+
+| File | Variable | Linter | Reason |
+|------|----------|--------|--------|
+| discretize_cart.R:190 | `err` | object_usage | Used in cli glue string |
+| discretize_xgb.R:492 | `predictors` | object_usage | Used in cli glue string |
+| lencode_bayes.R:252 | `junk` | object_usage | Captures output for side effect |
+| lencode_mixed.R:232 | `..levels` | object_name | Tidy eval internal variable |
+| lencode.R:230 | `..value` | object_name | Tidy eval internal variable |
+| woe.R (4 places) | `Laplace` | object_name | API parameter name |
+| woe.R:468 | `flagged` | object_usage | Used in cli glue string |
+
+#### 5. Updated .lintr Configuration
+Created exclusions for files that cannot/should not be modified:
+```
+exclusions: list(
+    "R/import-standalone-types-check.R",
+    "R/import-standalone-obj-type.R",
+    "vignettes",
+    "tests"
+  )
+```
+
+#### 6. Fixed .gitignore
+- Fixed malformed line (`revdep/data.sqlite*.Rcheck/` was two entries merged)
+- Added `..Rcheck/` pattern for parent directory R CMD check output
+- Added `vignettes/*.html` and `vignettes/*_files/` for rendered vignettes
+
+### Final Result
+```
+> lintr::lint_package()
+ℹ No lints found.
+```
+
+### Commits
+- `09358ca` Fix line length issues (>80 chars) found by lintr
+- `e994cbf` Fix lintr issues: double quotes and explicit return
+- `e2aaf38` Add nolint comments for intentional lintr exceptions
+- `6d88786` Fix .gitignore: add R CMD check and vignette build artifacts
