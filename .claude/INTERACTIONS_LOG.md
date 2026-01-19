@@ -415,3 +415,50 @@ uwotlite/
 | UMAP dependency | uwot → uwotlite | N/A |
 | AGPL dependency | dqrng (removed) | dqrng → sitmo |
 | Test count | ~400 → 833 | ~800 → 1140 |
+
+---
+
+## 2026-01-19: Diagnosed Duplicate Test File Issue
+
+### Summary
+Investigated user-reported test failures (9 failures) that occurred when running `devtools::test()` manually, despite tests passing during development.
+
+### Root Cause Analysis
+
+#### The Problem
+When the user ran tests manually, 9 tests failed:
+- 8 UMAP embedding comparison failures in test-umap.R
+- 1 backwards compatibility test failure ("`initial` must be a string")
+
+#### Investigation
+1. Verified the backwards compatibility fix was present in both source and installed code
+2. Ran the failing test manually in isolation - it passed
+3. Discovered a **duplicate test file** in the installed package's test directory
+
+#### Root Cause: Duplicate Test File in Installed Package
+The file `test_comparison_embed.R` (original name) still existed in the installed package's test directory alongside `test-zzz_comparison_embed.R` (renamed version). This caused:
+
+1. `test_comparison_embed.R` ran first (alphabetically before `test-umap.R`)
+2. It loaded the `embed` package via `embed::step_lencode_glm()`
+3. `embed`'s S3 methods overrode `embedmit`'s `prep.step_umap` method
+4. When `test-umap.R` ran later, it used `embed`'s version (which lacks the backwards compatibility fix)
+
+**Key insight:** The duplicate was only in the installed package (`/Library/.../embedmit/tests/testthat/`), NOT in the git repository. The source repo was already correct.
+
+### Resolution
+Deleted the stale duplicate file from the installed package location. No commit needed since the source repo was already correct.
+
+### Test Count Explanation
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Passed | 855 | 833 |
+| Failed | 9 | 0 |
+| Warnings | 14 | 10 |
+| Skipped | 5 | 4 |
+
+**Why 22 fewer passing tests?**
+The duplicate file contained the same ~22 comparison tests as `test-zzz_comparison_embed.R`. With both files present, those tests ran twice. Removing the duplicate means they run only once.
+
+### Lesson Learned
+When renaming test files, ensure the old file is completely removed from the installed package. Running `devtools::install(quick = FALSE)` with a full rebuild ensures the installed tests match the source repository.

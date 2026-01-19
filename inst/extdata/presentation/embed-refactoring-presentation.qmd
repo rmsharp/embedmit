@@ -460,7 +460,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 **Session Date:** January 16-18, 2026
 
-**Total Requests:** 22 distinct tasks
+**Total Requests:** 23 distinct tasks
 
 ---
 
@@ -671,6 +671,28 @@ Vignette now matches TMWR Chapter 17 structure (+183 lines)
 - `step_discretize_xgb`: 10.88% coverage
 - `step_embed`: 38.10% coverage
 - Supervised UMAP: ~60% coverage
+
+---
+
+## Request 23: Diagnose Test Failures
+
+### Prompt
+> "When I ran tests manually, I got [ FAIL 9 | WARN 14 | SKIP 5 | PASS 855 ]... explain"
+
+### Root Cause
+A **duplicate test file** existed in the installed package:
+
+1. `test_comparison_embed.R` (original) ran before `test-umap.R`
+2. Loaded `embed` package, overriding `embedmit`'s S3 methods
+3. `test-umap.R` then used `embed`'s `prep.step_umap` (lacking fixes)
+
+### Resolution
+Deleted stale duplicate from installed package (source repo was correct)
+
+### Result
+Tests now pass: `[ FAIL 0 | WARN 10 | SKIP 4 | PASS 833 ]`
+
+**Test count dropped by 22** because duplicate tests no longer run twice
 
 ---
 
