@@ -276,6 +276,59 @@ Updated the categorical encoding vignette to match Chapter 17 of "Tidy Modeling 
 
 ---
 
+## 2026-01-19: Code Coverage Analysis
+
+### Summary
+Ran covr code coverage analysis on all 4 packages (embed, embedmit, uwot, uwotlite) to identify areas for improvement.
+
+### Coverage Results
+
+| Package  | Coverage | Tests |
+|----------|----------|-------|
+| embed    | 72.99%   | 688   |
+| embedmit | ~73%*    | 833   |
+| uwot     | 83.23%   | 963   |
+| uwotlite | 85.33%   | 1140  |
+
+*embedmit coverage estimated; test environment issues prevented exact measurement.
+
+### File-Level Coverage (Low Coverage Areas)
+
+**embed/embedmit:**
+
+| File | Coverage | Issue |
+|------|----------|-------|
+| R/discretize_xgb.R | 10.88% | `run_xgboost`, `xgb_binning` untested |
+| R/embed.R | 38.10% | Neural network embedding paths |
+| R/umap.R | 68.13% | Various UMAP options |
+| R/pca_truncated.R | 71.01% | Edge cases |
+
+**uwot/uwotlite:**
+
+| File | Coverage | Issue |
+|------|----------|-------|
+| R/bigstatsr_init.R | 0.00% | Entire file untested |
+| R/umap2.R | 0%/76% | uwot untested, uwotlite improved |
+| R/rspectra_init.R | 49.23% | Spectral initialization |
+| R/supervised.R | 59.77% | Supervised UMAP |
+| R/init.R | 60.32% | Initialization methods |
+
+### Major Improvement Opportunities
+
+1. **step_discretize_xgb (10.88%)** - XGBoost binning functions have minimal coverage
+2. **step_embed (38.10%)** - Neural network embedding needs comprehensive tests
+3. **Supervised UMAP (~60%)** - Target-aware UMAP needs more test cases
+4. **Initialization methods (~60%)** - Spectral, random initialization paths
+5. **bigstatsr integration (0%)** - Large matrix support completely untested
+
+### Fork Improvements
+
+The forks show improved coverage over originals:
+- uwotlite R/umap2.R: 0% → 76.09% (+76 percentage points)
+- Overall uwotlite: 83.23% → 85.33% (+2.1 percentage points)
+
+---
+
 ## Package Structure Summary
 
 ### embedmit Final Structure

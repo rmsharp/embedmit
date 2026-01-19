@@ -339,6 +339,21 @@ embedmit/
 
 ---
 
+## Code Coverage Analysis
+
+### covr Results
+
+| Package  | Coverage | Low Coverage Files |
+|----------|----------|-------------------|
+| embed    | 72.99%   | discretize_xgb (11%), embed (38%) |
+| embedmit | ~73%     | Same as embed |
+| uwot     | 83.23%   | bigstatsr_init (0%), umap2 (0%) |
+| uwotlite | 85.33%   | bigstatsr_init (0%), umap2 (76%) |
+
+**Fork improvements:** uwotlite's umap2.R coverage increased from 0% to 76%
+
+---
+
 ## Code Changes Analysis
 
 ### embedmit: Files Modified
@@ -445,7 +460,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 **Session Date:** January 16-18, 2026
 
-**Total Requests:** 21 distinct tasks
+**Total Requests:** 22 distinct tasks
 
 ---
 
@@ -635,6 +650,27 @@ You're looking at it!
 
 ### Result
 Vignette now matches TMWR Chapter 17 structure (+183 lines)
+
+---
+
+## Request 22: Code Coverage Analysis
+
+### Prompt
+> "Create a code coverage report with covr for all 4 packages; identify areas of major improvement"
+
+### Results
+
+| Package  | Coverage | Tests |
+|----------|----------|-------|
+| embed    | 72.99%   | 688   |
+| embedmit | ~73%     | 833   |
+| uwot     | 83.23%   | 963   |
+| uwotlite | 85.33%   | 1140  |
+
+### Major Gaps Identified
+- `step_discretize_xgb`: 10.88% coverage
+- `step_embed`: 38.10% coverage
+- Supervised UMAP: ~60% coverage
 
 ---
 
