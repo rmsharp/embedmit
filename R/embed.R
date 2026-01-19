@@ -101,8 +101,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' a number of columns with embedding information, and columns `terms`,
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with a number of columns with embedding information, and columns `terms`,
 #' `levels`, and `id`:
 #'
 #' \describe{
@@ -126,7 +126,7 @@
 #' "Concatenate Embeddings for Categorical Variables with keras3"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
-#' @examplesIf !embedmit:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))
+#' @examplesIf embedmit:::run_examples("modeldata", "keras3")
 #' data(grants, package = "modeldata")
 #'
 #' set.seed(1)

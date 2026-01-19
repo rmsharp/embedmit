@@ -131,10 +131,9 @@ test_that("step_discretize_cart produces exact same results as embed", {
 
   # Factor columns should match
   factor_comparison <- compare_factor_columns(result_embedmit, result_embed)
-  expect_true(
-    factor_comparison$equivalent,
-    info = sprintf("Mismatched factor columns: %s", paste(factor_comparison$mismatched_cols, collapse = ", "))
-  )
+  info_msg <- sprintf("Mismatched factor columns: %s",
+                      paste(factor_comparison$mismatched_cols, collapse = ", "))
+  expect_true(factor_comparison$equivalent, info = info_msg)
 })
 
 # =============================================================================
@@ -165,7 +164,9 @@ test_that("step_collapse_cart produces exact same results as embed", {
   result_embed <- recipes::bake(rec_embed, new_data = test_data_new)
 
   factor_comparison <- compare_factor_columns(result_embedmit, result_embed)
-  expect_true(factor_comparison$equivalent, info = sprintf("Mismatched: %s", paste(factor_comparison$mismatched_cols, collapse = ", ")))
+  info_msg <- sprintf("Mismatched: %s",
+                      paste(factor_comparison$mismatched_cols, collapse = ", "))
+  expect_true(factor_comparison$equivalent, info = info_msg)
 })
 
 # =============================================================================

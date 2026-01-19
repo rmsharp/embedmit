@@ -57,7 +57,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with
 #' columns `level`, `value`, `terms`, and `id`:
 #'
 #' \describe{
@@ -166,7 +167,8 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
     if (is.factor(training[[y_name]])) {
       if (length(levels(training[[y_name]])) > 2) {
         cli::cli_abort(
-          "Mixed effects methods here are only implemented for two-class problems."
+          "Mixed effects methods here are only implemented for \\
+          two-class problems."
         )
       }
     }

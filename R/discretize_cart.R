@@ -46,8 +46,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' columns `terms`, `value`, and `id`:
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with columns `terms`, `value`, and `id`:
 #'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
@@ -189,8 +189,8 @@ cart_binning <- function(
   if (inherits(cart_mdl, "try-error")) {
     err <- conditionMessage(attr(cart_mdl, "condition"))
     cli::cli_warn(
-      "step_discretize_cart() failed to create a tree for predictor {.var {term}}, 
-      which will not be binned. The error: {err}"
+      "step_discretize_cart() failed to create a tree for predictor \\
+      {.var {term}}, which will not be binned. The error: {err}"
     )
     return(numeric(0))
   }

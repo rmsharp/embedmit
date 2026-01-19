@@ -13,13 +13,13 @@
 #'   construct the target simplicial set. If `neighbors` is greater than the
 #'   number of data points, the smaller value is used.
 #' @param metric Character, type of distance metric to use to find nearest
-#'   neighbors. See [uwotlite::umap()] for more details. Default to `"euclidean"`.
+#'   neighbors. See [uwotlite::umap()] for more details. Default `"euclidean"`.
 #' @param epochs Number of iterations for the neighbor optimization. See
 #'   [uwotlite::umap()] for more details.
 #' @param initial Character, Type of initialization for the coordinates. Can be
 #'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`,
 #'   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of initial
-#'   coordinates. See [uwotlite::umap()] for more details. Default to `"spectral"`.
+#'   coordinates. See [uwotlite::umap()] for details. Default `"spectral"`.
 #' @param target_weight Weighting factor between data topology and target
 #'   topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
 #'   entirely on target. The default of 0.5 balances the weighting equally
@@ -34,8 +34,8 @@
 #'   `n_threads` are set.
 #' @param seed Two integers to control the random numbers used by the numerical
 #'   methods. The default pulls from the main session's stream of numbers and
-#'   will give reproducible results if the seed is set prior to calling [recipes::prep]
-#'   or [recipes::bake].
+#'   will give reproducible results if the seed is set prior to calling
+#'   [recipes::prep] or [recipes::bake].
 #' @param retain Use `keep_original_cols` instead to specify whether the
 #'   original predictors should be retained along with the new embedding
 #'   variables.
@@ -57,7 +57,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with
 #'  columns `terms` and `id`:
 #'
 #' \describe{
@@ -84,7 +85,7 @@
 #' "How UMAP Works"
 #' \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
 #'
-#' @examplesIf rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")
+#' @examplesIf rlang::is_installed(c("ggplot2", "irlba"))
 #' library(recipes)
 #' library(ggplot2)
 #'

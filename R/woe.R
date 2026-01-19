@@ -8,8 +8,8 @@
 #' @inheritParams recipes::step_pca
 #' @inherit step_center return
 #' @param ... One or more selector functions to choose which variables will be
-#'   used to compute the components. See [recipes::selections] for more details. For
-#'   the `tidy` method, these are not currently used.
+#'   used to compute the components. See [recipes::selections] for more details.
+#'   For the `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
 #'   they be assigned?. By default, the function assumes that the new woe
 #'   components columns created by the original variables will be used as
@@ -62,14 +62,9 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble with columns `terms`
-#' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
-#' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
-#' more information.
-#'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' columns `terms` `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
-#' and `outcome` and `id`:
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with columns `terms`, `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`,
+#' `p_good`, `woe`, `outcome`, and `id`:
 #'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}

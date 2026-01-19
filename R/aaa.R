@@ -49,4 +49,10 @@ is_cran_check <- function() {
     Sys.getenv("_R_CHECK_PACKAGE_NAME_", "") != ""
   }
 }
+
+# Helper for @examplesIf conditions
+run_examples <- function(...) {
+
+  !is_cran_check() && rlang::is_installed(c(...))
+}
 # nocov end

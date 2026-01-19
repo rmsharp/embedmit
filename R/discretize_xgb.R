@@ -63,8 +63,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' columns `terms`, `value`, and `id`:
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with columns `terms`, `value`, and `id`:
 #'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
@@ -390,7 +390,10 @@ xgb_binning <- function(
   # model is constant and no splits will be returned. Additional check will
   # inform the user that the dataset is insufficient for this particular case
   # https://github.com/dmlc/xgboost/issues/2876
+
+  # nolint start: line_length_linter
   # https://stackoverflow.com/questions/42670033/r-getting-non-tree-model-detected-this-function-can-only-be-used-with-tree-mo
+  # nolint end
   if (utils::packageVersion("xgboost") >= "2.0.0.0") {
     best_iteration <- attr(xgb_mdl, "early_stop")$best_iteration
   } else {

@@ -6,8 +6,8 @@
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose which variables are
-#'   affected by the step. See [recipes::selections] for more details. For the `tidy`
-#'   method, these are not currently used.
+#'   affected by the step. See [recipes::selections] for more details. For the
+#'   `tidy` method, these are not currently used.
 #' @param outcome A call to `vars` to specify which variable is used as the
 #'   outcome to train CART models in order to pool factor levels.
 #' @param role Not used by this step since no new variables are created.
@@ -20,11 +20,11 @@
 #'   splits during the tree growing process. Larger values correspond to less
 #'   complex trees.
 #' @param results A list of results to convert to new factor levels.
-#' @param skip A logical. Should the step be skipped when the recipe is baked by
-#'   [recipes::bake]? While all operations are baked when [recipes::prep] is run, some
-#'   operations may not be able to be conducted on new data (e.g. processing the
-#'   outcome variable(s)). Care should be taken when using `skip = TRUE` as it
-#'   may affect the computations for subsequent operations
+#' @param skip A logical. Should the step be skipped when the recipe is baked
+#'   by [recipes::bake]? While all operations are baked when [recipes::prep]
+#'   is run, some operations may not be able to be conducted on new data (e.g.
+#'   processing the outcome variable(s)). Care should be taken when using
+#'   `skip = TRUE` as it may affect the computations for subsequent operations
 #' @param id A character string that is unique to this step to identify it.
 #' @return An updated recipe step.
 #' @details
@@ -42,8 +42,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' columns `terms`, `old`, `new`, and `id`:
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with columns `terms`, `old`, `new`, and `id`:
 #'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}

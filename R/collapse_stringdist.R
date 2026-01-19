@@ -5,8 +5,8 @@
 #'
 #' @inheritParams recipes::step_center
 #' @param ... One or more selector functions to choose which variables are
-#'   affected by the step. See [recipes::selections] for more details.  For the `tidy`
-#'   method, these are not currently used.
+#'   affected by the step. See [recipes::selections] for more details. For the
+#'   `tidy` method, these are not currently used.
 #' @param role Not used by this step since no new variables are created.
 #' @param distance Integer, value to determine which strings should be collapsed
 #'   with which. The value is being used inclusive, so `2` will collapse levels
@@ -28,8 +28,8 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' columns `terms`, `from`, `to`, and `id`:
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with columns `terms`, `from`, `to`, and `id`:
 #'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}

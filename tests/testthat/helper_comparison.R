@@ -256,9 +256,12 @@ format_exact_comparison <- function(comparison_result, labels = c("embedmit", "e
   }
 }
 
-format_umap_comparison <- function(comparison_result, labels = c("embedmit", "embed")) {
+format_umap_comparison <- function(comparison_result,
+                                   labels = c("embedmit", "embed")) {
+  fmt <- "UMAP Comparison:\n  Trustworthiness: %s=%.4f, %s=%.4f (diff=%.4f)"
+  fmt <- paste0(fmt, "\n  Distance Correlation: %.4f")
   sprintf(
-    "UMAP Comparison:\n  Trustworthiness: %s=%.4f, %s=%.4f (diff=%.4f)\n  Distance Correlation: %.4f",
+    fmt,
     labels[1], comparison_result$trust_embedmit,
     labels[2], comparison_result$trust_embed,
     comparison_result$trust_diff,
