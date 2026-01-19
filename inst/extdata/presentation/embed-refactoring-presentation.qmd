@@ -267,17 +267,30 @@ Keeps tests in repo for development, excludes from package build.
 
 ---
 
-## Final Package Structure
+## Final Package Structure {.smaller}
 
 ### embedmit
 
 ```
 embedmit/
-├── R/
-│   ├── umap.R          # Modified: uwotlite + tausworthe default
-│   └── ...             # 15 other step_* functions unchanged
-├── DESCRIPTION         # uwotlite in Imports
-└── NAMESPACE           # importFrom(uwotlite, ...)
+├── R/                              # 18 source files
+│   ├── umap.R                      # Modified: uwotlite + tausworthe default
+│   ├── lencode*.R                  # 4 likelihood encoding steps
+│   ├── pca_*.R                     # 3 PCA steps (truncated, sparse, sparse_bayes)
+│   ├── discretize_*.R              # 2 discretization steps (cart, xgb)
+│   ├── collapse_*.R                # 2 collapse steps (cart, stringdist)
+│   ├── embed.R, woe.R, feature_hash.R
+│   └── tunable.R, reexports.R, aaa.R
+├── tests/testthat/                 # 833 tests across 22 test files
+│   ├── test-zzz_comparison_embed.R # Comparison tests (run last)
+│   ├── test-coverage_gaps.R        # 59 coverage gap tests
+│   └── helper_comparison.R         # Test utilities
+├── inst/extdata/presentation/      # This presentation
+├── vignettes/                      # Quarto vignettes
+├── DESCRIPTION                     # uwotlite in Imports
+├── NAMESPACE                       # importFrom(uwotlite, ...)
+├── Makefile                        # Build/test automation
+└── CLAUDE.md                       # Claude Code configuration
 ```
 
 ---

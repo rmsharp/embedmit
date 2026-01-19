@@ -244,3 +244,89 @@ uwotlite::umap(
 ```
 84c7084 Fix UMAP test failures and improve backwards compatibility
 ```
+
+---
+
+## Package Structure Summary
+
+### embedmit Final Structure
+
+```
+embedmit/
+├── R/                              # 18 source files
+│   ├── umap.R                      # Modified: uwotlite + tausworthe default
+│   ├── lencode.R                   # Base likelihood encoding
+│   ├── lencode_glm.R               # GLM-based encoding
+│   ├── lencode_bayes.R             # Bayesian encoding
+│   ├── lencode_mixed.R             # Mixed effects encoding
+│   ├── pca_truncated.R             # Truncated PCA
+│   ├── pca_sparse.R                # Sparse PCA
+│   ├── pca_sparse_bayes.R          # Bayesian sparse PCA
+│   ├── discretize_cart.R           # CART-based discretization
+│   ├── discretize_xgb.R            # XGBoost-based discretization
+│   ├── collapse_cart.R             # CART-based factor collapsing
+│   ├── collapse_stringdist.R       # String distance collapsing
+│   ├── embed.R                     # Neural network embedding
+│   ├── woe.R                       # Weight of evidence
+│   ├── feature_hash.R              # Feature hashing
+│   ├── tunable.R                   # Tunable parameter definitions
+│   ├── reexports.R                 # Re-exported functions
+│   └── aaa.R                       # Package initialization
+├── tests/testthat/                 # 833 tests across 22 test files
+│   ├── test-zzz_comparison_embed.R # Comparison tests vs embed (run last)
+│   ├── test-coverage_gaps.R        # 59 comprehensive coverage tests
+│   ├── test-fork_regressions.R     # Fork-specific regression tests
+│   ├── test-umap.R                 # UMAP step tests
+│   ├── test-lencode*.R             # Likelihood encoding tests
+│   ├── test-pca_*.R                # PCA step tests
+│   ├── test-discretize_*.R         # Discretization tests
+│   ├── test-collapse_*.R           # Collapse step tests
+│   ├── helper_comparison.R         # Comparison test utilities
+│   └── _snaps/                     # Snapshot test expectations
+├── inst/extdata/presentation/      # Refactoring presentation (.qmd)
+├── vignettes/                      # Package vignettes
+│   └── categorical-encoding.qmd    # Categorical encoding guide
+├── scripts/
+│   └── precommit-tests.sh          # Pre-commit test runner
+├── .githooks/
+│   └── pre-commit                  # Git pre-commit hook
+├── .claude/                        # Claude Code configuration
+│   ├── INTERACTIONS_LOG.md         # This file
+│   └── commands/                   # Custom slash commands
+├── DESCRIPTION                     # Package metadata (uwotlite in Imports)
+├── NAMESPACE                       # Exports and imports
+├── Makefile                        # Build and test automation
+├── CLAUDE.md                       # Claude Code project config
+└── README.md                       # Package documentation
+```
+
+### uwotlite Final Structure
+
+```
+uwotlite/
+├── R/                              # UMAP implementation
+│   ├── uwot.R                      # Main UMAP functions
+│   ├── umap2.R                     # Alternative UMAP interface
+│   ├── transform.R                 # Transform new data
+│   └── ...                         # Supporting functions
+├── src/                            # C++ code
+│   ├── rng.h                       # Modified: sitmo instead of dqrng
+│   ├── optimize.cpp                # SGD optimization
+│   └── ...                         # Other C++ sources
+├── tests/testthat/                 # 1140 tests
+│   ├── test_comparison_uwot.R      # Comparison tests vs uwot
+│   ├── test-coverage_gaps.R        # 94 coverage gap tests
+│   └── ...                         # Feature tests
+├── DESCRIPTION                     # Package metadata (sitmo in LinkingTo)
+└── NAMESPACE                       # Exports
+```
+
+### Key Differences from Original Packages
+
+| Aspect | embed → embedmit | uwot → uwotlite |
+|--------|------------------|-----------------|
+| License | MIT (unchanged) | GPL-3 → MIT |
+| RNG default | pcg → tausworthe | pcg → sitmo |
+| UMAP dependency | uwot → uwotlite | N/A |
+| AGPL dependency | dqrng (removed) | dqrng → sitmo |
+| Test count | ~400 → 833 | ~800 → 1140 |
