@@ -397,7 +397,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 ---
 
-## Request 1: Discovery
+## Request 1: Discovery {.smaller}
 
 ### Prompt
 > "What are the AGPL dependencies in the embed R package?"
@@ -526,7 +526,7 @@ All CI workflows passing for both packages
 
 ---
 
-## Request 18: Comprehensive Test Coverage
+## Request 18: Comprehensive Test Coverage {.smaller}
 
 ### Prompt
 > "Look for paths that are not comprehensively unit tested in both packages"
@@ -541,7 +541,7 @@ Comprehensive test coverage for edge cases, validation, and error handling
 
 ---
 
-## Request 19: Fix UMAP Test Failures
+## Request 19: Fix UMAP Test Failures {.smaller}
 
 ### Prompt
 > "Install optional packages and run the tests"
