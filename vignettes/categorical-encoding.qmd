@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 )
 
 # Check for required packages (including embedmit itself for vignette building)
-required_pkgs <- c("embedmit", "modeldata", "ggplot2", "lme4", "dplyr", "rsample", "purrr")
+required_pkgs <- c("embedmit", "modeldata", "ggplot2", "lme4", "dplyr", "rsample", "purrr", "tidyr", "knitr")
 have_pkgs <- vapply(required_pkgs, requireNamespace, logical(1), quietly = TRUE)
 if (!all(have_pkgs)) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -51,10 +51,12 @@ This vignette explores alternative encoding strategies that address these challe
 library(embedmit)
 library(recipes)
 library(dplyr)
+library(tidyr)
 library(rsample)
 library(ggplot2)
 library(purrr)
 library(modeldata)
+library(knitr)
 
 # Load the Ames housing data
 data(ames)
@@ -69,11 +71,63 @@ ames_test <- testing(ames_split)
 ## Is an Encoding Necessary?
 
 A minority of models, such as those based on trees or rules, can handle categorical data natively and do not require encoding or transformation of these kinds of features. For example:
-
 - **Tree-based models** (decision trees, random forests, boosted trees) can find optimal splits on categorical variables directly
 - **Naive Bayes** models compute class probabilities without requiring numeric encoding
+- **Rule-based models** can directly use categorical conditions
 
-For these models, research has shown that creating dummy variables typically does not improve performance and can increase computation time. The `recipes` package provides `step_dummy()` for standard dummy encoding when it is needed.
+For these models, research has shown that creating dummy variables typically does not improve performance and can increase computation time. Starting with untransformed categorical variables when a model allows it is often the best approach.
+
+However, the majority of models require numeric representations for all predictors. For these cases, we need encoding strategies.
+
+## Dummy Variables
+
+The most common approach is to create *dummy* or *indicator* variables from the levels of a categorical variable. Table 17.1 shows how the `Bldg_Type` variable in the Ames data (with five categories) can be encoded using four dummy variables:
+
+```{r}
+#| label: dummy-table
+#| tbl-cap: "Table 17.1: Dummy variable encodings for building type categories."
+
+bldg_types <- c("OneFam", "TwoFmCon", "Duplex", "Twnhs", "TwnhsE")
+
+dummy_df <- tibble(
+  `Bldg_Type` = bldg_types,
+  `TwoFmCon` = c(0, 1, 0, 0, 0),
+  `Duplex` = c(0, 0, 1, 0, 0),
+  `Twnhs` = c(0, 0, 0, 1, 0),
+  `TwnhsE` = c(0, 0, 0, 0, 1)
+)
+
+kable(dummy_df, align = "lcccc")
+```
+
+The first factor level (`OneFam`) becomes the *reference level* and is encoded as all zeros. One disadvantage of this approach is that the reference level is absorbed into the intercept, making interpretation less intuitive.
+
+The `recipes` package provides `step_dummy()` for standard dummy encoding when it is needed.
+
+## Encoding Ordinal Predictors
+
+Sometimes categorical predictors are *ordinal*, meaning there is a natural ordering to the levels. For example, "none," "a little," "some," "a bunch," "copious amounts" has a clear progression.
+
+For ordinal variables, standard dummy encoding ignores the ordering information. The `recipes` package offers polynomial expansions that preserve ordinality. Table 17.2 shows the linear, quadratic, cubic, and quartic polynomial expansions:
+
+```{r}
+#| label: ordinal-table
+#| tbl-cap: "Table 17.2: Polynomial expansions for ordinal predictors."
+
+ordinal_levels <- c("none", "a little", "some", "a bunch", "copious amounts")
+
+ordinal_df <- tibble(
+  Level = ordinal_levels,
+  Linear = c(-0.632, -0.316, 0.000, 0.316, 0.632),
+  Quadratic = c(0.535, -0.267, -0.535, -0.267, 0.535),
+  Cubic = c(-0.316, 0.632, 0.000, -0.632, 0.316),
+  Quartic = c(0.119, -0.478, 0.717, -0.478, 0.119)
+)
+
+kable(ordinal_df, digits = 3, align = "lcccc")
+```
+
+The linear column captures the main trend, quadratic captures curvature, and so on. Consider using `step_unorder()` to convert ordered factors to regular factors, or `step_ordinalscore()` to convert to numeric scores based on rank.
 
 ## Using the Outcome for Encoding Predictors
 
@@ -144,6 +198,14 @@ glm_estimates %>%
 ```
 
 When the model encounters an unseen neighborhood at prediction time, it uses this default encoding.
+
+::: {.callout-warning}
+## Important: Overfitting Risk with Effect Encodings
+
+When you create an effect encoding for your categorical variable, you are effectively layering a mini-model inside your actual model. This supervised preprocessing **must be rigorously resampled** to avoid overfitting.
+
+The effect encoding should be estimated separately within each resample, just like model parameters. Using the tidymodels framework with `workflow()` ensures this happens automatically.
+:::
 
 ## Effect Encodings with Partial Pooling
 
@@ -228,9 +290,19 @@ ames_bayes <-
   step_ns(Latitude, Longitude, deg_free = 20)
 ```
 
+This approach provides full posterior distributions for each effect estimate, allowing for uncertainty quantification in downstream analyses.
+
 ## Feature Hashing
 
 *Feature hashing* methods also create dummy variables, but only consider the value of the category to assign it to a predefined pool of dummy variables. A hashing function takes an input of variable size and maps it to an output of fixed size.
+
+Feature hashing has several advantages:
+
+- **Memory efficient**: The number of columns is fixed regardless of cardinality
+- **Handles novel categories**: New levels automatically get hashed
+- **Fast**: Hash computation is very efficient
+
+However, feature hashing is **not directly interpretable** because hash functions cannot be reversed, and multiple categories can map to the same hash value (collisions).
 
 ```{r}
 #| label: hashing-demo
@@ -258,34 +330,126 @@ ames_hashed %>%
   head(10)
 ```
 
-Feature hashing can handle new category levels at prediction time, since it does not rely on pre-determined dummy variables. The `textrecipes` package provides `step_dummy_hash()` for this approach.
+### Hash Collisions
 
-## More Encoding Options
+When multiple categories map to the same hash value, this is called a *collision*. Table 17.3 shows the collision frequency when hashing the 28 Ames neighborhoods into 16 buckets:
 
-The `embedmit` package offers additional encoding methods:
+```{r}
+#| label: collision-table
+#| tbl-cap: "Table 17.3: Hash collision frequency for Ames neighborhoods with 16 hash buckets."
 
-| Function | Description |
-|----------|-------------|
-| `step_lencode_glm()` | GLM-based effect encoding (no pooling) |
-| `step_lencode_mixed()` | Mixed effects encoding (partial pooling) |
-| `step_lencode_bayes()` | Bayesian encoding (full uncertainty quantification) |
-| `step_woe()` | Weight of evidence transformation (binary outcomes) |
-| `step_umap()` | UMAP embeddings via uwotlite |
+collision_df <- ames_train %>%
+  mutate(
+    Hash = map_chr(Neighborhood, hash),
+    Hash = strtoi(substr(Hash, 26, 32), base = 16L),
+    Hash = Hash %% 16
+  ) %>%
+  distinct(Neighborhood, Hash) %>%
+  count(Hash, name = "Neighborhoods") %>%
+  arrange(Hash)
+
+# Show summary
+collision_summary <- collision_df %>%
+  count(Neighborhoods, name = "Hash_Buckets") %>%
+  arrange(desc(Neighborhoods))
+
+kable(collision_summary,
+      col.names = c("Neighborhoods per Bucket", "Number of Buckets"),
+      align = "cc")
+```
+
+Using `signed = TRUE` in feature hashing can reduce the impact of collisions by assigning +1 or -1 instead of just 1. The `textrecipes` package provides `step_dummy_hash()` for this approach.
+
+::: {.callout-tip}
+## Choosing the Number of Hash Buckets
+
+The number of hash buckets is a tuning parameter. More buckets mean fewer collisions but more columns. Consider using `step_zv()` after hashing to remove any zero-variance columns.
+:::
+
+## Entity Embeddings
+
+*Entity embeddings* use a neural network to learn a lower-dimensional representation of categorical variables. This is particularly useful for high-cardinality variables where dummy encoding would create too many columns.
+
+The `step_embed()` function creates these learned embeddings:
+
+```{r}
+#| label: embed-demo
+#| eval: false
+
+# Requires keras/tensorflow
+ames_embed <-
+  recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
+           Latitude + Longitude, data = ames_train) %>%
+  step_log(Gr_Liv_Area, base = 10) %>%
+  step_embed(Neighborhood, outcome = vars(Sale_Price),
+             num_terms = 5,        # Number of embedding dimensions
+             hidden_units = 10,    # Hidden layer size
+             options = embed_control(epochs = 20)) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_ns(Latitude, Longitude, deg_free = 20)
+```
+
+Key hyperparameters for entity embeddings include:
+
+| Parameter | Description |
+|-----------|-------------|
+| `num_terms` | Number of embedding dimensions (output columns) |
+| `hidden_units` | Size of hidden layer in the neural network |
+| `epochs` | Number of training passes through the data |
+
+Entity embeddings can capture complex nonlinear relationships between categories and the outcome.
+
+## Weight of Evidence
+
+The *Weight of Evidence* (WoE) transformation is designed for binary classification outcomes. It encodes each category level based on the logarithm of the ratio of good/bad outcomes:
+$$
+\text{WoE}_i = \ln\left(\frac{\text{Distribution of Events}_i}{\text{Distribution of Non-Events}_i}\right)
+$$
+
+The `step_woe()` function implements this encoding:
+
+```{r}
+#| label: woe-demo
+#| eval: false
+
+# For binary outcome
+binary_recipe <-
+  recipe(outcome ~ category, data = binary_data) %>%
+  step_woe(category, outcome = vars(outcome))
+```
+
+WoE is particularly popular in credit scoring and risk modeling applications. Positive WoE values indicate categories associated with higher event rates.
+
+## Summary of Encoding Options
+
+The `embedmit` package offers multiple encoding strategies. The choice depends on your specific situation:
+
+| Function | Best For | Handles Novel Levels | Interpretable |
+|----------|----------|---------------------|---------------|
+| `step_dummy()` | Low cardinality, linear models | No | Yes |
+| `step_lencode_glm()` | Medium cardinality, linear effects | Yes | Yes |
+| `step_lencode_mixed()` | Sparse categories, need shrinkage | Yes | Yes |
+| `step_lencode_bayes()` | Uncertainty quantification | Yes | Yes |
+| `step_embed()` | High cardinality, complex relationships | Yes | No |
+| `step_woe()` | Binary outcomes, risk modeling | Yes | Somewhat |
+| `step_feature_hash()` | Very high cardinality, memory constraints | Yes | No |
 
 ## Chapter Summary
 
 The most straightforward option for transforming a categorical variable to a numeric representation is to create dummy variables from the levels, but this option does not work well when you have a variable with high cardinality (too many levels) or when you may see novel values at prediction time (new levels).
 
-Effect encodings and feature hashing address these challenges:
+**Key takeaways:**
 
-- **Effect encodings** replace categories with a single numeric value measuring the outcome relationship
-- **Partial pooling** (via `step_lencode_mixed()`) adjusts estimates so that levels with small sample sizes are shrunk toward the overall mean
-- **Feature hashing** maps categories to a predefined pool of dummy variables and can handle novel categories
-
-Other options include entity embeddings (learned via a neural network with `step_embed()`) and weight of evidence transformation (via `step_woe()`).
+1. **Consider native handling first**: Tree-based models and Naive Bayes can handle categories directly
+2. **Effect encodings** replace categories with a single numeric value measuring the outcome relationship
+3. **Partial pooling** (via `step_lencode_mixed()`) adjusts estimates so that levels with small sample sizes are shrunk toward the overall mean
+4. **Feature hashing** maps categories to a predefined pool of dummy variables and can handle novel categories
+5. **Entity embeddings** learn complex representations via neural networks
+6. **Always resample** supervised encodings to avoid overfitting
 
 ## References
 
 - Kuhn, M., & Johnson, K. (2019). *Feature Engineering and Selection*. CRC Press.
 - Kuhn, M., & Silge, J. (2022). *Tidy Modeling with R*. O'Reilly Media.
 - Micci-Barreca, D. (2001). A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems. *ACM SIGKDD Explorations*, 3(1), 27-32.
+- Guo, C., & Berkhahn, F. (2016). Entity embeddings of categorical variables. *arXiv preprint arXiv:1604.06737*.

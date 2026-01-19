@@ -247,6 +247,35 @@ uwotlite::umap(
 
 ---
 
+## 2026-01-19: Enhanced Categorical Encoding Vignette
+
+### Summary
+Updated the categorical encoding vignette to match Chapter 17 of "Tidy Modeling with R" more closely, adding missing tables, theoretical explanations, and encoding methods.
+
+### Additions from TMWR Chapter 17
+
+**Tables Added:**
+- Table 17.1: Dummy variable encodings for building types
+- Table 17.2: Polynomial expansions for ordinal predictors
+- Table 17.3: Hash collision frequency for Ames neighborhoods
+
+**New Sections:**
+- Dummy Variables: Traditional encoding with reference level explanation
+- Encoding Ordinal Predictors: Polynomial expansions preserving ordinality
+- Entity Embeddings: Neural network-based `step_embed()` with hyperparameters
+- Weight of Evidence: WoE formula for binary outcomes
+- Summary of Encoding Options: Comparison table of all methods
+
+**Theoretical Additions:**
+- Overfitting warning callout (effect encodings must be resampled)
+- Native categorical handling advice (tree-based models, Naive Bayes)
+- Feature hashing collision explanation with tuning tips
+
+### Files Modified
+- `vignettes/categorical-encoding.qmd` - Major expansion (+183 lines)
+
+---
+
 ## Package Structure Summary
 
 ### embedmit Final Structure

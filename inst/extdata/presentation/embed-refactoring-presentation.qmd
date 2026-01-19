@@ -445,7 +445,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 **Session Date:** January 16-18, 2026
 
-**Total Requests:** 20 distinct tasks
+**Total Requests:** 21 distinct tasks
 
 ---
 
@@ -619,6 +619,22 @@ All tests passing: embedmit 833, uwotlite 1140
 
 ### Result
 You're looking at it!
+
+---
+
+## Request 21: Enhanced Vignette
+
+### Prompt
+> "The vignette based on Chapter 17 of TMWR does not have the same theoretical explanations or all of the same tabular output (see Table 17.2). Correct differences and omissions."
+
+### Actions
+- Added Tables 17.1, 17.2, 17.3 (dummy encoding, ordinal polynomials, hash collisions)
+- Added sections: Entity Embeddings, Weight of Evidence, Ordinal Predictors
+- Added overfitting warning callout, encoding comparison table
+- Expanded theoretical explanations throughout
+
+### Result
+Vignette now matches TMWR Chapter 17 structure (+183 lines)
 
 ---
 
