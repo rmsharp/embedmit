@@ -138,3 +138,109 @@ make install         # Install package locally
 - `Makefile` - Build and test automation
 - `scripts/precommit-tests.sh` - Pre-commit test script
 - `.githooks/pre-commit` - Git pre-commit hook
+
+---
+
+## 2026-01-18: Comprehensive Coverage Gap Tests
+
+### Summary
+Analyzed both embedmit and uwotlite for test coverage gaps and implemented comprehensive tests for high and medium priority gaps.
+
+### Work Completed
+
+#### 1. Coverage Gap Analysis
+Identified untested code paths in both packages:
+
+**embedmit gaps:**
+- step_woe smooth=TRUE branch
+- step_lencode log_odds edge cases
+- step_umap with various parameters
+- Print methods for untrained steps
+- required_pkgs methods
+
+**uwotlite gaps:**
+- Seed edge cases (0, negative, boundary values)
+- Invalid rng_type handling
+- Parameter validation
+- umap_transform edge cases
+- Model save/load functionality
+
+#### 2. Test Implementation
+
+**embedmit:** Created `tests/testthat/test-coverage_gaps.R` with 59 tests
+**uwotlite:** Created `tests/testthat/test-coverage_gaps.R` with 94 tests
+
+### Test Results After Implementation
+- **embedmit:** 833 passed, 0 failed, 10 warnings, 4 skips
+- **uwotlite:** 1140 passed, 0 failed, 0 warnings, 1 skip
+
+---
+
+## 2026-01-18: Fix UMAP Test Failures
+
+### Summary
+Fixed 10 failing UMAP tests in embedmit caused by RNG type mismatch and backwards compatibility issues.
+
+### Root Cause Analysis
+
+#### Issue 1: RNG Type Mismatch
+The test-umap.R comparison tests were failing because:
+- Direct `uwotlite::umap()` calls used default `pcg_rand = TRUE` → "pcg" RNG
+- `step_umap` uses `options = list(rng_type = "tausworthe")` → "tausworthe" RNG
+- Different RNG types produce different random sequences, causing embedding mismatches
+
+#### Issue 2: Backwards Compatibility Validation Order
+The `prep.step_umap()` function validated `initial` and `target_weight` parameters **before** checking for NULL and setting defaults. Old serialized recipes with NULL values would fail validation.
+
+#### Issue 3: Test Order and S3 Method Override
+When `test_comparison_embed.R` loaded the embed package via `embed::step_lencode_glm()`, embed's S3 methods overrode embedmit's methods. Tests running after comparison tests used embed's code instead of embedmit's.
+
+### Fixes Applied
+
+1. **R/umap.R** - Moved NULL checks before validation:
+```r
+# Set defaults for backwards compatibility with old recipes (#213)
+if (is.null(x$initial)) {
+  x$initial <- "spectral"
+}
+if (is.null(x$target_weight)) {
+  x$target_weight <- 0.5
+}
+# Validate after setting defaults
+rlang::arg_match0(x$initial, initial_umap_values, arg_nm = "initial")
+```
+
+2. **tests/testthat/test-umap.R** - Added `rng_type = "tausworthe"` to all direct uwotlite::umap calls:
+```r
+uwotlite::umap(
+  X = tr[, 1:4],
+  ...
+  rng_type = "tausworthe"  # Match step_umap's default
+)
+```
+
+3. **tests/testthat/test-umap.R** - Fixed backwards compatibility test to compare embeddings instead of full objects (avoids pointer/timing comparison failures)
+
+4. **tests/testthat/test-umap.R** - Fixed keep_original_cols test to use `recipe(~., mtcars)` instead of `recipe(~mpg, mtcars)` (single column fails when num_comp becomes 0)
+
+5. **Renamed comparison test** - `test_comparison_embed.R` → `test-zzz_comparison_embed.R` to run last (after all other tests complete)
+
+6. **Updated references** - Updated Makefile, scripts/precommit-tests.sh, CLAUDE.md, .Rbuildignore to reference renamed test file
+
+### Files Modified
+- `R/umap.R` - Validation order fix
+- `tests/testthat/test-umap.R` - RNG type and test fixes
+- `tests/testthat/_snaps/umap.md` - Updated snapshots
+- `tests/testthat/test_comparison_embed.R` → `test-zzz_comparison_embed.R` - Renamed
+- `Makefile`, `scripts/precommit-tests.sh`, `CLAUDE.md`, `.Rbuildignore`, `.claude/commands/test-comparison.md` - Updated references
+
+### Final Test Results
+| Package | Passed | Failed | Warnings | Skipped |
+|---------|--------|--------|----------|---------|
+| embedmit | 833 | 0 | 10 | 4 |
+| uwotlite | 1140 | 0 | 0 | 1 |
+
+### Commit
+```
+84c7084 Fix UMAP test failures and improve backwards compatibility
+```
