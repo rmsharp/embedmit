@@ -246,7 +246,7 @@ Caused by comparison test files referencing original packages.
 
 ---
 
-## CI/CD Solution
+## CI/CD Solution {.smaller}
 
 ### Prompt
 > "Fix the failing tests - exclude from R CMD check"
@@ -315,7 +315,7 @@ embedmit/
 
 ---
 
-## Feature Parity
+## Feature Parity {.smaller}
 
 ### All 16 Recipe Steps Preserved
 
@@ -442,7 +442,7 @@ uwotlite passes R CMD check with Status: OK
 
 ---
 
-## Requests 4-6: Documentation & CI
+## Requests 4-6: Documentation & CI {.smaller}
 
 ### Prompts
 > "Update README files"
@@ -474,7 +474,7 @@ Fully MIT-compatible dependency chain established
 
 ---
 
-## Requests 8-11: CI Fixes
+## Requests 8-11: CI Fixes {.smaller}
 
 ### Prompts
 > "Fix GitHub Actions failures"
@@ -493,7 +493,7 @@ All CI workflows passing
 
 ---
 
-## Requests 12-16: Vignettes & Polish
+## Requests 12-16: Vignettes & Polish {.smaller}
 
 ### Prompts
 > "Create vignettes based on TMWR Chapter 17"
@@ -570,8 +570,10 @@ You're looking at it!
 
 ---
 
-## The Power of AI-Assisted Development
+## The Power of AI-Assisted Development {.smaller}
 
+:::: {.columns}
+::: {.column width="60%"}
 ### What Claude Code CLI Handled
 
 - **Code analysis** - Dependency tree scanning
@@ -580,28 +582,37 @@ You're looking at it!
 - **CI/CD debugging** - GitHub Actions fixes
 - **Documentation** - Vignettes, README updates
 - **Problem solving** - License-aware solutions
-
+:::
+::: {.column width="40%"}
 ### Human Role
 
 - **Direction** - What to build and why
 - **Decisions** - Choosing between approaches
 - **Review** - Approving changes
+:::
+::::
 
 ---
 
-## Questions?
+## Questions? {.smaller}
 
 ### Contact
 
-R. Mark Sharp
-
-GitHub: [@rmsharp](https://github.com/rmsharp)
+R. Mark Sharp — GitHub: [@rmsharp](https://github.com/rmsharp)
 
 ### GitHub Repositories
 
-| Package | Repository |
-|---------|------------|
-| **embed** (original) | [github.com/tidymodels/embed](https://github.com/tidymodels/embed) |
-| **uwot** (original) | [github.com/jlmelville/uwot](https://github.com/jlmelville/uwot) |
-| **embedmit** (fork) | [github.com/rmsharp/embedmit](https://github.com/rmsharp/embedmit) |
-| **uwotlite** (fork) | [github.com/rmsharp/uwotlite](https://github.com/rmsharp/uwotlite) |
+:::: {.columns}
+::: {.column width="50%"}
+**Original Packages**
+
+- [tidymodels/embed](https://github.com/tidymodels/embed)
+- [jlmelville/uwot](https://github.com/jlmelville/uwot)
+:::
+::: {.column width="50%"}
+**MIT Forks**
+
+- [rmsharp/embedmit](https://github.com/rmsharp/embedmit)
+- [rmsharp/uwotlite](https://github.com/rmsharp/uwotlite)
+:::
+::::
