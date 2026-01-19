@@ -6,8 +6,14 @@ man/.Rapp.history
 revdep/cloud.noindex/*
 revdep/checks.noindex
 revdep/library.noindex
-revdep/data.sqlite*.Rcheck/
+revdep/data.sqlite
+*.Rcheck/
+..Rcheck/
 *.tar.gz
+
+# Vignette build artifacts
+vignettes/*.html
+vignettes/*_files/
 
 # Quarto presentation derivatives
 inst/extdata/presentation/*.html
