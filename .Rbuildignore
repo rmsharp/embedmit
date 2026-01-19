@@ -21,3 +21,4 @@ Applications/Tensorflow.Rmd
 ^\.vscode$
 ^tests/testthat/test_comparison_embed\.R$
 ^tests/testthat/helper_comparison\.R$
+^\.claude$
