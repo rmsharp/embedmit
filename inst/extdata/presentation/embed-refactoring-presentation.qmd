@@ -321,6 +321,52 @@ embedmit/
 
 ---
 
+## Test Coverage Comparison
+
+### Original vs Fork
+
+| Package  | R files | C++ files | Test files | Tests |
+|----------|---------|-----------|------------|-------|
+| embed    | 22      | -         | 20         | 688   |
+| embedmit | 22      | -         | 24         | 833   |
+| uwot     | 13      | 13        | 22         | 963   |
+| uwotlite | 13      | 13        | 26         | 1140  |
+
+**Improvements:**
+
+- embedmit: +4 test files, +145 tests (+21%)
+- uwotlite: +4 test files, +177 tests (+18%)
+
+---
+
+## Code Changes Analysis
+
+### embedmit: Files Modified
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| R/umap.R | **Substantive** | Added `rng_type = "tausworthe"` default, uwotlite namespace |
+| R/umap.R | Bugfix | Moved NULL checks before validation for backwards compat |
+| R/*.R (16 files) | Documentation | Updated uwot → uwotlite references |
+
+---
+
+## Code Changes Analysis
+
+### uwotlite: Files Modified
+
+| File | Change Type | Description |
+|------|-------------|-------------|
+| src/rng.h | **Substantive** | Replaced dqrng (AGPL) with sitmo (MIT) |
+| src/rng.h | **Substantive** | Custom `convert_seed()` replacing dqrng version |
+| src/rng.h | **Substantive** | `pcg32` → `sitmo::prng_engine` |
+| R/RcppExports.R | Generated | Updated symbol prefixes |
+| R/uwot.R, R/umap2.R | Minor | Package name references |
+
+**Total substantive code changes:** ~50 lines in 2 key files
+
+---
+
 ## Feature Parity
 
 ### All 16 Recipe Steps Preserved
