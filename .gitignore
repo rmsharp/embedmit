@@ -8,3 +8,7 @@ revdep/checks.noindex
 revdep/library.noindex
 revdep/data.sqlite*.Rcheck/
 *.tar.gz
+
+# Quarto presentation derivatives
+inst/extdata/presentation/*.html
+inst/extdata/presentation/*_files/
