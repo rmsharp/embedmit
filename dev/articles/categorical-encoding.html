@@ -85,10 +85,12 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rmsharp/embedmit" class="external-link">embedmit</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rsample.tidymodels.org" class="external-link">rsample</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org" class="external-link">modeldata</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load the Ames housing data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
@@ -102,14 +104,145 @@
 </div>
 </section><section class="level2"><h2 id="is-an-encoding-necessary">Is an Encoding Necessary?<a class="anchor" aria-label="anchor" href="#is-an-encoding-necessary"></a>
 </h2>
-<p>A minority of models, such as those based on trees or rules, can handle categorical data natively and do not require encoding or transformation of these kinds of features. For example:</p>
-<ul>
-<li>
-<strong>Tree-based models</strong> (decision trees, random forests, boosted trees) can find optimal splits on categorical variables directly</li>
-<li>
-<strong>Naive Bayes</strong> models compute class probabilities without requiring numeric encoding</li>
-</ul>
-<p>For these models, research has shown that creating dummy variables typically does not improve performance and can increase computation time. The <code>recipes</code> package provides <code><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy()</a></code> for standard dummy encoding when it is needed.</p>
+<p>A minority of models, such as those based on trees or rules, can handle categorical data natively and do not require encoding or transformation of these kinds of features. For example: - <strong>Tree-based models</strong> (decision trees, random forests, boosted trees) can find optimal splits on categorical variables directly - <strong>Naive Bayes</strong> models compute class probabilities without requiring numeric encoding - <strong>Rule-based models</strong> can directly use categorical conditions</p>
+<p>For these models, research has shown that creating dummy variables typically does not improve performance and can increase computation time. Starting with untransformed categorical variables when a model allows it is often the best approach.</p>
+<p>However, the majority of models require numeric representations for all predictors. For these cases, we need encoding strategies.</p>
+</section><section class="level2"><h2 id="dummy-variables">Dummy Variables<a class="anchor" aria-label="anchor" href="#dummy-variables"></a>
+</h2>
+<p>The most common approach is to create <em>dummy</em> or <em>indicator</em> variables from the levels of a categorical variable. Table 17.1 shows how the <code>Bldg_Type</code> variable in the Ames data (with five categories) can be encoded using four dummy variables:</p>
+<div class="cell" data-tbl-cap="Table 17.1: Dummy variable encodings for building type categories.">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bldg_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"OneFam"</span>, <span class="st">"TwoFmCon"</span>, <span class="st">"Duplex"</span>, <span class="st">"Twnhs"</span>, <span class="st">"TwnhsE"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dummy_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  `Bldg_Type` <span class="op">=</span> <span class="va">bldg_types</span>,</span>
+<span>  `TwoFmCon` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  `Duplex` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  `Twnhs` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  `TwnhsE` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">dummy_df</span>, align <span class="op">=</span> <span class="st">"lcccc"</span><span class="op">)</span></span></code></pre></div>
+</details><div class="cell-output-display">
+<table class="table caption-top">
+<caption>Table 17.1: Dummy variable encodings for building type categories.</caption>
+<thead><tr class="header">
+<th style="text-align: left;">Bldg_Type</th>
+<th style="text-align: center;">TwoFmCon</th>
+<th style="text-align: center;">Duplex</th>
+<th style="text-align: center;">Twnhs</th>
+<th style="text-align: center;">TwnhsE</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">OneFam</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TwoFmCon</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Duplex</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Twnhs</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TwnhsE</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The first factor level (<code>OneFam</code>) becomes the <em>reference level</em> and is encoded as all zeros. One disadvantage of this approach is that the reference level is absorbed into the intercept, making interpretation less intuitive.</p>
+<p>The <code>recipes</code> package provides <code><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy()</a></code> for standard dummy encoding when it is needed.</p>
+</section><section class="level2"><h2 id="encoding-ordinal-predictors">Encoding Ordinal Predictors<a class="anchor" aria-label="anchor" href="#encoding-ordinal-predictors"></a>
+</h2>
+<p>Sometimes categorical predictors are <em>ordinal</em>, meaning there is a natural ordering to the levels. For example, “none,” “a little,” “some,” “a bunch,” “copious amounts” has a clear progression.</p>
+<p>For ordinal variables, standard dummy encoding ignores the ordering information. The <code>recipes</code> package offers polynomial expansions that preserve ordinality. Table 17.2 shows the linear, quadratic, cubic, and quartic polynomial expansions:</p>
+<div class="cell" data-tbl-cap="Table 17.2: Polynomial expansions for ordinal predictors.">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ordinal_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"a little"</span>, <span class="st">"some"</span>, <span class="st">"a bunch"</span>, <span class="st">"copious amounts"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ordinal_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  Level <span class="op">=</span> <span class="va">ordinal_levels</span>,</span>
+<span>  Linear <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.632</span>, <span class="op">-</span><span class="fl">0.316</span>, <span class="fl">0.000</span>, <span class="fl">0.316</span>, <span class="fl">0.632</span><span class="op">)</span>,</span>
+<span>  Quadratic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.535</span>, <span class="op">-</span><span class="fl">0.267</span>, <span class="op">-</span><span class="fl">0.535</span>, <span class="op">-</span><span class="fl">0.267</span>, <span class="fl">0.535</span><span class="op">)</span>,</span>
+<span>  Cubic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.316</span>, <span class="fl">0.632</span>, <span class="fl">0.000</span>, <span class="op">-</span><span class="fl">0.632</span>, <span class="fl">0.316</span><span class="op">)</span>,</span>
+<span>  Quartic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.119</span>, <span class="op">-</span><span class="fl">0.478</span>, <span class="fl">0.717</span>, <span class="op">-</span><span class="fl">0.478</span>, <span class="fl">0.119</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">ordinal_df</span>, digits <span class="op">=</span> <span class="fl">3</span>, align <span class="op">=</span> <span class="st">"lcccc"</span><span class="op">)</span></span></code></pre></div>
+</details><div class="cell-output-display">
+<table class="table caption-top">
+<caption>Table 17.2: Polynomial expansions for ordinal predictors.</caption>
+<thead><tr class="header">
+<th style="text-align: left;">Level</th>
+<th style="text-align: center;">Linear</th>
+<th style="text-align: center;">Quadratic</th>
+<th style="text-align: center;">Cubic</th>
+<th style="text-align: center;">Quartic</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">none</td>
+<td style="text-align: center;">-0.632</td>
+<td style="text-align: center;">0.535</td>
+<td style="text-align: center;">-0.316</td>
+<td style="text-align: center;">0.119</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">a little</td>
+<td style="text-align: center;">-0.316</td>
+<td style="text-align: center;">-0.267</td>
+<td style="text-align: center;">0.632</td>
+<td style="text-align: center;">-0.478</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">some</td>
+<td style="text-align: center;">0.000</td>
+<td style="text-align: center;">-0.535</td>
+<td style="text-align: center;">0.000</td>
+<td style="text-align: center;">0.717</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">a bunch</td>
+<td style="text-align: center;">0.316</td>
+<td style="text-align: center;">-0.267</td>
+<td style="text-align: center;">-0.632</td>
+<td style="text-align: center;">-0.478</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">copious amounts</td>
+<td style="text-align: center;">0.632</td>
+<td style="text-align: center;">0.535</td>
+<td style="text-align: center;">0.316</td>
+<td style="text-align: center;">0.119</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The linear column captures the main trend, quadratic captures curvature, and so on. Consider using <code><a href="https://recipes.tidymodels.org/reference/step_unorder.html" class="external-link">step_unorder()</a></code> to convert ordered factors to regular factors, or <code><a href="https://recipes.tidymodels.org/reference/step_ordinalscore.html" class="external-link">step_ordinalscore()</a></code> to convert to numeric scores based on rank.</p>
 </section><section class="level2"><h2 id="using-the-outcome-for-encoding-predictors">Using the Outcome for Encoding Predictors<a class="anchor" aria-label="anchor" href="#using-the-outcome-for-encoding-predictors"></a>
 </h2>
 <p>There are multiple options for encodings more complex than dummy or indicator variables. One method called <em>effect</em> or <em>likelihood encodings</em> replaces the original categorical variables with a single numeric column that measures the effect of those data.</p>
@@ -118,7 +251,7 @@
 </h3>
 <p>The Ames data has 28 different neighborhoods. Let’s visualize how sale price varies across them:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Neighborhood</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
@@ -142,7 +275,7 @@
 </h3>
 <p>The <code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code> function uses a generalized linear model to estimate the effect of each category level:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_glm</span> <span class="op">&lt;-</span></span>
 <span><span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -157,7 +290,7 @@
 </div>
 <p>We can examine the learned encodings by preparing the recipe and using <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_estimates</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep</a></span><span class="op">(</span><span class="va">ames_glm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -184,7 +317,7 @@
 </h3>
 <p>Effect encodings can seamlessly handle situations where a novel factor level is encountered in the data. The encoding includes a special <code>..new</code> level:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_estimates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">level</span> <span class="op">==</span> <span class="st">"..new"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
@@ -194,12 +327,19 @@
 </details>
 </div>
 <p>When the model encounters an unseen neighborhood at prediction time, it uses this default encoding.</p>
+<div>
+<blockquote>
+<p><strong>Important: Overfitting Risk with Effect Encodings</strong></p>
+<p>When you create an effect encoding for your categorical variable, you are effectively layering a mini-model inside your actual model. This supervised preprocessing <strong>must be rigorously resampled</strong> to avoid overfitting.</p>
+<p>The effect encoding should be estimated separately within each resample, just like model parameters. Using the tidymodels framework with <code>workflow()</code> ensures this happens automatically.</p>
+</blockquote>
+</div>
 </section></section><section class="level2"><h2 id="effect-encodings-with-partial-pooling">Effect Encodings with Partial Pooling<a class="anchor" aria-label="anchor" href="#effect-encodings-with-partial-pooling"></a>
 </h2>
 <p>Creating an effect encoding with <code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code> estimates the effect separately for each factor level (in this case, neighborhood). However, some of these neighborhoods have many houses in them, and some have only a few. There is much more uncertainty in our measurement of price for neighborhoods with few training set homes than for neighborhoods with many.</p>
 <p>We can use <em>partial pooling</em> to adjust these estimates so that levels with small sample sizes are shrunk toward the overall mean. The <code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> function uses hierarchical or mixed effects models to accomplish this:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_mixed</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -213,7 +353,7 @@
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mixed_estimates</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep</a></span><span class="op">(</span><span class="va">ames_mixed</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -236,7 +376,7 @@
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mixed_estimates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">level</span> <span class="op">==</span> <span class="st">"..new"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
@@ -249,7 +389,7 @@
 </h3>
 <p>Let’s visualize how partial pooling affects the estimates:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_estimates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>`no pooling` <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
@@ -282,7 +422,7 @@
 </h3>
 <p>For fully Bayesian uncertainty quantification, <code><a href="../reference/step_lencode_bayes.html">step_lencode_bayes()</a></code> provides an alternative approach (requires the <code>rstanarm</code> package):</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_bayes</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -293,11 +433,22 @@
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_ns.html" class="external-link">step_ns</a></span><span class="op">(</span><span class="va">Latitude</span>, <span class="va">Longitude</span>, deg_free <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 </details>
 </div>
+<p>This approach provides full posterior distributions for each effect estimate, allowing for uncertainty quantification in downstream analyses.</p>
 </section></section><section class="level2"><h2 id="feature-hashing">Feature Hashing<a class="anchor" aria-label="anchor" href="#feature-hashing"></a>
 </h2>
 <p><em>Feature hashing</em> methods also create dummy variables, but only consider the value of the category to assign it to a predefined pool of dummy variables. A hashing function takes an input of variable size and maps it to an output of fixed size.</p>
+<p>Feature hashing has several advantages:</p>
+<ul>
+<li>
+<strong>Memory efficient</strong>: The number of columns is fixed regardless of cardinality</li>
+<li>
+<strong>Handles novel categories</strong>: New levels automatically get hashed</li>
+<li>
+<strong>Fast</strong>: Hash computation is very efficient</li>
+</ul>
+<p>However, feature hashing is <strong>not directly interpretable</strong> because hash functions cannot be reversed, and multiple categories can map to the same hash value (collisions).</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rlang.r-lib.org" class="external-link">rlang</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ames_hashed</span> <span class="op">&lt;-</span></span>
@@ -320,7 +471,7 @@
 </div>
 <p>In feature hashing, the number of possible hashes is a hyperparameter and is set by the model developer through computing the modulo of the integer hashes:</p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames_hashed</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    Hash <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/strtoi.html" class="external-link">strtoi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">Hash</span>, <span class="fl">26</span>, <span class="fl">32</span><span class="op">)</span>, base <span class="op">=</span> <span class="fl">16L</span><span class="op">)</span>,</span>
@@ -343,60 +494,204 @@
 <span><span class="co">#&gt; 10 Sawyer              8</span></span></code></pre></div>
 </details>
 </div>
-<p>Feature hashing can handle new category levels at prediction time, since it does not rely on pre-determined dummy variables. The <code>textrecipes</code> package provides <code>step_dummy_hash()</code> for this approach.</p>
-</section><section class="level2"><h2 id="more-encoding-options">More Encoding Options<a class="anchor" aria-label="anchor" href="#more-encoding-options"></a>
-</h2>
-<p>The <code>embedmit</code> package offers additional encoding methods:</p>
+<section class="level3"><h3 id="hash-collisions">Hash Collisions<a class="anchor" aria-label="anchor" href="#hash-collisions"></a>
+</h3>
+<p>When multiple categories map to the same hash value, this is called a <em>collision</em>. Table 17.3 shows the collision frequency when hashing the 28 Ames neighborhoods into 16 buckets:</p>
+<div class="cell" data-tbl-cap="Table 17.3: Hash collision frequency for Ames neighborhoods with 16 hash buckets.">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">collision_df</span> <span class="op">&lt;-</span> <span class="va">ames_train</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    Hash <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">Neighborhood</span>, <span class="va">hash</span><span class="op">)</span>,</span>
+<span>    Hash <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/strtoi.html" class="external-link">strtoi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">Hash</span>, <span class="fl">26</span>, <span class="fl">32</span><span class="op">)</span>, base <span class="op">=</span> <span class="fl">16L</span><span class="op">)</span>,</span>
+<span>    Hash <span class="op">=</span> <span class="va">Hash</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">16</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">Neighborhood</span>, <span class="va">Hash</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">Hash</span>, name <span class="op">=</span> <span class="st">"Neighborhoods"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Hash</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show summary</span></span>
+<span><span class="va">collision_summary</span> <span class="op">&lt;-</span> <span class="va">collision_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">Neighborhoods</span>, name <span class="op">=</span> <span class="st">"Hash_Buckets"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Neighborhoods</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">collision_summary</span>,</span>
+<span>      col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Neighborhoods per Bucket"</span>, <span class="st">"Number of Buckets"</span><span class="op">)</span>,</span>
+<span>      align <span class="op">=</span> <span class="st">"cc"</span><span class="op">)</span></span></code></pre></div>
+</details><div class="cell-output-display">
 <table class="table caption-top">
-<colgroup>
-<col style="width: 43%">
-<col style="width: 56%">
-</colgroup>
+<caption>Table 17.3: Hash collision frequency for Ames neighborhoods with 16 hash buckets.</caption>
 <thead><tr class="header">
-<th>Function</th>
+<th style="text-align: center;">Neighborhoods per Bucket</th>
+<th style="text-align: center;">Number of Buckets</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Using <code>signed = TRUE</code> in feature hashing can reduce the impact of collisions by assigning +1 or -1 instead of just 1. The <code>textrecipes</code> package provides <code>step_dummy_hash()</code> for this approach.</p>
+<div>
+<blockquote>
+<p><strong>Choosing the Number of Hash Buckets</strong></p>
+<p>The number of hash buckets is a tuning parameter. More buckets mean fewer collisions but more columns. Consider using <code><a href="https://recipes.tidymodels.org/reference/step_zv.html" class="external-link">step_zv()</a></code> after hashing to remove any zero-variance columns.</p>
+</blockquote>
+</div>
+</section></section><section class="level2"><h2 id="entity-embeddings">Entity Embeddings<a class="anchor" aria-label="anchor" href="#entity-embeddings"></a>
+</h2>
+<p><em>Entity embeddings</em> use a neural network to learn a lower-dimensional representation of categorical variables. This is particularly useful for high-cardinality variables where dummy encoding would create too many columns.</p>
+<p>The <code><a href="../reference/step_embed.html">step_embed()</a></code> function creates these learned embeddings:</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Requires keras/tensorflow</span></span>
+<span><span class="va">ames_embed</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
+<span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/step_embed.html">step_embed</a></span><span class="op">(</span><span class="va">Neighborhood</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span>,</span>
+<span>             num_terms <span class="op">=</span> <span class="fl">5</span>,        <span class="co"># Number of embedding dimensions</span></span>
+<span>             hidden_units <span class="op">=</span> <span class="fl">10</span>,    <span class="co"># Hidden layer size</span></span>
+<span>             options <span class="op">=</span> <span class="fu"><a href="../reference/step_embed.html">embed_control</a></span><span class="op">(</span>epochs <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html" class="external-link">all_nominal_predictors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_ns.html" class="external-link">step_ns</a></span><span class="op">(</span><span class="va">Latitude</span>, <span class="va">Longitude</span>, deg_free <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
+</details>
+</div>
+<p>Key hyperparameters for entity embeddings include:</p>
+<table class="table caption-top">
+<thead><tr class="header">
+<th>Parameter</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code></td>
-<td>GLM-based effect encoding (no pooling)</td>
+<td><code>num_terms</code></td>
+<td>Number of embedding dimensions (output columns)</td>
 </tr>
 <tr class="even">
-<td><code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code></td>
-<td>Mixed effects encoding (partial pooling)</td>
+<td><code>hidden_units</code></td>
+<td>Size of hidden layer in the neural network</td>
 </tr>
 <tr class="odd">
+<td><code>epochs</code></td>
+<td>Number of training passes through the data</td>
+</tr>
+</tbody>
+</table>
+<p>Entity embeddings can capture complex nonlinear relationships between categories and the outcome.</p>
+</section><section class="level2"><h2 id="weight-of-evidence">Weight of Evidence<a class="anchor" aria-label="anchor" href="#weight-of-evidence"></a>
+</h2>
+<p>The <em>Weight of Evidence</em> (WoE) transformation is designed for binary classification outcomes. It encodes each category level based on the logarithm of the ratio of good/bad outcomes: <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">WoE</mtext><mi>i</mi></msub><mo>=</mo><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mtext mathvariant="normal">Distribution of Events</mtext><mi>i</mi></msub><msub><mtext mathvariant="normal">Distribution of Non-Events</mtext><mi>i</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\text{WoE}_i = \ln\left(\frac{\text{Distribution of Events}_i}{\text{Distribution of Non-Events}_i}\right)
+</annotation></semantics></math></p>
+<p>The <code><a href="../reference/step_woe.html">step_woe()</a></code> function implements this encoding:</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># For binary outcome</span></span>
+<span><span class="va">binary_recipe</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">category</span>, data <span class="op">=</span> <span class="va">binary_data</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/step_woe.html">step_woe</a></span><span class="op">(</span><span class="va">category</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">outcome</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</details>
+</div>
+<p>WoE is particularly popular in credit scoring and risk modeling applications. Positive WoE values indicate categories associated with higher event rates.</p>
+</section><section class="level2"><h2 id="summary-of-encoding-options">Summary of Encoding Options<a class="anchor" aria-label="anchor" href="#summary-of-encoding-options"></a>
+</h2>
+<p>The <code>embedmit</code> package offers multiple encoding strategies. The choice depends on your specific situation:</p>
+<table class="table caption-top">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 37%">
+<col style="width: 26%">
+</colgroup>
+<thead><tr class="header">
+<th>Function</th>
+<th>Best For</th>
+<th>Handles Novel Levels</th>
+<th>Interpretable</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy()</a></code></td>
+<td>Low cardinality, linear models</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code></td>
+<td>Medium cardinality, linear effects</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code></td>
+<td>Sparse categories, need shrinkage</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
 <td><code><a href="../reference/step_lencode_bayes.html">step_lencode_bayes()</a></code></td>
-<td>Bayesian encoding (full uncertainty quantification)</td>
+<td>Uncertainty quantification</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/step_embed.html">step_embed()</a></code></td>
+<td>High cardinality, complex relationships</td>
+<td>Yes</td>
+<td>No</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/step_woe.html">step_woe()</a></code></td>
-<td>Weight of evidence transformation (binary outcomes)</td>
+<td>Binary outcomes, risk modeling</td>
+<td>Yes</td>
+<td>Somewhat</td>
 </tr>
 <tr class="odd">
-<td><code><a href="../reference/step_umap.html">step_umap()</a></code></td>
-<td>UMAP embeddings via uwotlite</td>
+<td><code><a href="../reference/step_feature_hash.html">step_feature_hash()</a></code></td>
+<td>Very high cardinality, memory constraints</td>
+<td>Yes</td>
+<td>No</td>
 </tr>
 </tbody>
 </table></section><section class="level2"><h2 id="chapter-summary">Chapter Summary<a class="anchor" aria-label="anchor" href="#chapter-summary"></a>
 </h2>
 <p>The most straightforward option for transforming a categorical variable to a numeric representation is to create dummy variables from the levels, but this option does not work well when you have a variable with high cardinality (too many levels) or when you may see novel values at prediction time (new levels).</p>
-<p>Effect encodings and feature hashing address these challenges:</p>
-<ul>
+<p><strong>Key takeaways:</strong></p>
+<ol type="1">
+<li>
+<strong>Consider native handling first</strong>: Tree-based models and Naive Bayes can handle categories directly</li>
 <li>
 <strong>Effect encodings</strong> replace categories with a single numeric value measuring the outcome relationship</li>
 <li>
 <strong>Partial pooling</strong> (via <code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code>) adjusts estimates so that levels with small sample sizes are shrunk toward the overall mean</li>
 <li>
 <strong>Feature hashing</strong> maps categories to a predefined pool of dummy variables and can handle novel categories</li>
-</ul>
-<p>Other options include entity embeddings (learned via a neural network with <code><a href="../reference/step_embed.html">step_embed()</a></code>) and weight of evidence transformation (via <code><a href="../reference/step_woe.html">step_woe()</a></code>).</p>
-</section><section class="level2"><h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<li>
+<strong>Entity embeddings</strong> learn complex representations via neural networks</li>
+<li>
+<strong>Always resample</strong> supervised encodings to avoid overfitting</li>
+</ol></section><section class="level2"><h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
 <li>Kuhn, M., &amp; Johnson, K. (2019). <em>Feature Engineering and Selection</em>. CRC Press.</li>
 <li>Kuhn, M., &amp; Silge, J. (2022). <em>Tidy Modeling with R</em>. O’Reilly Media.</li>
 <li>Micci-Barreca, D. (2001). A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems. <em>ACM SIGKDD Explorations</em>, 3(1), 27-32.</li>
+<li>Guo, C., &amp; Berkhahn, F. (2016). Entity embeddings of categorical variables. <em>arXiv preprint arXiv:1604.06737</em>.</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
