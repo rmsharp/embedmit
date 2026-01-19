@@ -528,16 +528,16 @@ All CI workflows passing for both packages
 
 ## Request 18: Comprehensive Test Coverage {.smaller}
 
-### Prompt
 > "Look for paths that are not comprehensively unit tested in both packages"
 
-### Actions
-- Analyzed code coverage gaps in embedmit and uwotlite
-- Created test-coverage_gaps.R for both packages
-- Implemented 59 tests for embedmit, 94 tests for uwotlite
-
-### Result
-Comprehensive test coverage for edge cases, validation, and error handling
+:::: {.columns}
+::: {.column width="60%"}
+**Actions:** Analyzed coverage gaps, created test-coverage_gaps.R for both packages
+:::
+::: {.column width="40%"}
+**Result:** 59 + 94 = 153 new tests
+:::
+::::
 
 ---
 
