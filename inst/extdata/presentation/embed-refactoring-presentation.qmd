@@ -11,6 +11,12 @@ format:
     code-summary: "Show code"
     highlight-style: github
     transition: slide
+    smaller: true
+    css: |
+      .reveal h2 { font-size: 1.4em; }
+      .reveal h3 { font-size: 1.1em; }
+      .reveal p, .reveal li { font-size: 0.85em; }
+      .reveal pre { font-size: 0.75em; }
 ---
 
 ## The Problem
@@ -246,7 +252,7 @@ Caused by comparison test files referencing original packages.
 
 ---
 
-## CI/CD Solution {.smaller}
+## CI/CD Solution
 
 ### Prompt
 > "Fix the failing tests - exclude from R CMD check"
@@ -267,7 +273,7 @@ Keeps tests in repo for development, excludes from package build.
 
 ---
 
-## Final Package Structure {.smaller}
+## Final Package Structure
 
 ### embedmit
 
@@ -315,7 +321,7 @@ embedmit/
 
 ---
 
-## Feature Parity {.smaller}
+## Feature Parity
 
 ### All 16 Recipe Steps Preserved
 
@@ -385,7 +391,7 @@ recipe(outcome ~ ., data = train) |>
 
 ---
 
-## How Did We Get Here? {.smaller}
+## How Did We Get Here?
 
 ### The Claude Code CLI Journey
 
@@ -397,7 +403,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 ---
 
-## Request 1: Discovery {.smaller}
+## Request 1: Discovery
 
 ### Prompt
 > "What are the AGPL dependencies in the embed R package?"
@@ -442,7 +448,7 @@ uwotlite passes R CMD check with Status: OK
 
 ---
 
-## Requests 4-6: Documentation & CI {.smaller}
+## Requests 4-6: Documentation & CI
 
 ### Prompts
 > "Update README files"
@@ -474,7 +480,7 @@ Fully MIT-compatible dependency chain established
 
 ---
 
-## Requests 8-11: CI Fixes {.smaller}
+## Requests 8-11: CI Fixes
 
 ### Prompts
 > "Fix GitHub Actions failures"
@@ -493,7 +499,7 @@ All CI workflows passing
 
 ---
 
-## Requests 12-16: Vignettes & Polish {.smaller}
+## Requests 12-16: Vignettes & Polish
 
 ### Prompts
 > "Create vignettes based on TMWR Chapter 17"
@@ -526,7 +532,7 @@ All CI workflows passing for both packages
 
 ---
 
-## Request 18: Comprehensive Test Coverage {.smaller}
+## Request 18: Comprehensive Test Coverage
 
 > "Look for paths that are not comprehensively unit tested in both packages"
 
@@ -541,7 +547,7 @@ All CI workflows passing for both packages
 
 ---
 
-## Request 19: Fix UMAP Test Failures {.smaller}
+## Request 19: Fix UMAP Test Failures
 
 ### Prompt
 > "Install optional packages and run the tests"
@@ -570,7 +576,7 @@ You're looking at it!
 
 ---
 
-## The Power of AI-Assisted Development {.smaller}
+## The Power of AI-Assisted Development
 
 :::: {.columns}
 ::: {.column width="60%"}
@@ -594,7 +600,7 @@ You're looking at it!
 
 ---
 
-## Questions? {.smaller}
+## Questions?
 
 ### Contact
 
