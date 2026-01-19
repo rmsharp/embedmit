@@ -70,7 +70,7 @@ make precommit     # Pre-commit test suite with clear output
 # R commands (alternative)
 Rscript -e "devtools::test()"
 Rscript -e "devtools::check()"
-Rscript -e "testthat::test_file('tests/testthat/test_comparison_embed.R')"
+Rscript -e "testthat::test_file('tests/testthat/test-zzz_comparison_embed.R')"
 ```
 
 ### Pre-Commit Checklist
@@ -95,7 +95,7 @@ Before committing code changes:
 - `R/` - Source code for recipe steps
 - `tests/testthat/` - Test files
 - `tests/testthat/helper_comparison.R` - Utilities for embed comparison
-- `tests/testthat/test_comparison_embed.R` - Comparison test suite
+- `tests/testthat/test-zzz_comparison_embed.R` - Comparison test suite
 - `Makefile` - Build and test automation
 - `.githooks/pre-commit` - Git pre-commit hook
 

@@ -57,7 +57,7 @@ if Rscript -e "
     quit(status = 0)
   }
   library(testthat)
-  results <- testthat::test_file('tests/testthat/test_comparison_embed.R', reporter = 'summary')
+  results <- testthat::test_file('tests/testthat/test-zzz_comparison_embed.R', reporter = 'summary')
   df <- as.data.frame(results)
   failed <- sum(df\$failed)
   errors <- sum(df\$error)

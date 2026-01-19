@@ -19,6 +19,6 @@ Applications/Tensorflow.Rmd
 ^CRAN-SUBMISSION$
 ^[\.]?air\.toml$
 ^\.vscode$
-^tests/testthat/test_comparison_embed\.R$
+^tests/testthat/test-zzz_comparison_embed\.R$
 ^tests/testthat/helper_comparison\.R$
 ^\.claude$

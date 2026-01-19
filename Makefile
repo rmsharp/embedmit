@@ -35,7 +35,7 @@ test-comparison:
 	@echo "=========================================="
 	@echo "Running comparison tests vs embed..."
 	@echo "=========================================="
-	Rscript -e "testthat::test_file('tests/testthat/test_comparison_embed.R')"
+	Rscript -e "testthat::test_file('tests/testthat/test-zzz_comparison_embed.R')"
 
 # Run all tests (lint + unit + comparison)
 test-all: lint test test-comparison

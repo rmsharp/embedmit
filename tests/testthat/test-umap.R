@@ -7,7 +7,7 @@ tr <- iris_dat[-split, ]
 te <- iris_dat[split, ]
 
 test_that("factor outcome", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   set.seed(11)
   supervised <-
@@ -27,7 +27,8 @@ test_that("factor outcome", {
         min_dist = 0.01,
         verbose = FALSE,
         n_threads = 1,
-        ret_model = TRUE
+        ret_model = TRUE,
+        rng_type = "tausworthe"
       )
     )
 
@@ -53,7 +54,7 @@ test_that("factor outcome", {
 })
 
 test_that("numeric outcome", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   set.seed(11)
   supervised <-
@@ -73,7 +74,8 @@ test_that("numeric outcome", {
         min_dist = 0.01,
         verbose = FALSE,
         n_threads = 1,
-        ret_model = TRUE
+        ret_model = TRUE,
+        rng_type = "tausworthe"
       )
     )
 
@@ -104,7 +106,7 @@ test_that("numeric outcome", {
 })
 
 test_that("metric argument works", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   set.seed(11)
   unsupervised <-
@@ -130,7 +132,8 @@ test_that("metric argument works", {
         min_dist = 0.2,
         verbose = FALSE,
         n_threads = 1,
-        ret_model = TRUE
+        ret_model = TRUE,
+        rng_type = "tausworthe"
       )
     )
 
@@ -161,7 +164,7 @@ test_that("metric argument works", {
 })
 
 test_that("no outcome", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   set.seed(11)
   unsupervised <-
@@ -185,7 +188,8 @@ test_that("no outcome", {
         min_dist = 0.2,
         verbose = FALSE,
         n_threads = 1,
-        ret_model = TRUE
+        ret_model = TRUE,
+        rng_type = "tausworthe"
       )
     )
 
@@ -216,7 +220,7 @@ test_that("no outcome", {
 })
 
 test_that("check_name() is used", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   dat <- tr
   dat$UMAP1 <- dat$Species
@@ -257,7 +261,7 @@ test_that("tunable", {
 })
 
 test_that("backwards compatible for initial and target_weight args (#213)", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   rec <- recipe(Species ~ ., data = tr) |>
     step_umap(all_predictors(), num_comp = 2)
@@ -267,10 +271,15 @@ test_that("backwards compatible for initial and target_weight args (#213)", {
   rec$steps[[1]]$initial <- NULL
   rec$steps[[1]]$target_weight <- NULL
 
-  expect_identical(
-    prep(rec),
-    exp_res
+  new_res <- prep(rec)
+
+  # Compare embeddings instead of full objects (pointers and timings vary)
+  expect_equal(
+    new_res$steps[[1]]$object$embedding,
+    exp_res$steps[[1]]$object$embedding
   )
+  expect_equal(new_res$steps[[1]]$initial, exp_res$steps[[1]]$initial)
+  expect_equal(new_res$steps[[1]]$target_weight, exp_res$steps[[1]]$target_weight)
 })
 
 test_that("bad args", {
@@ -326,7 +335,7 @@ test_that("bad args", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   rec <- recipe(Species ~ ., data = tr) |>
     step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) |>
@@ -379,7 +388,7 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("keep_original_cols works", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   new_names <- c("UMAP1", "UMAP2", "UMAP3")
 
@@ -419,9 +428,9 @@ test_that("keep_original_cols works", {
 })
 
 test_that("keep_original_cols - can prep recipes with it missing", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
-  rec <- recipe(~mpg, mtcars) |>
+  rec <- recipe(~., mtcars) |>
     step_umap(all_predictors())
 
   rec$steps[[1]]$keep_original_cols <- NULL
@@ -436,7 +445,7 @@ test_that("keep_original_cols - can prep recipes with it missing", {
 })
 
 test_that("printing", {
-  skip_if_not_installed("irlba", "2.3.5.2")
+  skip_if_not_installed("irlba")
 
   rec <- recipe(~., data = tr[, -5]) |>
     step_umap(all_predictors())

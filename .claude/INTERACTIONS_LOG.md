@@ -23,7 +23,7 @@ Created test infrastructure to verify feature parity between embedmit (MIT fork)
   - `create_binned_test_data()` - Generate WOE-suitable test data
   - `create_umap_test_data()` - Generate clustered data for UMAP tests
 
-- `tests/testthat/test_comparison_embed.R` - 14 test sections:
+- `tests/testthat/test-zzz_comparison_embed.R` - 14 test sections:
   1. step_lencode_glm exact equivalence
   2. step_lencode_mixed exact equivalence
   3. step_discretize_cart exact equivalence

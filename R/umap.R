@@ -255,8 +255,19 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
   check_number_whole(x$num_comp, min = 0, arg = "num_comp")
   check_number_whole(x$neighbors, min = 0, arg = "neighbors")
   check_number_decimal(x$min_dist, arg = "min_dist")
+
   check_number_decimal(x$learn_rate, min = 0, arg = "learn_rate")
   check_number_whole(x$epochs, min = 0, allow_null = TRUE, arg = "epochs")
+
+  # Set defaults for backwards compatibility with old recipes (#213)
+  if (is.null(x$initial)) {
+    x$initial <- "spectral"
+  }
+  if (is.null(x$target_weight)) {
+    x$target_weight <- 0.5
+  }
+
+  # Validate after setting defaults
   rlang::arg_match0(x$initial, initial_umap_values, arg_nm = "initial")
   check_number_decimal(x$target_weight, min = 0, max = 1, arg = "target_weight")
 
@@ -268,13 +279,6 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     }
     x$neighbors <- min(nrow(training) - 1, x$neighbors)
     x$num_comp <- min(length(col_names) - 1, x$num_comp)
-
-    if (is.null(x$initial)) {
-      x$initial <- "spectral"
-    }
-    if (is.null(x$target_weight)) {
-      x$target_weight <- 0.5
-    }
 
     withr::with_seed(
       x$seed[1],
