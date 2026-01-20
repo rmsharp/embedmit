@@ -38,6 +38,47 @@ embed (MIT)
 
 ---
 
+## The Value of Fresh Eyes
+
+### AI as a New Team Member
+
+When Claude Code CLI examines a codebase for the first time, it brings:
+
+- **No assumptions** about "the way things have always been done"
+- **Pattern recognition** across thousands of similar projects
+- **Objective analysis** without organizational politics or history
+- **Systematic exploration** of every dependency and code path
+
+Fresh eyes often spot:
+
+- Unnecessary complexity that accumulated over time
+- Alternative solutions the original authors didn't consider
+- Hidden dependencies that create licensing issues
+
+---
+
+## Test-Driven Development (TDD)
+
+### Why TDD Matters for Refactoring
+
+This project followed TDD principles throughout:
+
+1. **Run existing tests first** - Establish baseline behavior
+2. **Write new tests before changes** - Define expected outcomes
+3. **Make minimal changes** - Only what's needed to pass tests
+4. **Verify continuously** - All 1,973+ tests pass after every change
+
+### TDD Benefits in This Project
+
+| Benefit | Example |
+|---------|---------|
+| **Confidence** | Replaced RNG without breaking UMAP quality |
+| **Documentation** | Tests show exactly what each function should do |
+| **Regression prevention** | Caught S3 method override bug immediately |
+| **Refactoring safety** | Renamed uwotlite → uwotmit across 100+ files |
+
+---
+
 ## Discovery Phase
 
 ### Prompt
