@@ -68,14 +68,18 @@ This project followed TDD principles throughout:
 3. **Make minimal changes** - Only what's needed to pass tests
 4. **Verify continuously** - All 1,973+ tests pass after every change
 
-### TDD Benefits in This Project
+---
+
+## TDD Benefits in This Project
 
 | Benefit | Example |
 |---------|---------|
-| **Confidence** | Replaced RNG (random number generator) without breaking UMAP (Uniform Manifold Approximation and Projection) quality |
+| **Confidence** | Replaced RNG (random number generator) without breaking UMAP quality |
 | **Documentation** | Tests show exactly what each function should do |
 | **Regression prevention** | Caught S3 method override bug immediately |
 | **Refactoring safety** | Renamed uwotlite → uwotmit across 100+ files |
+
+*UMAP = Uniform Manifold Approximation and Projection*
 
 ---
 
