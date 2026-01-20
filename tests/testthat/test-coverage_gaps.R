@@ -522,7 +522,7 @@ test_that("required_pkgs.step_umap returns correct packages", {
   pkgs <- recipes::required_pkgs(rec$steps[[1]])
 
   expect_true("embedmit" %in% pkgs)
-  expect_true("uwotlite" %in% pkgs)
+  expect_true("uwotmit" %in% pkgs)
   expect_false("uwot" %in% pkgs)  # Should NOT require uwot
 })
 

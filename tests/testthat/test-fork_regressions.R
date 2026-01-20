@@ -53,45 +53,45 @@ test_that("step_umap respects user-specified rng_type override", {
 })
 
 # -----------------------------------------------------------------------------
-# Section 2: uwotlite Dependency (CRITICAL)
-# embedmit must use uwotlite, not uwot
+# Section 2: uwotmit Dependency (CRITICAL)
+# embedmit must use uwotmit, not uwot
 # -----------------------------------------------------------------------------
 
-test_that("step_umap requires uwotlite package (not uwot)", {
+test_that("step_umap requires uwotmit package (not uwot)", {
   rec <- recipe(~., data = iris[1:50, 1:4]) |>
     step_umap(all_predictors(), num_comp = 2)
 
   pkgs <- required_pkgs(rec$steps[[1]])
 
-  # Must contain uwotlite
+  # Must contain uwotmit
   expect_true(
-    "uwotlite" %in% pkgs,
-    info = "CRITICAL: embedmit must require uwotlite, not uwot"
+    "uwotmit" %in% pkgs,
+    info = "CRITICAL: embedmit must require uwotmit, not uwot"
   )
 
   # Should NOT require uwot (we've forked away from it)
   expect_false(
     "uwot" %in% pkgs,
-    info = "embedmit should not require uwot - we use uwotlite"
+    info = "embedmit should not require uwot - we use uwotmit"
   )
 })
 
-test_that("required_pkgs for step_umap returns embedmit and uwotlite", {
+test_that("required_pkgs for step_umap returns embedmit and uwotmit", {
   rec <- recipe(~., data = iris[1:50, 1:4]) |>
     step_umap(all_predictors(), num_comp = 2)
 
   pkgs <- required_pkgs(rec$steps[[1]])
 
   expect_true("embedmit" %in% pkgs)
-  expect_true("uwotlite" %in% pkgs)
+  expect_true("uwotmit" %in% pkgs)
 })
 
 # -----------------------------------------------------------------------------
-# Section 3: UMAP Execution with uwotlite (Integration)
-# Verify that step_umap actually works with uwotlite
+# Section 3: UMAP Execution with uwotmit (Integration)
+# Verify that step_umap actually works with uwotmit
 # -----------------------------------------------------------------------------
 
-test_that("step_umap prep succeeds with uwotlite backend", {
+test_that("step_umap prep succeeds with uwotmit backend", {
   skip_if_not_installed("irlba")
 
   set.seed(42)
@@ -106,7 +106,7 @@ expect_true(rec$steps[[1]]$trained)
   expect_true(!is.null(rec$steps[[1]]$object))
 })
 
-test_that("step_umap bake produces valid output with uwotlite", {
+test_that("step_umap bake produces valid output with uwotmit", {
   skip_if_not_installed("irlba")
 
   set.seed(42)
@@ -206,7 +206,7 @@ test_that("step_umap num_comp is respected", {
 # Section 5: Supervised UMAP
 # -----------------------------------------------------------------------------
 
-test_that("step_umap supervised mode works with uwotlite", {
+test_that("step_umap supervised mode works with uwotmit", {
   skip_if_not_installed("irlba")
 
   set.seed(42)

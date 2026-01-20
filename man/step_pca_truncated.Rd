@@ -83,10 +83,10 @@ variance) in the original variables. Also, the components are statistically
 independent from one another. This means that they can be used to combat
 large inter-variables correlations in a data set.
 
-It is advisable to standardize the variables prior to running PCA. Here, each
-variable will be centered and scaled prior to the PCA calculation. This can
-be changed using the \code{options} argument or by using \code{\link[recipes:step_center]{recipes::step_center()}} and
-\code{\link[recipes:step_scale]{recipes::step_scale()}}.
+It is advisable to standardize the variables prior to running PCA. Here,
+each variable will be centered and scaled prior to the PCA calculation. This
+can be changed using the \code{options} argument or by using
+\code{\link[recipes:step_center]{recipes::step_center()}} and \code{\link[recipes:step_scale]{recipes::step_scale()}}.
 
 The argument \code{num_comp} controls the number of components that will be retained
 (the original variables that are used to derive the components are removed from
@@ -96,8 +96,9 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step two things can happen depending
-the \code{type} argument. If \code{type = "coef"} a tibble returned with 4 columns
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step two things can happen
+depending the \code{type} argument. If \code{type = "coef"} a tibble returned with 4
+columns
 \code{terms}, \code{value}, \code{component} , and \code{id}:
 
 \describe{

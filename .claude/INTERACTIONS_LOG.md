@@ -79,8 +79,8 @@ Created Claude Code configuration for TDD compliance:
 | All tests pass | ✅ |
 
 ### Related Work
-- uwotlite comparison test suite also created (see uwotlite/.claude/INTERACTIONS_LOG.md)
-- 40 tests passed for uwotlite vs uwot comparison
+- uwotmit comparison test suite also created (see uwotmit/.claude/INTERACTIONS_LOG.md)
+- 40 tests passed for uwotmit vs uwot comparison
 
 ---
 
@@ -144,7 +144,7 @@ make install         # Install package locally
 ## 2026-01-18: Comprehensive Coverage Gap Tests
 
 ### Summary
-Analyzed both embedmit and uwotlite for test coverage gaps and implemented comprehensive tests for high and medium priority gaps.
+Analyzed both embedmit and uwotmit for test coverage gaps and implemented comprehensive tests for high and medium priority gaps.
 
 ### Work Completed
 
@@ -158,7 +158,7 @@ Identified untested code paths in both packages:
 - Print methods for untrained steps
 - required_pkgs methods
 
-**uwotlite gaps:**
+**uwotmit gaps:**
 - Seed edge cases (0, negative, boundary values)
 - Invalid rng_type handling
 - Parameter validation
@@ -168,11 +168,11 @@ Identified untested code paths in both packages:
 #### 2. Test Implementation
 
 **embedmit:** Created `tests/testthat/test-coverage_gaps.R` with 59 tests
-**uwotlite:** Created `tests/testthat/test-coverage_gaps.R` with 94 tests
+**uwotmit:** Created `tests/testthat/test-coverage_gaps.R` with 94 tests
 
 ### Test Results After Implementation
 - **embedmit:** 833 passed, 0 failed, 10 warnings, 4 skips
-- **uwotlite:** 1140 passed, 0 failed, 0 warnings, 1 skip
+- **uwotmit:** 1140 passed, 0 failed, 0 warnings, 1 skip
 
 ---
 
@@ -185,7 +185,7 @@ Fixed 10 failing UMAP tests in embedmit caused by RNG type mismatch and backward
 
 #### Issue 1: RNG Type Mismatch
 The test-umap.R comparison tests were failing because:
-- Direct `uwotlite::umap()` calls used default `pcg_rand = TRUE` → "pcg" RNG
+- Direct `uwotmit::umap()` calls used default `pcg_rand = TRUE` → "pcg" RNG
 - `step_umap` uses `options = list(rng_type = "tausworthe")` → "tausworthe" RNG
 - Different RNG types produce different random sequences, causing embedding mismatches
 
@@ -210,9 +210,9 @@ if (is.null(x$target_weight)) {
 rlang::arg_match0(x$initial, initial_umap_values, arg_nm = "initial")
 ```
 
-2. **tests/testthat/test-umap.R** - Added `rng_type = "tausworthe"` to all direct uwotlite::umap calls:
+2. **tests/testthat/test-umap.R** - Added `rng_type = "tausworthe"` to all direct uwotmit::umap calls:
 ```r
-uwotlite::umap(
+uwotmit::umap(
   X = tr[, 1:4],
   ...
   rng_type = "tausworthe"  # Match step_umap's default
@@ -238,7 +238,7 @@ uwotlite::umap(
 | Package | Passed | Failed | Warnings | Skipped |
 |---------|--------|--------|----------|---------|
 | embedmit | 833 | 0 | 10 | 4 |
-| uwotlite | 1140 | 0 | 0 | 1 |
+| uwotmit | 1140 | 0 | 0 | 1 |
 
 ### Commit
 ```
@@ -279,7 +279,7 @@ Updated the categorical encoding vignette to match Chapter 17 of "Tidy Modeling 
 ## 2026-01-19: Code Coverage Analysis
 
 ### Summary
-Ran covr code coverage analysis on all 4 packages (embed, embedmit, uwot, uwotlite) to identify areas for improvement.
+Ran covr code coverage analysis on all 4 packages (embed, embedmit, uwot, uwotmit) to identify areas for improvement.
 
 ### Coverage Results
 
@@ -288,7 +288,7 @@ Ran covr code coverage analysis on all 4 packages (embed, embedmit, uwot, uwotli
 | embed    | 72.99%   | 688   |
 | embedmit | ~73%*    | 833   |
 | uwot     | 83.23%   | 963   |
-| uwotlite | 85.33%   | 1140  |
+| uwotmit | 85.33%   | 1140  |
 
 *embedmit coverage estimated; test environment issues prevented exact measurement.
 
@@ -303,12 +303,12 @@ Ran covr code coverage analysis on all 4 packages (embed, embedmit, uwot, uwotli
 | R/umap.R | 68.13% | Various UMAP options |
 | R/pca_truncated.R | 71.01% | Edge cases |
 
-**uwot/uwotlite:**
+**uwot/uwotmit:**
 
 | File | Coverage | Issue |
 |------|----------|-------|
 | R/bigstatsr_init.R | 0.00% | Entire file untested |
-| R/umap2.R | 0%/76% | uwot untested, uwotlite improved |
+| R/umap2.R | 0%/76% | uwot untested, uwotmit improved |
 | R/rspectra_init.R | 49.23% | Spectral initialization |
 | R/supervised.R | 59.77% | Supervised UMAP |
 | R/init.R | 60.32% | Initialization methods |
@@ -324,8 +324,8 @@ Ran covr code coverage analysis on all 4 packages (embed, embedmit, uwot, uwotli
 ### Fork Improvements
 
 The forks show improved coverage over originals:
-- uwotlite R/umap2.R: 0% → 76.09% (+76 percentage points)
-- Overall uwotlite: 83.23% → 85.33% (+2.1 percentage points)
+- uwotmit R/umap2.R: 0% → 76.09% (+76 percentage points)
+- Overall uwotmit: 83.23% → 85.33% (+2.1 percentage points)
 
 ---
 
@@ -336,7 +336,7 @@ The forks show improved coverage over originals:
 ```
 embedmit/
 ├── R/                              # 22 source files
-│   ├── umap.R                      # Modified: uwotlite + tausworthe default
+│   ├── umap.R                      # Modified: uwotmit + tausworthe default
 │   ├── lencode.R                   # Base likelihood encoding
 │   ├── lencode_glm.R               # GLM-based encoding
 │   ├── lencode_bayes.R             # Bayesian encoding
@@ -375,17 +375,17 @@ embedmit/
 ├── .claude/                        # Claude Code configuration
 │   ├── INTERACTIONS_LOG.md         # This file
 │   └── commands/                   # Custom slash commands
-├── DESCRIPTION                     # Package metadata (uwotlite in Imports)
+├── DESCRIPTION                     # Package metadata (uwotmit in Imports)
 ├── NAMESPACE                       # Exports and imports
 ├── Makefile                        # Build and test automation
 ├── CLAUDE.md                       # Claude Code project config
 └── README.md                       # Package documentation
 ```
 
-### uwotlite Final Structure
+### uwotmit Final Structure
 
 ```
-uwotlite/
+uwotmit/
 ├── R/                              # 13 source files
 │   ├── uwot.R                      # Main UMAP functions
 │   ├── umap2.R                     # Alternative UMAP interface
@@ -408,11 +408,11 @@ uwotlite/
 
 ### Key Differences from Original Packages
 
-| Aspect | embed → embedmit | uwot → uwotlite |
+| Aspect | embed → embedmit | uwot → uwotmit |
 |--------|------------------|-----------------|
 | License | MIT (unchanged) | GPL-3 → MIT |
 | RNG default | pcg → tausworthe | pcg → sitmo |
-| UMAP dependency | uwot → uwotlite | N/A |
+| UMAP dependency | uwot → uwotmit | N/A |
 | AGPL dependency | dqrng (removed) | dqrng → sitmo |
 | Test count | ~400 → 833 | ~800 → 1140 |
 
@@ -533,3 +533,104 @@ exclusions: list(
 - `e994cbf` Fix lintr issues: double quotes and explicit return
 - `e2aaf38` Add nolint comments for intentional lintr exceptions
 - `6d88786` Fix .gitignore: add R CMD check and vignette build artifacts
+
+---
+
+## Request 25: Rename uwotlite to uwotmit
+
+**Date:** 2026-01-19
+**Type:** Package rename across ecosystem
+
+### User Request
+"are both packages ready for submission to CRAN?; a better name for uwotlite is uwotmit; Update package name, github repository, all internal references to uwotmit, and external references in the embedmit package; rerun all tests, correcting any errors; update INTERACTIONS_LOG.md and presentation."
+
+### CRAN Readiness Assessment
+
+Both packages pass R CMD check with minor NOTEs:
+
+**embedmit:**
+- NOTE: Hidden files (.lintr, .githooks) - acceptable for development
+- NOTE: Long file paths in presentation - cosmetic only
+
+**uwotlite (pre-rename):**
+- NOTE: Rd xrefs - informational only
+- NOTE: HTML tidy warning - cosmetic only
+
+Both packages are ready for CRAN submission.
+
+### Rationale for Name Change
+
+"uwotmit" better reflects the package purpose:
+- Preserves recognition of "uwot" (UMAP implementation)
+- "mit" suffix clearly indicates MIT licensing
+- More descriptive than "lite" which could suggest reduced functionality
+- Maintains symmetry with "embedmit"
+
+### Changes Made
+
+#### 1. uwotmit Package (formerly uwotlite)
+
+All internal references updated:
+
+| File Category | Files Modified |
+|---------------|----------------|
+| Package metadata | DESCRIPTION |
+| R source files | All R/*.R files |
+| Test infrastructure | tests/testthat.R, all tests/testthat/*.R |
+| Vignettes | vignettes/*.qmd, vignettes/*.Rmd |
+| Documentation | README.md, CLAUDE.md, man/*.Rd |
+| Claude config | .claude/INTERACTIONS_LOG.md, .claude/commands/*.md |
+| Build files | pkgdown/_pkgdown.yml, Makefile, scripts/*.sh |
+| Git config | .gitignore (uwotlite.Rcheck/ → uwotmit.Rcheck/) |
+| Hooks | .claude/hooks/pre-commit.sh |
+
+#### 2. embedmit Package
+
+All external references to uwotlite updated to uwotmit:
+
+| File | Change |
+|------|--------|
+| DESCRIPTION | `Imports: uwotlite` → `Imports: uwotmit` |
+| NAMESPACE | `importFrom(uwotlite,...)` → `importFrom(uwotmit,...)` |
+| R/*.R | All `uwotlite::` → `uwotmit::` |
+| tests/testthat/*.R | All package references |
+| README.md | All documentation references |
+| .claude/INTERACTIONS_LOG.md | All historical references |
+| inst/extdata/presentation/*.qmd | All presentation references |
+
+### Test Results After Rename
+
+**uwotmit:**
+```
+── R CMD check results ─────────────────────────────────── uwotmit 0.2.0.9000 ──
+0 errors ✔ | 0 warnings ✔ | 2 notes ✔
+
+Test passed 🥳
+FAIL 0 | WARN 0 | SKIP 1 | PASS 1140
+```
+
+**embedmit:**
+```
+Test passed 🎊
+FAIL 0 | WARN 10 | SKIP 3 | PASS 834
+```
+
+### Pending Manual Steps
+
+1. **GitHub Repository Rename**: User must manually rename the repository on GitHub:
+   - Go to https://github.com/rmsharp/uwotlite/settings
+   - Under "Repository name", change to "uwotmit"
+   - Update will automatically redirect old URLs
+
+2. **Update Remote URLs** (after GitHub rename):
+   ```bash
+   cd /Users/rmsharp/Documents/R_packages/uwotmit
+   git remote set-url origin https://github.com/rmsharp/uwotmit.git
+   ```
+
+### Documentation Impact
+
+- Both packages now use consistent "mit" suffix naming
+- README files updated with new package name
+- All cross-references between packages corrected
+- CRAN submission documentation ready

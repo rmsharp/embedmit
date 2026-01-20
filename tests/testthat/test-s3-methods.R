@@ -29,11 +29,11 @@ test_that("required packages", {
   check_required_pkgs(required_pkgs(r4), c("recipes", "xgboost"), "embedmit", "embed")
 
 
-  # step_umap can return uwotlite or uwot, and embedmit or embed
+  # step_umap can return uwotmit or uwot, and embedmit or embed
   pkgs5 <- required_pkgs(r5)
   expect_true("recipes" %in% pkgs5)
-  expect_true(any(c("uwotlite", "uwot") %in% pkgs5),
-    info = sprintf("Expected uwotlite or uwot, got: %s", paste(pkgs5, collapse = ", ")))
+  expect_true(any(c("uwotmit", "uwot") %in% pkgs5),
+    info = sprintf("Expected uwotmit or uwot, got: %s", paste(pkgs5, collapse = ", ")))
   expect_true(any(c("embedmit", "embed") %in% pkgs5),
     info = sprintf("Expected embedmit or embed, got: %s", paste(pkgs5, collapse = ", ")))
 })

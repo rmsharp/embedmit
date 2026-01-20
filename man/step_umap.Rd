@@ -58,33 +58,33 @@ is used.}
 \item{min_dist}{The effective minimum distance between embedded points.}
 
 \item{metric}{Character, type of distance metric to use to find nearest
-neighbors. See \code{\link[uwotlite:umap]{uwotlite::umap()}} for more details. Default to \code{"euclidean"}.}
+neighbors. See \code{\link[uwotmit:umap]{uwotmit::umap()}} for more details. Default \code{"euclidean"}.}
 
 \item{learn_rate}{Positive number of the learning rate for the optimization
 process.}
 
 \item{epochs}{Number of iterations for the neighbor optimization. See
-\code{\link[uwotlite:umap]{uwotlite::umap()}} for more details.}
+\code{\link[uwotmit:umap]{uwotmit::umap()}} for more details.}
 
 \item{initial}{Character, Type of initialization for the coordinates. Can be
 one of \code{"spectral"}, \code{"normlaplacian"}, \code{"random"}, \code{"lvrandom"},
 \code{"laplacian"}, \code{"pca"}, \code{"spca"}, \code{"agspectral"}, or a matrix of initial
-coordinates. See \code{\link[uwotlite:umap]{uwotlite::umap()}} for more details. Default to \code{"spectral"}.}
+coordinates. See \code{\link[uwotmit:umap]{uwotmit::umap()}} for details. Default \code{"spectral"}.}
 
 \item{target_weight}{Weighting factor between data topology and target
 topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
 entirely on target. The default of 0.5 balances the weighting equally
 between data and target.}
 
-\item{options}{A list of options to pass to \code{\link[uwotlite:umap]{uwotlite::umap()}}. The arguments
+\item{options}{A list of options to pass to \code{\link[uwotmit:umap]{uwotmit::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model},
 and \code{learning_rate} should not be passed here. By default, \code{verbose} and
 \code{n_threads} are set.}
 
 \item{seed}{Two integers to control the random numbers used by the numerical
 methods. The default pulls from the main session's stream of numbers and
-will give reproducible results if the seed is set prior to calling \link[recipes:prep]{recipes::prep}
-or \link[recipes:bake]{recipes::bake}.}
+will give reproducible results if the seed is set prior to calling
+\link[recipes:prep]{recipes::prep} or \link[recipes:bake]{recipes::bake}.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}
@@ -129,7 +129,8 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{UMAP1} - \code{UMAP101}.
 }
 \section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
+with
 columns \code{terms} and \code{id}:
 
 \describe{
@@ -166,7 +167,7 @@ prepped recipes, see the \href{https://rstudio.github.io/bundle/}{bundle} packag
 }
 
 \examples{
-\dontshow{if (rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("ggplot2", "irlba"))) withAutoprint(\{ # examplesIf}
 library(recipes)
 library(ggplot2)
 

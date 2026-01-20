@@ -86,7 +86,7 @@ dqrng provides the PCG (Permuted Congruential Generator) - a high-quality PRNG.
 
 ```
 embedmit (MIT)
-  └── uwotlite (MIT)
+  └── uwotmit (MIT)
         └── sitmo (MIT)
               └── Alternative RNG implementation
 ```
@@ -103,9 +103,9 @@ embedmit (MIT)
 - Change UMAP default to `rng_type = "tausworthe"`
 - Still depends on uwot, but avoids dqrng at runtime
 
-### Option C: uwotlite with sitmo
+### Option C: uwotmit with sitmo
 
-- Fork uwot → uwotlite
+- Fork uwot → uwotmit
 - Replace dqrng with sitmo (MIT-licensed)
 - Provides MIT-only UMAP implementation
 
@@ -113,10 +113,10 @@ embedmit (MIT)
 
 ---
 
-## Creating uwotlite
+## Creating uwotmit
 
 ### Prompt
-> "Create uwotlite - Fork of uwot with sitmo (MIT) replacing dqrng (AGPL)"
+> "Create uwotmit - Fork of uwot with sitmo (MIT) replacing dqrng (AGPL)"
 
 ### Key Changes in src/rng.h
 
@@ -132,7 +132,7 @@ embedmit (MIT)
 
 ---
 
-## uwotlite: Custom Seed Conversion
+## uwotmit: Custom Seed Conversion
 
 ### Replacing dqrng::convert_seed
 
@@ -149,7 +149,7 @@ inline uint64_t convert_seed(const uint32_t* seeds, std::size_t n) {
 
 ---
 
-## uwotlite: PRNG Struct
+## uwotmit: PRNG Struct
 
 ### Using sitmo instead of PCG
 
@@ -165,7 +165,7 @@ struct pcg_prng {
 
 ---
 
-## uwotlite: DESCRIPTION Changes
+## uwotmit: DESCRIPTION Changes
 
 ```yaml
 # Before
@@ -182,7 +182,7 @@ License: MIT + file LICENSE
 ## Creating embedmit
 
 ### Prompt
-> "Create embedmit - Fork of embed with uwotlite dependency"
+> "Create embedmit - Fork of embed with uwotmit dependency"
 
 ### Key Change in R/umap.R (line 124)
 
@@ -206,8 +206,8 @@ importFrom(uwot,umap)
 importFrom(uwot,umap_transform)
 
 # After
-importFrom(uwotlite,umap)
-importFrom(uwotlite,umap_transform)
+importFrom(uwotmit,umap)
+importFrom(uwotmit,umap_transform)
 ```
 
 ---
@@ -219,8 +219,8 @@ importFrom(uwotlite,umap_transform)
 Imports: ..., uwot, ...
 
 # After
-Imports: ..., uwotlite, ...
-Remotes: rmsharp/uwotlite
+Imports: ..., uwotmit, ...
+Remotes: rmsharp/uwotmit
 ```
 
 ---
@@ -264,7 +264,7 @@ Caused by comparison test files referencing original packages.
 ^tests/testthat/test_comparison_embed\.R$
 ^tests/testthat/helper_comparison\.R$
 
-# uwotlite/.Rbuildignore
+# uwotmit/.Rbuildignore
 ^tests/testthat/test_comparison_uwot\.R$
 ^tests/testthat/helper_comparison\.R$
 ```
@@ -280,7 +280,7 @@ Keeps tests in repo for development, excludes from package build.
 ```
 embedmit/
 ├── R/                              # 22 source files
-│   ├── umap.R                      # Modified: uwotlite + tausworthe default
+│   ├── umap.R                      # Modified: uwotmit + tausworthe default
 │   ├── lencode*.R                  # 4 likelihood encoding steps
 │   ├── pca_*.R                     # 3 PCA steps (truncated, sparse, sparse_bayes)
 │   ├── discretize_*.R              # 2 discretization steps (cart, xgb)
@@ -293,8 +293,8 @@ embedmit/
 │   └── helper_comparison.R         # Test utilities
 ├── inst/extdata/presentation/      # This presentation
 ├── vignettes/                      # Quarto vignettes
-├── DESCRIPTION                     # uwotlite in Imports
-├── NAMESPACE                       # importFrom(uwotlite, ...)
+├── DESCRIPTION                     # uwotmit in Imports
+├── NAMESPACE                       # importFrom(uwotmit, ...)
 ├── Makefile                        # Build/test automation
 └── CLAUDE.md                       # Claude Code configuration
 ```
@@ -312,7 +312,7 @@ embedmit/
 - test-coverage: ✅ (833 tests)
 - pkgdown: ✅
 
-**uwotlite:**
+**uwotmit:**
 
 - R-CMD-check: ✅
 - lint: ✅
@@ -330,12 +330,12 @@ embedmit/
 | embed    | 22      | -         | 20         | 688   |
 | embedmit | 22      | -         | 24         | 833   |
 | uwot     | 13      | 13        | 22         | 963   |
-| uwotlite | 13      | 13        | 26         | 1140  |
+| uwotmit | 13      | 13        | 26         | 1140  |
 
 **Improvements:**
 
 - embedmit: +4 test files, +145 tests (+21%)
-- uwotlite: +4 test files, +177 tests (+18%)
+- uwotmit: +4 test files, +177 tests (+18%)
 
 ---
 
@@ -348,9 +348,9 @@ embedmit/
 | embed    | 72.99%   | discretize_xgb (11%), embed (38%) |
 | embedmit | ~73%     | Same as embed |
 | uwot     | 83.23%   | bigstatsr_init (0%), umap2 (0%) |
-| uwotlite | 85.33%   | bigstatsr_init (0%), umap2 (76%) |
+| uwotmit | 85.33%   | bigstatsr_init (0%), umap2 (76%) |
 
-**Fork improvements:** uwotlite's umap2.R coverage increased from 0% to 76%
+**Fork improvements:** uwotmit's umap2.R coverage increased from 0% to 76%
 
 ---
 
@@ -360,15 +360,15 @@ embedmit/
 
 | File | Change Type | Description |
 |------|-------------|-------------|
-| R/umap.R | **Substantive** | Added `rng_type = "tausworthe"` default, uwotlite namespace |
+| R/umap.R | **Substantive** | Added `rng_type = "tausworthe"` default, uwotmit namespace |
 | R/umap.R | Bugfix | Moved NULL checks before validation for backwards compat |
-| R/*.R (16 files) | Documentation | Updated uwot → uwotlite references |
+| R/*.R (16 files) | Documentation | Updated uwot → uwotmit references |
 
 ---
 
 ## Code Changes Analysis
 
-### uwotlite: Files Modified
+### uwotmit: Files Modified
 
 | File | Change Type | Description |
 |------|-------------|-------------|
@@ -403,7 +403,7 @@ embedmit/
 | Aspect | embed | embedmit |
 |--------|-------|----------|
 | Package license | MIT | MIT |
-| UMAP dependency | uwot (GPL-3) | uwotlite (MIT) |
+| UMAP dependency | uwot (GPL-3) | uwotmit (MIT) |
 | RNG dependency | dqrng (AGPL-3) | sitmo (MIT) |
 | **Effective license** | **AGPL-3** | **MIT** |
 
@@ -411,7 +411,7 @@ embedmit/
 
 ## Installation
 
-### embedmit (includes uwotlite automatically)
+### embedmit (includes uwotmit automatically)
 
 ```r
 # Install from GitHub
@@ -443,7 +443,7 @@ recipe(outcome ~ ., data = train) |>
 ### GitHub Repositories
 
 - **embedmit:** [github.com/rmsharp/embedmit](https://github.com/rmsharp/embedmit)
-- **uwotlite:** [github.com/rmsharp/uwotlite](https://github.com/rmsharp/uwotlite)
+- **uwotmit:** [github.com/rmsharp/uwotmit](https://github.com/rmsharp/uwotmit)
 
 ### Original Packages
 
@@ -458,9 +458,9 @@ recipe(outcome ~ ., data = train) |>
 
 This project was completed entirely through conversational prompts with Claude Code CLI, an AI-powered command-line assistant.
 
-**Session Date:** January 16-18, 2026
+**Session Date:** January 16-19, 2026
 
-**Total Requests:** 24 distinct tasks
+**Total Requests:** 25 distinct tasks
 
 ---
 
@@ -487,7 +487,7 @@ Found dependency chain: embed → uwot → dqrng
 ### Actions
 - Cloned embed and uwot repositories
 - Created embedmit with tausworthe RNG default
-- Created uwotlite with sitmo replacing dqrng
+- Created uwotmit with sitmo replacing dqrng
 
 ### Result
 Both packages built successfully, pushed to GitHub
@@ -497,7 +497,7 @@ Both packages built successfully, pushed to GitHub
 ## Request 3: Fix Failing Tests
 
 ### Prompt
-> "Fix the failing tests in uwotlite"
+> "Fix the failing tests in uwotmit"
 
 ### Actions
 - Updated RcppExports.R symbol prefixes
@@ -505,7 +505,7 @@ Both packages built successfully, pushed to GitHub
 - Added proper LICENSE.md file
 
 ### Result
-uwotlite passes R CMD check with Status: OK
+uwotmit passes R CMD check with Status: OK
 
 ---
 
@@ -529,12 +529,12 @@ All GitHub Actions passing
 ## Request 7: Complete the Chain
 
 ### Prompt
-> "Make embedmit depend on uwotlite instead of uwot"
+> "Make embedmit depend on uwotmit instead of uwot"
 
 ### Actions
-- Changed DESCRIPTION Imports: uwot → uwotlite
+- Changed DESCRIPTION Imports: uwot → uwotmit
 - Updated NAMESPACE imports
-- Modified all uwot:: references to uwotlite::
+- Modified all uwot:: references to uwotmit::
 
 ### Result
 Fully MIT-compatible dependency chain established
@@ -545,7 +545,7 @@ Fully MIT-compatible dependency chain established
 
 ### Prompts
 > "Fix GitHub Actions failures"
-> "Fix uwotlite pkgdown failure"
+> "Fix uwotmit pkgdown failure"
 > "Fix snapshot test failures"
 > "Fix Codecov upload failure"
 
@@ -619,7 +619,7 @@ All CI workflows passing for both packages
 - Renamed comparison test to run last (S3 method override issue)
 
 ### Result
-All tests passing: embedmit 833, uwotlite 1140
+All tests passing: embedmit 833, uwotmit 1140
 
 ---
 
@@ -665,7 +665,7 @@ Vignette now matches TMWR Chapter 17 structure (+183 lines)
 | embed    | 72.99%   | 688   |
 | embedmit | ~73%     | 833   |
 | uwot     | 83.23%   | 963   |
-| uwotlite | 85.33%   | 1140  |
+| uwotmit | 85.33%   | 1140  |
 
 ### Major Gaps Identified
 - `step_discretize_xgb`: 10.88% coverage
@@ -719,6 +719,28 @@ Tests now pass: `[ FAIL 0 | WARN 10 | SKIP 4 | PASS 833 ]`
 
 ---
 
+## Request 25: Package Rename (uwotlite → uwotmit)
+
+### Prompt
+> "A better name for uwotlite is uwotmit; Update package name, all internal references, and external references in embedmit"
+
+### Rationale
+- "uwotmit" better reflects purpose (uwot + MIT licensing)
+- "lite" could suggest reduced functionality
+- Maintains symmetry with "embedmit"
+
+### Actions
+- Renamed package in DESCRIPTION, all R/*.R files, tests, vignettes
+- Updated all man/*.Rd documentation files
+- Updated embedmit references: DESCRIPTION, NAMESPACE, R/, tests/
+- Verified tests pass on both packages
+
+### Result
+- uwotmit: FAIL 0 | WARN 0 | SKIP 1 | PASS 1140
+- embedmit: FAIL 0 | WARN 10 | SKIP 3 | PASS 834
+
+---
+
 ## The Power of AI-Assisted Development
 
 :::: {.columns}
@@ -732,6 +754,7 @@ Tests now pass: `[ FAIL 0 | WARN 10 | SKIP 4 | PASS 833 ]`
 - **Documentation** - Vignettes, README updates
 - **Problem solving** - License-aware solutions
 - **Code style** - Lintr compliance, nolint annotations
+- **Ecosystem rename** - uwotlite → uwotmit across packages
 :::
 ::: {.column width="40%"}
 ### Human Role
@@ -763,6 +786,6 @@ R. Mark Sharp — GitHub: [@rmsharp](https://github.com/rmsharp)
 **MIT Forks**
 
 - [rmsharp/embedmit](https://github.com/rmsharp/embedmit)
-- [rmsharp/uwotlite](https://github.com/rmsharp/uwotlite)
+- [rmsharp/uwotmit](https://github.com/rmsharp/uwotmit)
 :::
 ::::

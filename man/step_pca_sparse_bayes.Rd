@@ -26,8 +26,8 @@ step_pca_sparse_bayes(
 operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables will be
-used to compute the components. See \link[recipes:selections]{recipes::selections} for more details. For
-the \code{tidy} method, these are not currently used.}
+used to compute the components. See \link[recipes:selections]{recipes::selections} for more details.
+For the \code{tidy} method, these are not currently used.}
 
 \item{role}{For model terms created by this step, what analysis role should
 they be assigned? By default, the function assumes that the new principal
@@ -107,7 +107,8 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
+with
 columns \code{terms}, \code{value}, \code{component}, and \code{id}:
 
 \describe{

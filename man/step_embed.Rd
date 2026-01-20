@@ -151,8 +151,8 @@ tensorflow models cannot be run in parallel within the same session (via
 this step with \code{caret}, avoid parallel processing.
 }
 \section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
-a number of columns with embedding information, and columns \code{terms},
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
+with a number of columns with embedding information, and columns \code{terms},
 \code{levels}, and \code{id}:
 
 \describe{
@@ -177,7 +177,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (!embedmit:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (embedmit:::run_examples("modeldata", "keras3")) withAutoprint(\{ # examplesIf}
 data(grants, package = "modeldata")
 
 set.seed(1)

@@ -24,8 +24,8 @@ step_woe(
 operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables will be
-used to compute the components. See \link[recipes:selections]{recipes::selections} for more details. For
-the \code{tidy} method, these are not currently used.}
+used to compute the components. See \link[recipes:selections]{recipes::selections} for more details.
+For the \code{tidy} method, these are not currently used.}
 
 \item{role}{For model terms created by this step, what analysis role should
 they be assigned?. By default, the function assumes that the new woe
@@ -100,14 +100,9 @@ levels of one given predictor. One easy way to do this is by tweaking an
 output returned from \code{dictionary()}.
 }
 \section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
-(the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good},
-\code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See \code{\link[=dictionary]{dictionary()}} for
-more information.
-
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
-columns \code{terms} \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good}, \code{p_bad}, \code{p_good}, \code{woe}
-and \code{outcome} and \code{id}:
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
+with columns \code{terms}, \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good}, \code{p_bad},
+\code{p_good}, \code{woe}, \code{outcome}, and \code{id}:
 
 \describe{
 \item{terms}{character, the selectors or variables selected}

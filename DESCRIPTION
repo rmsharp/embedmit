@@ -35,7 +35,7 @@ Imports:
     tibble,
     tidyr,
     utils,
-    uwotlite,
+    uwotmit,
     vctrs,
     withr
 Suggests:
@@ -60,7 +60,7 @@ Suggests:
     xgboost
 VignetteBuilder: knitr, quarto
 ByteCompile: true
-Remotes: rmsharp/uwotlite
+Remotes: rmsharp/uwotmit
 Config/Needs/website: tidymodels, ggiraph, reticulate
 Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2025-04-24

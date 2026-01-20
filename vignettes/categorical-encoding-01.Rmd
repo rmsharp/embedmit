@@ -248,7 +248,7 @@ The `embedmit` package offers additional encoding methods:
 | `step_lencode_mixed()` | Mixed effects encoding (partial pooling) |
 | `step_lencode_bayes()` | Bayesian encoding (full uncertainty quantification) |
 | `step_woe()` | Weight of evidence transformation (binary outcomes) |
-| `step_umap()` | UMAP embeddings via uwotlite |
+| `step_umap()` | UMAP embeddings via uwotmit |
 
 ## Chapter Summary
 

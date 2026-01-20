@@ -78,8 +78,8 @@ stop with a note about installing the package.
 Note that the original data will be replaced with the new bins.
 }
 \section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
-columns \code{terms}, \code{value}, and \code{id}:
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
+with columns \code{terms}, \code{value}, and \code{id}:
 
 \describe{
 \item{terms}{character, the selectors or variables selected}

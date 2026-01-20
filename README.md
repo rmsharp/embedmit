@@ -21,7 +21,7 @@ licensing complications for projects that need to maintain MIT or other
 permissive licensing throughout their dependency tree.
 
 `embedmit` solves this by: 1. Depending on
-[uwotlite](https://github.com/rmsharp/uwotlite) instead of `uwot` - an
+[uwotmit](https://github.com/rmsharp/uwotmit) instead of `uwot` - an
 MIT-licensed fork that replaces `dqrng` with `sitmo` 2. Using
 `rng_type = "tausworthe"` as the default for additional safety
 
@@ -30,13 +30,13 @@ MIT-licensed fork that replaces `dqrng` with `sitmo` 2. Using
 | Feature              | embed                         | embedmit                 |
 |----------------------|-------------------------------|--------------------------|
 | License              | MIT                           | MIT                      |
-| UMAP dependency      | uwot (requires dqrng, AGPL-3) | uwotlite (MIT-only deps) |
+| UMAP dependency      | uwot (requires dqrng, AGPL-3) | uwotmit (MIT-only deps) |
 | Default RNG for UMAP | PCG (via dqrng)               | Tausworthe (built-in)    |
 | Functionality        | Full                          | Full                     |
 
 ### Technical Changes
 
-1.  **Dependency change**: `uwot` → `uwotlite` in DESCRIPTION
+1.  **Dependency change**: `uwot` → `uwotmit` in DESCRIPTION
 2.  **Default RNG** in `R/umap.R`:
 
 ``` r
@@ -106,7 +106,7 @@ dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm),
 - `step_umap()` uses a nonlinear transformation similar to t-SNE but can
   be used to project the transformation on new data. Both supervised and
   unsupervised methods can be used. **Note:** In embedmit, this uses
-  [uwotlite](https://github.com/rmsharp/uwotlite) and defaults to the
+  [uwotmit](https://github.com/rmsharp/uwotmit) and defaults to the
   tausworthe RNG for a fully MIT-compatible dependency chain.
 
 - `step_discretize_xgb()` and `step_discretize_cart()` can make binned
@@ -167,6 +167,6 @@ functionality goes to the original authors and contributors.
 ## See Also
 
 - The original [embed package](https://github.com/tidymodels/embed)
-- [uwotlite](https://github.com/rmsharp/uwotlite) - MIT-compatible fork
+- [uwotmit](https://github.com/rmsharp/uwotmit) - MIT-compatible fork
   of uwot with sitmo instead of dqrng
 - The [tidymodels](https://www.tidymodels.org/) framework

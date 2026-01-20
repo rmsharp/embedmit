@@ -18,7 +18,7 @@ test_that("factor outcome", {
   direct_mod <-
     withr::with_seed(
       supervised$steps[[1]]$seed[1],
-      uwotlite::umap(
+      uwotmit::umap(
         X = tr[, 1:4],
         y = tr$Species,
         n_neighbors = 15,
@@ -43,7 +43,7 @@ test_that("factor outcome", {
   direct_pred <-
     withr::with_seed(
       supervised$steps[[1]]$seed[2],
-      uwotlite::umap_transform(model = direct_mod, X = te[, 1:4])
+      uwotmit::umap_transform(model = direct_mod, X = te[, 1:4])
     )
   colnames(direct_pred) <- paste0("umap_", 1:2)
   expect_equal(
@@ -65,7 +65,7 @@ test_that("numeric outcome", {
   direct_mod <-
     withr::with_seed(
       supervised$steps[[1]]$seed[1],
-      uwotlite::umap(
+      uwotmit::umap(
         X = tr[, 2:4],
         y = tr$Sepal.Length,
         n_neighbors = 15,
@@ -90,7 +90,7 @@ test_that("numeric outcome", {
   direct_pred <-
     withr::with_seed(
       supervised$steps[[1]]$seed[2],
-      uwotlite::umap_transform(model = direct_mod, X = te[, 2:4])
+      uwotmit::umap_transform(model = direct_mod, X = te[, 2:4])
     )
   colnames(direct_pred) <- paste0("umap_", 1:2)
   expect_equal(
@@ -123,7 +123,7 @@ test_that("metric argument works", {
   direct_mod <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[1],
-      uwotlite::umap(
+      uwotmit::umap(
         X = tr[, -5],
         n_neighbors = 15,
         n_components = 3,
@@ -148,7 +148,7 @@ test_that("metric argument works", {
   direct_pred <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[2],
-      uwotlite::umap_transform(model = direct_mod, X = te[, -5])
+      uwotmit::umap_transform(model = direct_mod, X = te[, -5])
     )
   colnames(direct_pred) <- paste0("umap_", 1:3)
   expect_equal(
@@ -180,7 +180,7 @@ test_that("no outcome", {
   direct_mod <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[1],
-      uwotlite::umap(
+      uwotmit::umap(
         X = tr[, -5],
         n_neighbors = 15,
         n_components = 3,
@@ -204,7 +204,7 @@ test_that("no outcome", {
   direct_pred <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[2],
-      uwotlite::umap_transform(model = direct_mod, X = te[, -5])
+      uwotmit::umap_transform(model = direct_mod, X = te[, -5])
     )
   colnames(direct_pred) <- paste0("umap_", 1:3)
   expect_equal(
