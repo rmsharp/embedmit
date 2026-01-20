@@ -2,8 +2,10 @@
 # embedmit
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check-scheduled](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check-scheduled.yaml/badge.svg)](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check-scheduled.yaml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- badges: end -->
 
 ## MIT-Compatible Fork of embed
