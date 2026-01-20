@@ -887,7 +887,10 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <li>Frequent breaking changes between TensorFlow versions</li>
 <li>Platform-specific issues (macOS ARM, Windows)</li>
 </ul>
-<h3 id="resolution">Resolution</h3>
+</section>
+<section id="tensorflow-ci-resolution" class="slide level2">
+<h2>TensorFlow CI Resolution</h2>
+<h3 id="solution">Solution</h3>
 <ul>
 <li>TensorFlow tests run locally, skipped in CI (<code>skip_on_ci()</code>)</li>
 <li>keras3/tensorflow moved to Suggests (not Imports)</li>

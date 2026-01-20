@@ -578,7 +578,11 @@ uwotmit passes R CMD check with Status: OK
 - Frequent breaking changes between TensorFlow versions
 - Platform-specific issues (macOS ARM, Windows)
 
-### Resolution
+---
+
+## TensorFlow CI Resolution
+
+### Solution
 - TensorFlow tests run locally, skipped in CI (`skip_on_ci()`)
 - keras3/tensorflow moved to Suggests (not Imports)
 - Core functionality tested; neural network embeddings tested manually
