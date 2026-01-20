@@ -155,10 +155,10 @@ components are designed to capture the maximum amount of information (i.e.
 variance) in the original variables. Also, the components are statistically
 independent from one another. This means that they can be used to combat
 large inter-variables correlations in a data set.</p>
-<p>It is advisable to standardize the variables prior to running PCA. Here, each
-variable will be centered and scaled prior to the PCA calculation. This can
-be changed using the <code>options</code> argument or by using <code><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">recipes::step_center()</a></code> and
-<code><a href="https://recipes.tidymodels.org/reference/step_scale.html" class="external-link">recipes::step_scale()</a></code>.</p>
+<p>It is advisable to standardize the variables prior to running PCA. Here,
+each variable will be centered and scaled prior to the PCA calculation. This
+can be changed using the <code>options</code> argument or by using
+<code><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">recipes::step_center()</a></code> and <code><a href="https://recipes.tidymodels.org/reference/step_scale.html" class="external-link">recipes::step_scale()</a></code>.</p>
 <p>The argument <code>num_comp</code> controls the number of components that will be retained
 (the original variables that are used to derive the components are removed from
 the data). The new components will have names that begin with <code>prefix</code> and a
@@ -168,8 +168,9 @@ the names would be <code>PC1</code> - <code>PC101</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step two things can happen depending
-the <code>type</code> argument. If <code>type = "coef"</code> a tibble returned with 4 columns
+    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step two things can happen
+depending the <code>type</code> argument. If <code>type = "coef"</code> a tibble returned with 4
+columns
 <code>terms</code>, <code>value</code>, <code>component</code> , and <code>id</code>:</p>
 <dl><dt>terms</dt>
 <dd><p>character, the selectors or variables selected</p></dd>

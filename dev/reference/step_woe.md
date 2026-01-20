@@ -138,16 +138,8 @@ easy way to do this is by tweaking an output returned from
 
 When you
 [`tidy()`](https://recipes.tidymodels.org/reference/tidy.recipe.html)
-this step, a tibble with columns `terms` (the selectors or variables
-selected), `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
-and `outcome` is returned.. See
-[`dictionary()`](https://rmsharp.github.io/embedmit/dev/reference/dictionary.md)
-for more information.
-
-When you
-[`tidy()`](https://recipes.tidymodels.org/reference/tidy.recipe.html)
-this step, a tibble is returned with columns `terms` `value`, `n_tot`,
-`n_bad`, `n_good`, `p_bad`, `p_good`, `woe` and `outcome` and `id`:
+this step, a tibble is returned with columns `terms`, `value`, `n_tot`,
+`n_bad`, `n_good`, `p_bad`, `p_good`, `woe`, `outcome`, and `id`:
 
 - terms:
 

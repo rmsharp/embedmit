@@ -348,7 +348,7 @@ The `embedmit` package offers additional encoding methods:
 | [`step_lencode_mixed()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_mixed.md) | Mixed effects encoding (partial pooling)            |
 | [`step_lencode_bayes()`](https://rmsharp.github.io/embedmit/dev/reference/step_lencode_bayes.md) | Bayesian encoding (full uncertainty quantification) |
 | [`step_woe()`](https://rmsharp.github.io/embedmit/dev/reference/step_woe.md)                     | Weight of evidence transformation (binary outcomes) |
-| [`step_umap()`](https://rmsharp.github.io/embedmit/dev/reference/step_umap.md)                   | UMAP embeddings via uwotlite                        |
+| [`step_umap()`](https://rmsharp.github.io/embedmit/dev/reference/step_umap.md)                   | UMAP embeddings via uwotmit                         |
 
 ## Chapter Summary
 

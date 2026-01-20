@@ -79,8 +79,8 @@ step_umap(
 - metric:
 
   Character, type of distance metric to use to find nearest neighbors.
-  See [`uwotlite::umap()`](https://rdrr.io/pkg/uwotlite/man/umap.html)
-  for more details. Default to `"euclidean"`.
+  See [`uwotmit::umap()`](https://rdrr.io/pkg/uwotmit/man/umap.html) for
+  more details. Default `"euclidean"`.
 
 - learn_rate:
 
@@ -89,7 +89,7 @@ step_umap(
 - epochs:
 
   Number of iterations for the neighbor optimization. See
-  [`uwotlite::umap()`](https://rdrr.io/pkg/uwotlite/man/umap.html) for
+  [`uwotmit::umap()`](https://rdrr.io/pkg/uwotmit/man/umap.html) for
   more details.
 
 - initial:
@@ -98,8 +98,8 @@ step_umap(
   `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`,
   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of
   initial coordinates. See
-  [`uwotlite::umap()`](https://rdrr.io/pkg/uwotlite/man/umap.html) for
-  more details. Default to `"spectral"`.
+  [`uwotmit::umap()`](https://rdrr.io/pkg/uwotmit/man/umap.html) for
+  details. Default `"spectral"`.
 
 - target_weight:
 
@@ -111,7 +111,7 @@ step_umap(
 - options:
 
   A list of options to pass to
-  [`uwotlite::umap()`](https://rdrr.io/pkg/uwotlite/man/umap.html). The
+  [`uwotmit::umap()`](https://rdrr.io/pkg/uwotmit/man/umap.html). The
   arguments `X`, `n_neighbors`, `n_components`, `min_dist`, `n_epochs`,
   `ret_model`, and `learning_rate` should not be passed here. By
   default, `verbose` and `n_threads` are set.
@@ -235,7 +235,6 @@ and Projection for Dimension Reduction.
 ## Examples
 
 ``` r
-if (FALSE) { # rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")
 library(recipes)
 library(ggplot2)
 
@@ -256,5 +255,4 @@ theme_set(theme_bw())
 bake(supervised, new_data = te, Species, starts_with("umap")) |>
   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) +
   geom_point(alpha = .5)
-}
 ```

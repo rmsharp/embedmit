@@ -73,8 +73,8 @@ operations for this recipe.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>One or more selector functions to choose which variables are
-affected by the step. See <a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">recipes::selections</a> for more details. For the <code>tidy</code>
-method, these are not currently used.</p></dd>
+affected by the step. See <a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">recipes::selections</a> for more details. For the
+<code>tidy</code> method, these are not currently used.</p></dd>
 
 
 <dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
@@ -108,11 +108,11 @@ complex trees.</p></dd>
 
 
 <dt id="arg-skip">skip<a class="anchor" aria-label="anchor" href="#arg-skip"></a></dt>
-<dd><p>A logical. Should the step be skipped when the recipe is baked by
-<a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake</a>? While all operations are baked when <a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep</a> is run, some
-operations may not be able to be conducted on new data (e.g. processing the
-outcome variable(s)). Care should be taken when using <code>skip = TRUE</code> as it
-may affect the computations for subsequent operations</p></dd>
+<dd><p>A logical. Should the step be skipped when the recipe is baked
+by <a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake</a>? While all operations are baked when <a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep</a>
+is run, some operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when using
+<code>skip = TRUE</code> as it may affect the computations for subsequent operations</p></dd>
 
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
@@ -137,8 +137,8 @@ find any signal in the data.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble is returned with
-columns <code>terms</code>, <code>old</code>, <code>new</code>, and <code>id</code>:</p>
+    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble is returned
+with columns <code>terms</code>, <code>old</code>, <code>new</code>, and <code>id</code>:</p>
 <dl><dt>terms</dt>
 <dd><p>character, the selectors or variables selected</p></dd>
 
