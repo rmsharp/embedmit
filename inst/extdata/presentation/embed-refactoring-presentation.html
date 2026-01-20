@@ -1055,7 +1055,10 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <li>Loaded <code>embed</code> package, overriding <code>embedmit</code>’s S3 methods</li>
 <li><code>test-umap.R</code> then used <code>embed</code>’s <code>prep.step_umap</code> (lacking fixes)</li>
 </ol>
-<h3 id="resolution">Resolution</h3>
+</section>
+<section id="request-23-resolution" class="slide level2">
+<h2>Request 23: Resolution</h2>
+<h3 id="fix">Fix</h3>
 <p>Deleted stale duplicate from installed package (source repo was correct)</p>
 <h3 id="result-11">Result</h3>
 <p>Tests now pass: <code>[ FAIL 0 | WARN 10 | SKIP 4 | PASS 833 ]</code></p>

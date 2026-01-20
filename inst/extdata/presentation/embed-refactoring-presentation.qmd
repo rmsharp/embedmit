@@ -732,7 +732,11 @@ A **duplicate test file** existed in the installed package:
 2. Loaded `embed` package, overriding `embedmit`'s S3 methods
 3. `test-umap.R` then used `embed`'s `prep.step_umap` (lacking fixes)
 
-### Resolution
+---
+
+## Request 23: Resolution
+
+### Fix
 Deleted stale duplicate from installed package (source repo was correct)
 
 ### Result
