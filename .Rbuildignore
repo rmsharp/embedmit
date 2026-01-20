@@ -22,3 +22,6 @@ Applications/Tensorflow.Rmd
 ^tests/testthat/test-zzz_comparison_embed\.R$
 ^tests/testthat/helper_comparison\.R$
 ^\.claude$
+^\.githooks$
+^\.lintr$
+^inst/extdata/presentation$

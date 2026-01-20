@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rmsharp/embedmit/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/rmsharp/embedmit/graph/badge.svg)](https://app.codecov.io/gh/rmsharp/embedmit)
 <!-- badges: end -->
 
 ## MIT-Compatible Fork of embed

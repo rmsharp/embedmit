@@ -634,3 +634,75 @@ FAIL 0 | WARN 10 | SKIP 3 | PASS 834
 - README files updated with new package name
 - All cross-references between packages corrected
 - CRAN submission documentation ready
+
+---
+
+## 2026-01-19: CRAN Readiness Assessment and .Rbuildignore Updates
+
+### Summary
+Performed comprehensive CRAN readiness assessment for both packages, ran code quality tools (lintr, goodpractice, covr), and updated .Rbuildignore to address R CMD check NOTEs.
+
+### CRAN Readiness Check Results
+
+#### embedmit: 1 WARNING, 4 NOTEs
+
+| Issue | Severity | Action |
+|-------|----------|--------|
+| `Remotes` field + uwotmit not on CRAN | WARNING | **Blocking** - uwotmit must be on CRAN first |
+| Long file paths in `inst/extdata/presentation/` | NOTE | ✅ Fixed (added to .Rbuildignore) |
+| Hidden files (.lintr, .githooks) | NOTE | ✅ Fixed (added to .Rbuildignore) |
+| Non-standard top-level files | NOTE | Noted for future |
+| Version 1.2.1.9000 | NOTE | Change to 1.2.2 before submission |
+
+#### uwotmit: 4 NOTEs → 3 NOTEs
+
+See uwotmit INTERACTIONS_LOG.md for details. Key improvement: moved Matrix from Depends to Imports.
+
+### Code Quality Tool Results
+
+#### Coverage (covr)
+
+| Package | Coverage | Low Coverage Files |
+|---------|----------|-------------------|
+| embedmit | 75.27% | discretize_xgb.R (11%), embed.R (38%) |
+| uwotmit | 83.04% | bigstatsr_init.R (0%), rspectra_init.R (49%) |
+
+#### Lintr
+
+| Package | Result |
+|---------|--------|
+| embedmit | ✅ No lints found |
+| uwotmit | Style issues (inherited from uwot) |
+
+#### Goodpractice
+
+**embedmit issues:**
+- 75% test coverage (acceptable for CRAN)
+- Uses `Depends` for recipes (required for tidymodels integration)
+- Uses `=` instead of `<-` in 3 places (low priority)
+- Imports entire packages (architectural decision)
+
+### Changes Made
+
+**.Rbuildignore**: Added three entries to exclude from built package:
+```
+^\.githooks$
+^\.lintr$
+^inst/extdata/presentation$
+```
+
+The `inst/extdata/presentation/` exclusion resolves 60+ long file path warnings from the Quarto revealjs presentation files.
+
+### CRAN Submission Order
+
+1. **First**: Submit uwotmit to CRAN (no blocking dependencies)
+2. **Then**: Remove `Remotes: rmsharp/uwotmit` from embedmit DESCRIPTION
+3. **Then**: Submit embedmit to CRAN
+
+### Remaining Pre-Submission Tasks
+
+- [ ] Wait for uwotmit CRAN acceptance
+- [ ] Remove `Remotes: rmsharp/uwotmit` from DESCRIPTION
+- [ ] Change version from 1.2.1.9000 to 1.2.2
+- [ ] Add remaining items to .Rbuildignore: `^CLAUDE\.md$`, `^Makefile$`, `^scripts$`
+- [ ] Final R CMD check --as-cran verification
