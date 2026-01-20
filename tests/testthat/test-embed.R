@@ -319,7 +319,7 @@ test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) |>
     step_embed(all_predictors(), outcome = "mpg")
-  rec_param <- tunable.step_embed(rec$steps[[1]])
+  rec_param <- tunable(rec$steps[[1]])
   expect_equal(rec_param$name, c("num_terms", "hidden_units"))
   expect_true(all(rec_param$source == "recipe"))
   expect_true(is.list(rec_param$call_info))
