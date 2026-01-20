@@ -1035,12 +1035,16 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="request-22-coverage-gaps" class="slide level2">
+<h2>Request 22: Coverage Gaps</h2>
 <h3 id="major-gaps-identified">Major Gaps Identified</h3>
 <ul>
 <li><code>step_discretize_xgb</code>: 10.88% coverage</li>
 <li><code>step_embed</code>: 38.10% coverage</li>
 <li>Supervised UMAP: ~60% coverage</li>
 </ul>
+<p>These gaps exist in original packages and were inherited by forks.</p>
 </section>
 <section id="request-23-diagnose-test-failures" class="slide level2">
 <h2>Request 23: Diagnose Test Failures</h2>
@@ -1075,12 +1079,15 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <li>Fixed line lengths &gt;80 characters across 13 R files</li>
 <li>Changed single quotes to double quotes in cli_abort() calls</li>
 <li>Removed explicit return() in favor of implicit returns</li>
-<li>Added nolint comments for intentional exceptions:
+</ul>
+</section>
+<section id="request-24-lintr-exceptions" class="slide level2">
+<h2>Request 24: Lintr Exceptions</h2>
+<h3 id="added-nolint-comments-for-intentional-exceptions">Added nolint comments for intentional exceptions:</h3>
 <ul>
 <li><code>Laplace</code> parameter (API name, can’t change)</li>
 <li><code>..levels</code>, <code>..value</code> (tidy eval internals)</li>
 <li>Variables used in cli glue strings</li>
-</ul></li>
 </ul>
 <h3 id="result-12">Result</h3>
 <pre><code>&gt; lintr::lint_package()
@@ -1098,12 +1105,14 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <li>“lite” could suggest reduced functionality</li>
 <li>Maintains symmetry with “embedmit”</li>
 </ul>
+</section>
+<section id="request-25-rename-actions-result" class="slide level2">
+<h2>Request 25: Rename Actions &amp; Result</h2>
 <h3 id="actions-12">Actions</h3>
 <ul>
 <li>Renamed package in DESCRIPTION, all R/*.R files, tests, vignettes</li>
 <li>Updated all man/*.Rd documentation files</li>
 <li>Updated embedmit references: DESCRIPTION, NAMESPACE, R/, tests/</li>
-<li>Verified tests pass on both packages</li>
 </ul>
 <h3 id="result-13">Result</h3>
 <ul>
@@ -1111,11 +1120,8 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <li>embedmit: FAIL 0 | WARN 10 | SKIP 3 | PASS 834</li>
 </ul>
 </section>
-<section id="the-power-of-ai-assisted-development" class="slide level2">
-<h2>The Power of AI-Assisted Development</h2>
-<div class="columns">
-<div class="column" style="width:60%;">
-<h3 id="what-claude-code-cli-handled">What Claude Code CLI Handled</h3>
+<section id="what-claude-code-cli-handled" class="slide level2">
+<h2>What Claude Code CLI Handled</h2>
 <ul>
 <li><strong>Code analysis</strong> - Dependency tree scanning</li>
 <li><strong>Refactoring</strong> - Package renaming, namespace updates</li>
@@ -1126,14 +1132,16 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <li><strong>Code style</strong> - Lintr compliance, nolint annotations</li>
 <li><strong>Ecosystem rename</strong> - uwotlite → uwotmit across packages</li>
 </ul>
-</div><div class="column" style="width:40%;">
-<h3 id="human-role">Human Role</h3>
+</section>
+<section id="the-human-role" class="slide level2">
+<h2>The Human Role</h2>
+<h3 id="direction-decisions-review">Direction, Decisions, Review</h3>
 <ul>
 <li><strong>Direction</strong> - What to build and why</li>
 <li><strong>Decisions</strong> - Choosing between approaches</li>
 <li><strong>Review</strong> - Approving changes</li>
 </ul>
-</div></div>
+<p>The AI handles the mechanics; humans provide the vision and judgment.</p>
 </section>
 <section id="questions" class="slide level2">
 <h2>Questions?</h2>
