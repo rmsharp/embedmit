@@ -72,7 +72,7 @@ This project followed TDD principles throughout:
 
 | Benefit | Example |
 |---------|---------|
-| **Confidence** | Replaced RNG without breaking UMAP quality |
+| **Confidence** | Replaced RNG (random number generator) without breaking UMAP (Uniform Manifold Approximation and Projection) quality |
 | **Documentation** | Tests show exactly what each function should do |
 | **Regression prevention** | Caught S3 method override bug immediately |
 | **Refactoring safety** | Renamed uwotlite → uwotmit across 100+ files |
