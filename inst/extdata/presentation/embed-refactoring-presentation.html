@@ -875,10 +875,26 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <ul>
 <li>Updated README.Rmd files for both packages</li>
 <li>Fixed pkgdown.yaml, test-coverage.yaml workflows</li>
-<li>Removed fragile TensorFlow CI steps</li>
+</ul>
+</section>
+<section id="why-tensorflow-ci-was-removed" class="slide level2">
+<h2>Why TensorFlow CI Was Removed</h2>
+<h3 id="the-problem-1">The Problem</h3>
+<p><code>step_embed()</code> uses TensorFlow/Keras for neural network entity embeddings, but TensorFlow CI is notoriously fragile:</p>
+<ul>
+<li>Python/TensorFlow version mismatches across CI platforms</li>
+<li>Large installation footprint (~500MB) slows CI</li>
+<li>Frequent breaking changes between TensorFlow versions</li>
+<li>Platform-specific issues (macOS ARM, Windows)</li>
+</ul>
+<h3 id="resolution">Resolution</h3>
+<ul>
+<li>TensorFlow tests run locally, skipped in CI (<code>skip_on_ci()</code>)</li>
+<li>keras3/tensorflow moved to Suggests (not Imports)</li>
+<li>Core functionality tested; neural network embeddings tested manually</li>
 </ul>
 <h3 id="result-3">Result</h3>
-<p>All GitHub Actions passing</p>
+<p>All GitHub Actions passing reliably</p>
 </section>
 <section id="request-7-complete-the-chain" class="slide level2">
 <h2>Request 7: Complete the Chain</h2>

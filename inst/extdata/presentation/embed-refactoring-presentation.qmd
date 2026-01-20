@@ -565,10 +565,26 @@ uwotmit passes R CMD check with Status: OK
 ### Actions
 - Updated README.Rmd files for both packages
 - Fixed pkgdown.yaml, test-coverage.yaml workflows
-- Removed fragile TensorFlow CI steps
+
+---
+
+## Why TensorFlow CI Was Removed
+
+### The Problem
+`step_embed()` uses TensorFlow/Keras for neural network entity embeddings, but TensorFlow CI is notoriously fragile:
+
+- Python/TensorFlow version mismatches across CI platforms
+- Large installation footprint (~500MB) slows CI
+- Frequent breaking changes between TensorFlow versions
+- Platform-specific issues (macOS ARM, Windows)
+
+### Resolution
+- TensorFlow tests run locally, skipped in CI (`skip_on_ci()`)
+- keras3/tensorflow moved to Suggests (not Imports)
+- Core functionality tested; neural network embeddings tested manually
 
 ### Result
-All GitHub Actions passing
+All GitHub Actions passing reliably
 
 ---
 
