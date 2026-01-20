@@ -25,3 +25,6 @@ Applications/Tensorflow.Rmd
 ^\.githooks$
 ^\.lintr$
 ^inst/extdata/presentation$
+^CLAUDE\.md$
+^Makefile$
+^scripts$
