@@ -706,3 +706,38 @@ The `inst/extdata/presentation/` exclusion resolves 60+ long file path warnings 
 - [ ] Change version from 1.2.1.9000 to 1.2.2
 - [ ] Add remaining items to .Rbuildignore: `^CLAUDE\.md$`, `^Makefile$`, `^scripts$`
 - [ ] Final R CMD check --as-cran verification
+
+---
+
+## 2026-01-20: Fix Vignette to Match TMWR Chapter 17
+
+### Summary
+Fixed categorical encoding vignette so that `mixed_estimates` values match those shown in TMWR Chapter 17. The issue was that Sale_Price was not being log-transformed.
+
+### Root Cause Analysis
+
+**TMWR Chapter 17** shows `mixed_estimates` values around **5.07-5.49** (log10 scale):
+```
+# A tibble: 29 × 4
+  level              value terms        id
+1 North_Ames          5.15 Neighborhood lencode_mixed_SC9hi
+2 College_Creek       5.29 Neighborhood lencode_mixed_SC9hi
+...
+```
+
+**Vignette (before fix)** produced values on raw dollar scale (~$150,000-$500,000) because `Sale_Price` was not being log-transformed.
+
+### The Fix
+
+Changed `step_log(Gr_Liv_Area, base = 10)` to `step_log(Sale_Price, Gr_Liv_Area, base = 10)` in all four recipes:
+
+1. `ames_glm` (line 168)
+2. `ames_mixed` (line 221)
+3. `ames_bayes` (line 286)
+4. `ames_embed` (line 383)
+
+### Files Modified
+- `vignettes/categorical-encoding.qmd` - Added Sale_Price to step_log() in 4 recipes
+
+### Result
+`mixed_estimates` values now match TMWR Chapter 17 (~5.0-5.5 on log10 scale)

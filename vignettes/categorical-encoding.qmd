@@ -165,7 +165,7 @@ The `step_lencode_glm()` function uses a generalized linear model to estimate th
 ames_glm <-
 recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_lencode_glm(Neighborhood, outcome = vars(Sale_Price)) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~ Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -218,7 +218,7 @@ We can use *partial pooling* to adjust these estimates so that levels with small
 ames_mixed <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_lencode_mixed(Neighborhood, outcome = vars(Sale_Price)) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~ Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -283,7 +283,7 @@ For fully Bayesian uncertainty quantification, `step_lencode_bayes()` provides a
 ames_bayes <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_lencode_bayes(Neighborhood, outcome = vars(Sale_Price)) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~ Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -380,7 +380,7 @@ The `step_embed()` function creates these learned embeddings:
 ames_embed <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_embed(Neighborhood, outcome = vars(Sale_Price),
              num_terms = 5,        # Number of embedding dimensions
              hidden_units = 10,    # Hidden layer size

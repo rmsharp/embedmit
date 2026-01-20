@@ -504,9 +504,9 @@ recipe(outcome ~ ., data = train) |>
 
 This project was completed entirely through conversational prompts with Claude Code CLI, an AI-powered command-line assistant.
 
-**Session Date:** January 16-19, 2026
+**Session Date:** January 16-20, 2026
 
-**Total Requests:** 25 distinct tasks
+**Total Requests:** 26 distinct tasks
 
 ---
 
@@ -712,6 +712,25 @@ You're looking at it!
 
 ### Result
 Vignette now matches TMWR Chapter 17 structure (+183 lines)
+
+---
+
+## Request 26: Fix Vignette Sale_Price Scale
+
+### Prompt
+> "Why are the mixed_estimates in Chapter 17 very different from the vignette?"
+
+### Root Cause
+TMWR Chapter 17 shows `mixed_estimates` values ~5.0-5.5 (log10 scale), but vignette was producing raw dollar values (~$150,000) because `Sale_Price` was not log-transformed.
+
+### Fix
+Changed `step_log(Gr_Liv_Area, base = 10)` to:
+```r
+step_log(Sale_Price, Gr_Liv_Area, base = 10)
+```
+
+### Result
+`mixed_estimates` values now match TMWR (~5.15 for North_Ames, etc.)
 
 ---
 
