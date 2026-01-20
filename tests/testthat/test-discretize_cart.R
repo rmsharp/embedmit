@@ -193,7 +193,7 @@ test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) |>
     step_discretize_cart(all_predictors(), outcome = "mpg")
-  rec_param <- tunable.step_discretize_cart(rec$steps[[1]])
+  rec_param <- tunable(rec$steps[[1]])
   expect_equal(rec_param$name, c("cost_complexity", "tree_depth", "min_n"))
   expect_true(all(rec_param$source == "recipe"))
   expect_true(is.list(rec_param$call_info))

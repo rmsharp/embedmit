@@ -86,7 +86,7 @@ test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) |>
     step_pca_sparse_bayes(all_predictors())
-  rec_param <- tunable.step_pca_sparse_bayes(rec$steps[[1]])
+  rec_param <- tunable(rec$steps[[1]])
   expect_equal(
     rec_param$name,
     c("num_comp", "prior_slab_dispersion", "prior_mixture_threshold")

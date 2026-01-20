@@ -238,7 +238,7 @@ test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) |>
     step_umap(all_predictors())
-  rec_param <- tunable.step_umap(rec$steps[[1]])
+  rec_param <- tunable(rec$steps[[1]])
   expect_equal(
     rec_param$name,
     c(

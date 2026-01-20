@@ -580,7 +580,7 @@ test_that("case weights step_discretize_xgb", {
 
   set.seed(28)
   for (col_names in c("x", "z")) {
-    exp_rules[[col_names]] <- xgb_binning(
+    exp_rules[[col_names]] <- embedmit:::xgb_binning(
       sim_tr_cls_cw |> select(-weight),
       "class",
       col_names,
@@ -611,7 +611,7 @@ test_that("case weights step_discretize_xgb", {
 
   set.seed(28)
   for (col_names in c("x", "z")) {
-    exp_rules[[col_names]] <- xgb_binning(
+    exp_rules[[col_names]] <- embedmit:::xgb_binning(
       sim_tr_mcls_cw |> select(-weight),
       "class",
       col_names,
@@ -642,7 +642,7 @@ test_that("case weights step_discretize_xgb", {
 
   set.seed(28)
   for (col_names in c("x", "z")) {
-    exp_rules[[col_names]] <- xgb_binning(
+    exp_rules[[col_names]] <- embedmit:::xgb_binning(
       sim_tr_reg_cw |> select(-weight),
       "y",
       col_names,
@@ -667,7 +667,7 @@ test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) |>
     step_discretize_xgb(all_predictors(), outcome = "mpg")
-  rec_param <- tunable.step_discretize_xgb(rec$steps[[1]])
+  rec_param <- tunable(rec$steps[[1]])
   expect_equal(
     rec_param$name,
     c("sample_val", "learn_rate", "num_breaks", "tree_depth", "min_n")

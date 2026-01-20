@@ -80,7 +80,7 @@ test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) |>
     step_pca_sparse(all_predictors())
-  rec_param <- tunable.step_pca_sparse(rec$steps[[1]])
+  rec_param <- tunable(rec$steps[[1]])
   expect_equal(rec_param$name, c("num_comp", "predictor_prop"))
   expect_true(all(rec_param$source == "recipe"))
   expect_true(is.list(rec_param$call_info))
