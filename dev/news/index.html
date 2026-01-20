@@ -38,7 +38,47 @@
       <small>Source: <a href="https://github.com/rmsharp/embedmit/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="embedmit-100">embedmit 1.0.0<a class="anchor" aria-label="anchor" href="#embedmit-100"></a></h2>
+<div class="section level3">
+<h3 id="initial-release-1-0-0">Initial Release<a class="anchor" aria-label="anchor" href="#initial-release-1-0-0"></a></h3>
+<p>This is the first release of embedmit, an MIT-compatible fork of the embed package (version 1.2.1) by Emil Hvitfeldt and Max Kuhn (Posit Software, PBC).</p>
+<div class="section level4">
+<h4 id="key-differences-from-embed-1-0-0">Key Differences from embed<a class="anchor" aria-label="anchor" href="#key-differences-from-embed-1-0-0"></a></h4>
+<ul><li><p><strong>MIT-Compatible</strong>: embedmit depends on uwotmit instead of uwot for UMAP functionality. This avoids the AGPL-licensed dqrng dependency that uwot uses, making embedmit suitable for inclusion in projects requiring permissive licensing.</p></li>
+<li><p><strong>Default RNG</strong>: The <code><a href="../reference/step_umap.html">step_umap()</a></code> function defaults to <code>rng_type = "tausworthe"</code> instead of <code>"pcg"</code> to avoid the AGPL-licensed PCG implementation. Users can still explicitly request <code>rng_type = "pcg"</code> if desired, which will use the MIT-licensed sitmo implementation from uwotmit.</p></li>
+<li><p><strong>Package renamed</strong>: The package is named <code>embedmit</code> to distinguish it from the original <code>embed</code> package.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="inherited-features-from-embed-1-0-0">Inherited Features from embed 1.2.1<a class="anchor" aria-label="anchor" href="#inherited-features-from-embed-1-0-0"></a></h4>
+<p>embedmit inherits all features from embed 1.2.1, including:</p>
+<ul><li>
+<code><a href="../reference/step_umap.html">step_umap()</a></code> for UMAP dimensionality reduction</li>
+<li>
+<code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code>, <code><a href="../reference/step_lencode_bayes.html">step_lencode_bayes()</a></code>, <code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> for likelihood encodings</li>
+<li>
+<code><a href="../reference/step_lencode.html">step_lencode()</a></code> for analytical likelihood encoding with optional smoothing</li>
+<li>
+<code><a href="../reference/step_woe.html">step_woe()</a></code> for weight of evidence encodings</li>
+<li>
+<code><a href="../reference/step_embed.html">step_embed()</a></code> for entity embeddings using neural networks</li>
+<li>
+<code><a href="../reference/step_discretize_cart.html">step_discretize_cart()</a></code> and <code><a href="../reference/step_discretize_xgb.html">step_discretize_xgb()</a></code> for supervised binning</li>
+<li>
+<code><a href="../reference/step_collapse_cart.html">step_collapse_cart()</a></code> and <code><a href="../reference/step_collapse_stringdist.html">step_collapse_stringdist()</a></code> for factor level pooling</li>
+<li>
+<code><a href="../reference/step_pca_sparse.html">step_pca_sparse()</a></code>, <code><a href="../reference/step_pca_sparse_bayes.html">step_pca_sparse_bayes()</a></code>, and <code><a href="../reference/step_pca_truncated.html">step_pca_truncated()</a></code> for sparse PCA methods</li>
+<li>Full integration with the tidymodels ecosystem</li>
+</ul></div>
+<div class="section level4">
+<h4 id="acknowledgments-1-0-0">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments-1-0-0"></a></h4>
+<p>This package is based on embed by Emil Hvitfeldt, Max Kuhn, and Posit Software, PBC. All credit for the recipe step implementations goes to the original authors. This fork exists solely to provide an MIT-compatible alternative for users who require permissive licensing.</p>
+<p>For the original embed package, see: <a href="https://github.com/tidymodels/embed" class="external-link uri">https://github.com/tidymodels/embed</a></p>
+</div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
