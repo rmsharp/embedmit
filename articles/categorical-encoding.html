@@ -278,7 +278,7 @@
 <code class="sourceCode R"><span><span class="va">ames_glm</span> <span class="op">&lt;-</span></span>
 <span><span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Sale_Price</span>, <span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/step_lencode_glm.html">step_lencode_glm</a></span><span class="op">(</span><span class="va">Neighborhood</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html" class="external-link">all_nominal_predictors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_interact.html" class="external-link">step_interact</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Gr_Liv_Area</span><span class="op">:</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Bldg_Type_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -296,18 +296,18 @@
 <span></span>
 <span><span class="va">glm_estimates</span></span>
 <span><span class="co">#&gt; # A tibble: 29 × 4</span></span>
-<span><span class="co">#&gt;    level                value terms        id               </span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;            </span></span>
-<span><span class="co">#&gt;  1 North_Ames         144416. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  2 College_Creek      202763. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  3 Old_Town           124999. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  4 Edwards            130460. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  5 Somerset           232310. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  6 Northridge_Heights 321119. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  7 Gilbert            191159. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  8 Sawyer             137208. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt;  9 Northwest_Ames     188726. Neighborhood lencode_glm_yj20u</span></span>
-<span><span class="co">#&gt; 10 Sawyer_West        182651. Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;    level              value terms        id               </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;            </span></span>
+<span><span class="co">#&gt;  1 North_Ames          5.15 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  2 College_Creek       5.29 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  3 Old_Town            5.07 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  4 Edwards             5.09 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  5 Somerset            5.35 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  6 Northridge_Heights  5.49 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  7 Gilbert             5.28 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  8 Sawyer              5.13 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt;  9 Northwest_Ames      5.27 Neighborhood lencode_glm_yj20u</span></span>
+<span><span class="co">#&gt; 10 Sawyer_West         5.24 Neighborhood lencode_glm_yj20u</span></span>
 <span><span class="co">#&gt; # ℹ 19 more rows</span></span></code></pre></div>
 </details>
 </div>
@@ -320,9 +320,9 @@
 <code class="sourceCode R"><span><span class="va">glm_estimates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">level</span> <span class="op">==</span> <span class="st">"..new"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
-<span><span class="co">#&gt;   level   value terms        id               </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;            </span></span>
-<span><span class="co">#&gt; 1 ..new 183150. Neighborhood lencode_glm_yj20u</span></span></code></pre></div>
+<span><span class="co">#&gt;   level value terms        id               </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;            </span></span>
+<span><span class="co">#&gt; 1 ..new  5.23 Neighborhood lencode_glm_yj20u</span></span></code></pre></div>
 </details>
 </div>
 <p>When the model encounters an unseen neighborhood at prediction time, it uses this default encoding.</p>
@@ -342,7 +342,7 @@
 <code class="sourceCode R"><span><span class="va">ames_mixed</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Sale_Price</span>, <span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/step_lencode_mixed.html">step_lencode_mixed</a></span><span class="op">(</span><span class="va">Neighborhood</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html" class="external-link">all_nominal_predictors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_interact.html" class="external-link">step_interact</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Gr_Liv_Area</span><span class="op">:</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Bldg_Type_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -359,18 +359,18 @@
 <span></span>
 <span><span class="va">mixed_estimates</span></span>
 <span><span class="co">#&gt; # A tibble: 29 × 4</span></span>
-<span><span class="co">#&gt;    level                value terms        id                 </span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;              </span></span>
-<span><span class="co">#&gt;  1 North_Ames         144488. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  2 College_Creek      202724. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  3 Old_Town           125183. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  4 Edwards            130698. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  5 Somerset           232135. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  6 Northridge_Heights 320533. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  7 Gilbert            191145. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  8 Sawyer             137433. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt;  9 Northwest_Ames     188722. Neighborhood lencode_mixed_AmBz1</span></span>
-<span><span class="co">#&gt; 10 Sawyer_West        182683. Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;    level              value terms        id                 </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;              </span></span>
+<span><span class="co">#&gt;  1 North_Ames          5.15 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  2 College_Creek       5.29 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  3 Old_Town            5.07 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  4 Edwards             5.10 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  5 Somerset            5.35 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  6 Northridge_Heights  5.49 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  7 Gilbert             5.28 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  8 Sawyer              5.13 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt;  9 Northwest_Ames      5.27 Neighborhood lencode_mixed_AmBz1</span></span>
+<span><span class="co">#&gt; 10 Sawyer_West         5.24 Neighborhood lencode_mixed_AmBz1</span></span>
 <span><span class="co">#&gt; # ℹ 19 more rows</span></span></code></pre></div>
 </details>
 </div>
@@ -379,9 +379,9 @@
 <code class="sourceCode R"><span><span class="va">mixed_estimates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">level</span> <span class="op">==</span> <span class="st">"..new"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
-<span><span class="co">#&gt;   level   value terms        id                 </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;              </span></span>
-<span><span class="co">#&gt; 1 ..new 183225. Neighborhood lencode_mixed_AmBz1</span></span></code></pre></div>
+<span><span class="co">#&gt;   level value terms        id                 </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;              </span></span>
+<span><span class="co">#&gt; 1 ..new  5.23 Neighborhood lencode_mixed_AmBz1</span></span></code></pre></div>
 </details>
 </div>
 <section class="level3"><h3 id="comparing-pooling-methods">Comparing Pooling Methods<a class="anchor" aria-label="anchor" href="#comparing-pooling-methods"></a>
@@ -425,7 +425,7 @@
 <code class="sourceCode R"><span><span class="va">ames_bayes</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Sale_Price</span>, <span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/step_lencode_bayes.html">step_lencode_bayes</a></span><span class="op">(</span><span class="va">Neighborhood</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_dummy.html" class="external-link">step_dummy</a></span><span class="op">(</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html" class="external-link">all_nominal_predictors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_interact.html" class="external-link">step_interact</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Gr_Liv_Area</span><span class="op">:</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Bldg_Type_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -561,7 +561,7 @@
 <span><span class="va">ames_embed</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span></span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_log.html" class="external-link">step_log</a></span><span class="op">(</span><span class="va">Sale_Price</span>, <span class="va">Gr_Liv_Area</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/step_embed.html">step_embed</a></span><span class="op">(</span><span class="va">Neighborhood</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span>,</span>
 <span>             num_terms <span class="op">=</span> <span class="fl">5</span>,        <span class="co"># Number of embedding dimensions</span></span>
 <span>             hidden_units <span class="op">=</span> <span class="fl">10</span>,    <span class="co"># Hidden layer size</span></span>

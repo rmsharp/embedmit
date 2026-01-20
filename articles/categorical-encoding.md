@@ -201,7 +201,7 @@ Code
 ames_glm <-
 recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_lencode_glm(Neighborhood, outcome = vars(Sale_Price)) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~ Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -222,18 +222,18 @@ glm_estimates <-
 
 glm_estimates
 #> # A tibble: 29 × 4
-#>    level                value terms        id               
-#>    <chr>                <dbl> <chr>        <chr>            
-#>  1 North_Ames         144416. Neighborhood lencode_glm_yj20u
-#>  2 College_Creek      202763. Neighborhood lencode_glm_yj20u
-#>  3 Old_Town           124999. Neighborhood lencode_glm_yj20u
-#>  4 Edwards            130460. Neighborhood lencode_glm_yj20u
-#>  5 Somerset           232310. Neighborhood lencode_glm_yj20u
-#>  6 Northridge_Heights 321119. Neighborhood lencode_glm_yj20u
-#>  7 Gilbert            191159. Neighborhood lencode_glm_yj20u
-#>  8 Sawyer             137208. Neighborhood lencode_glm_yj20u
-#>  9 Northwest_Ames     188726. Neighborhood lencode_glm_yj20u
-#> 10 Sawyer_West        182651. Neighborhood lencode_glm_yj20u
+#>    level              value terms        id               
+#>    <chr>              <dbl> <chr>        <chr>            
+#>  1 North_Ames          5.15 Neighborhood lencode_glm_yj20u
+#>  2 College_Creek       5.29 Neighborhood lencode_glm_yj20u
+#>  3 Old_Town            5.07 Neighborhood lencode_glm_yj20u
+#>  4 Edwards             5.09 Neighborhood lencode_glm_yj20u
+#>  5 Somerset            5.35 Neighborhood lencode_glm_yj20u
+#>  6 Northridge_Heights  5.49 Neighborhood lencode_glm_yj20u
+#>  7 Gilbert             5.28 Neighborhood lencode_glm_yj20u
+#>  8 Sawyer              5.13 Neighborhood lencode_glm_yj20u
+#>  9 Northwest_Ames      5.27 Neighborhood lencode_glm_yj20u
+#> 10 Sawyer_West         5.24 Neighborhood lencode_glm_yj20u
 #> # ℹ 19 more rows
 ```
 
@@ -252,9 +252,9 @@ Code
 glm_estimates %>%
   filter(level == "..new")
 #> # A tibble: 1 × 4
-#>   level   value terms        id               
-#>   <chr>   <dbl> <chr>        <chr>            
-#> 1 ..new 183150. Neighborhood lencode_glm_yj20u
+#>   level value terms        id               
+#>   <chr> <dbl> <chr>        <chr>            
+#> 1 ..new  5.23 Neighborhood lencode_glm_yj20u
 ```
 
 When the model encounters an unseen neighborhood at prediction time, it
@@ -292,7 +292,7 @@ Code
 ames_mixed <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_lencode_mixed(Neighborhood, outcome = vars(Sale_Price)) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~ Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -310,18 +310,18 @@ mixed_estimates <-
 
 mixed_estimates
 #> # A tibble: 29 × 4
-#>    level                value terms        id                 
-#>    <chr>                <dbl> <chr>        <chr>              
-#>  1 North_Ames         144488. Neighborhood lencode_mixed_AmBz1
-#>  2 College_Creek      202724. Neighborhood lencode_mixed_AmBz1
-#>  3 Old_Town           125183. Neighborhood lencode_mixed_AmBz1
-#>  4 Edwards            130698. Neighborhood lencode_mixed_AmBz1
-#>  5 Somerset           232135. Neighborhood lencode_mixed_AmBz1
-#>  6 Northridge_Heights 320533. Neighborhood lencode_mixed_AmBz1
-#>  7 Gilbert            191145. Neighborhood lencode_mixed_AmBz1
-#>  8 Sawyer             137433. Neighborhood lencode_mixed_AmBz1
-#>  9 Northwest_Ames     188722. Neighborhood lencode_mixed_AmBz1
-#> 10 Sawyer_West        182683. Neighborhood lencode_mixed_AmBz1
+#>    level              value terms        id                 
+#>    <chr>              <dbl> <chr>        <chr>              
+#>  1 North_Ames          5.15 Neighborhood lencode_mixed_AmBz1
+#>  2 College_Creek       5.29 Neighborhood lencode_mixed_AmBz1
+#>  3 Old_Town            5.07 Neighborhood lencode_mixed_AmBz1
+#>  4 Edwards             5.10 Neighborhood lencode_mixed_AmBz1
+#>  5 Somerset            5.35 Neighborhood lencode_mixed_AmBz1
+#>  6 Northridge_Heights  5.49 Neighborhood lencode_mixed_AmBz1
+#>  7 Gilbert             5.28 Neighborhood lencode_mixed_AmBz1
+#>  8 Sawyer              5.13 Neighborhood lencode_mixed_AmBz1
+#>  9 Northwest_Ames      5.27 Neighborhood lencode_mixed_AmBz1
+#> 10 Sawyer_West         5.24 Neighborhood lencode_mixed_AmBz1
 #> # ℹ 19 more rows
 ```
 
@@ -331,9 +331,9 @@ Code
 mixed_estimates %>%
   filter(level == "..new")
 #> # A tibble: 1 × 4
-#>   level   value terms        id                 
-#>   <chr>   <dbl> <chr>        <chr>              
-#> 1 ..new 183225. Neighborhood lencode_mixed_AmBz1
+#>   level value terms        id                 
+#>   <chr> <dbl> <chr>        <chr>              
+#> 1 ..new  5.23 Neighborhood lencode_mixed_AmBz1
 ```
 
 ### Comparing Pooling Methods
@@ -388,7 +388,7 @@ Code
 ames_bayes <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_lencode_bayes(Neighborhood, outcome = vars(Sale_Price)) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~ Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -537,7 +537,7 @@ Code
 ames_embed <-
   recipe(Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Bldg_Type +
            Latitude + Longitude, data = ames_train) %>%
-  step_log(Gr_Liv_Area, base = 10) %>%
+  step_log(Sale_Price, Gr_Liv_Area, base = 10) %>%
   step_embed(Neighborhood, outcome = vars(Sale_Price),
              num_terms = 5,        # Number of embedding dimensions
              hidden_units = 10,    # Hidden layer size
