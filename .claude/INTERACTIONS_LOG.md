@@ -741,3 +741,21 @@ Changed `step_log(Gr_Liv_Area, base = 10)` to `step_log(Sale_Price, Gr_Liv_Area,
 
 ### Result
 `mixed_estimates` values now match TMWR Chapter 17 (~5.0-5.5 on log10 scale)
+
+---
+
+## 2026-01-20: Split TensorFlow CI Slide
+
+### Summary
+Split the "Why TensorFlow CI Was Removed" slide into two slides for better readability.
+
+### Changes Made
+Split into:
+1. **"Why TensorFlow CI Was Removed"** - The problem (4 bullet points about CI fragility)
+2. **"TensorFlow CI Resolution"** - Solution and result
+
+### Files Modified
+- `inst/extdata/presentation/embed-refactoring-presentation.qmd`
+
+### Commit
+`0178aa1` - "Split TensorFlow CI slide into two slides"

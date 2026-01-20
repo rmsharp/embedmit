@@ -818,7 +818,7 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <h3 id="the-claude-code-cli-journey">The Claude Code CLI Journey</h3>
 <p>This project was completed entirely through conversational prompts with Claude Code CLI, an AI-powered command-line assistant.</p>
 <p><strong>Session Date:</strong> January 16-20, 2026</p>
-<p><strong>Total Requests:</strong> 26 distinct tasks</p>
+<p><strong>Total Requests:</strong> 27 distinct tasks</p>
 </section>
 <section id="request-1-discovery" class="slide level2">
 <h2>Request 1: Discovery</h2>
@@ -1030,9 +1030,18 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 <h3 id="result-11">Result</h3>
 <p><code>mixed_estimates</code> values now match TMWR (~5.15 for North_Ames, etc.)</p>
 </section>
+<section id="request-27-split-tensorflow-slide" class="slide level2">
+<h2>Request 27: Split TensorFlow Slide</h2>
+<h3 id="prompt-13">Prompt</h3>
+<blockquote>
+<p>“Slide beginning with ‘Why TensorFlow CI Was Removed’ is too long”</p>
+</blockquote>
+<h3 id="fix-1">Fix</h3>
+<p>Split into two slides: 1. <strong>“Why TensorFlow CI Was Removed”</strong> - The problem 2. <strong>“TensorFlow CI Resolution”</strong> - Solution and result</p>
+</section>
 <section id="request-22-code-coverage-analysis" class="slide level2">
 <h2>Request 22: Code Coverage Analysis</h2>
-<h3 id="prompt-13">Prompt</h3>
+<h3 id="prompt-14">Prompt</h3>
 <blockquote>
 <p>“Create a code coverage report with covr for all 4 packages; identify areas of major improvement”</p>
 </blockquote>
@@ -1081,7 +1090,7 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 </section>
 <section id="request-23-diagnose-test-failures" class="slide level2">
 <h2>Request 23: Diagnose Test Failures</h2>
-<h3 id="prompt-14">Prompt</h3>
+<h3 id="prompt-15">Prompt</h3>
 <blockquote>
 <p>“When I ran tests manually, I got [ FAIL 9 | WARN 14 | SKIP 5 | PASS 855 ]… explain”</p>
 </blockquote>
@@ -1095,7 +1104,7 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 </section>
 <section id="request-23-resolution" class="slide level2">
 <h2>Request 23: Resolution</h2>
-<h3 id="fix-1">Fix</h3>
+<h3 id="fix-2">Fix</h3>
 <p>Deleted stale duplicate from installed package (source repo was correct)</p>
 <h3 id="result-12">Result</h3>
 <p>Tests now pass: <code>[ FAIL 0 | WARN 10 | SKIP 4 | PASS 833 ]</code></p>
@@ -1103,7 +1112,7 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 </section>
 <section id="request-24-lintr-compliance" class="slide level2">
 <h2>Request 24: Lintr Compliance</h2>
-<h3 id="prompt-15">Prompt</h3>
+<h3 id="prompt-16">Prompt</h3>
 <blockquote>
 <p>“Run lintr; use double quotes where needed” “Place nolint at the end of lines to hide warnings for intentional patterns”</p>
 </blockquote>
@@ -1128,7 +1137,7 @@ R CMD check: '::' or ':::' import not declared from: 'uwot'</code></pre>
 </section>
 <section id="request-25-package-rename-uwotlite-uwotmit" class="slide level2">
 <h2>Request 25: Package Rename (uwotlite → uwotmit)</h2>
-<h3 id="prompt-16">Prompt</h3>
+<h3 id="prompt-17">Prompt</h3>
 <blockquote>
 <p>“A better name for uwotlite is uwotmit; Update package name, all internal references, and external references in embedmit”</p>
 </blockquote>

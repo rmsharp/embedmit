@@ -506,7 +506,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 **Session Date:** January 16-20, 2026
 
-**Total Requests:** 26 distinct tasks
+**Total Requests:** 27 distinct tasks
 
 ---
 
@@ -735,6 +735,18 @@ step_log(Sale_Price, Gr_Liv_Area, base = 10)
 
 ### Result
 `mixed_estimates` values now match TMWR (~5.15 for North_Ames, etc.)
+
+---
+
+## Request 27: Split TensorFlow Slide
+
+### Prompt
+> "Slide beginning with 'Why TensorFlow CI Was Removed' is too long"
+
+### Fix
+Split into two slides:
+1. **"Why TensorFlow CI Was Removed"** - The problem
+2. **"TensorFlow CI Resolution"** - Solution and result
 
 ---
 
