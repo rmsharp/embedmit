@@ -759,3 +759,42 @@ Split into:
 
 ### Commit
 `0178aa1` - "Split TensorFlow CI slide into two slides"
+
+---
+
+## 2026-01-21: TMWR Chapter 17 Validation with embedmit
+
+### Summary
+Validated that embedmit produces identical results to the original embed package by rendering TMWR Chapter 17 with embedmit substituted for embed.
+
+### Process
+1. Fetched `17-encoding-categorical-data.Rmd` from https://github.com/rmsharp/TMwR
+2. Fetched `ames_snippets.R` (data preparation script)
+3. Substituted `library(embed)` → `library(embedmit)` throughout
+4. Installed missing dependency (`text2vec` for `step_dummy_hash`)
+5. Rendered the R Markdown document
+6. Compared numeric outputs with https://www.tmwr.org/categorical
+
+### Results - Perfect Match
+
+| Neighborhood | TMWR (embed) | embedmit | Match |
+|--------------|--------------|----------|-------|
+| North_Ames | 5.15 | 5.15 | ✓ |
+| College_Creek | 5.29 | 5.29 | ✓ |
+| Old_Town | 5.07 | 5.07 | ✓ |
+| Edwards (GLM) | 5.09 | 5.09 | ✓ |
+| Edwards (mixed) | 5.10 | 5.10 | ✓ |
+| Somerset | 5.35 | 5.35 | ✓ |
+| Northridge_Heights | 5.49 | 5.49 | ✓ |
+| ..new (GLM) | 5.23 | 5.23 | ✓ |
+| ..new (mixed) | 5.23 | 5.23 | ✓ |
+
+All effect encodings (GLM and mixed/partial pooling) produce **identical results**.
+
+### Files Created
+- `inst/extdata/tmwr_chapter17/ames_snippets.R` - Data preparation script
+- `inst/extdata/tmwr_chapter17/17-encoding-categorical-data.Rmd` - Modified chapter
+- `inst/extdata/tmwr_chapter17/17-encoding-categorical-data.html` - Rendered output
+
+### Conclusion
+embedmit is a drop-in replacement for embed with identical numerical results.

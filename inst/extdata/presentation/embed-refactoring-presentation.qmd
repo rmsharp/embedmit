@@ -506,7 +506,7 @@ This project was completed entirely through conversational prompts with Claude C
 
 **Session Date:** January 16-20, 2026
 
-**Total Requests:** 27 distinct tasks
+**Total Requests:** 28 distinct tasks
 
 ---
 
@@ -747,6 +747,26 @@ step_log(Sale_Price, Gr_Liv_Area, base = 10)
 Split into two slides:
 1. **"Why TensorFlow CI Was Removed"** - The problem
 2. **"TensorFlow CI Resolution"** - Solution and result
+
+---
+
+## Request 28: TMWR Chapter 17 Validation
+
+### Prompt
+> "Substitute embedmit for embed in TMWR Chapter 17; knit and compare to tmwr.org"
+
+### Process
+- Fetched R Markdown from GitHub, substituted `library(embedmit)`
+- Rendered chapter with all effect encoding examples
+
+### Result
+**All values identical** - embedmit is a drop-in replacement
+
+| Metric | embed | embedmit |
+|--------|-------|----------|
+| North_Ames | 5.15 | 5.15 |
+| ..new (GLM) | 5.23 | 5.23 |
+| ..new (mixed) | 5.23 | 5.23 |
 
 ---
 
